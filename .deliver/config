@@ -5,7 +5,7 @@ BUILD_USER="deploy"
 BUILD_AT="/tmp/edeliver/$APP/builds"
 
 RELEASE_DIR="/tmp/edeliver/$APP/builds/_build/prod/rel/$APP"
-
+RELEASE_VERSION=0.0.1
 # prevent re-installing node modules; this defaults to "."
 GIT_CLEAN_PATHS="_build rel priv/static"
 
@@ -39,9 +39,9 @@ pre_erlang_clean_compile() {
     mkdir -p priv/static # required by the phoenix.digest task
     npm install
 
-    ./node_modules/brunch/bin/brunch build --production
+    ./assets/node_modules/brunch/bin/brunch build --production
 
     # run your custom task
-    APP='$APP' MIX_ENV='$TARGET_MIX_ENV' $MIX_CMD phoenix.digest $SILENCE
+    APP='$APP' MIX_ENV='PROD' $MIX_CMD phoenix.digest $SILENCE
   "
 }

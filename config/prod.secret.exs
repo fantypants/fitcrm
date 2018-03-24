@@ -14,7 +14,7 @@ config :fitcrm, FitcrmWeb.Endpoint,
 # Configure your database
 config :fitcrm, Fitcrm.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "seasoft",
+  password: "seasoft",
   database: "fitcrm_prod",
   pool_size: 15
