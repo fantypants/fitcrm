@@ -43,7 +43,6 @@ defmodule Fitcrm.Mixfile do
       {:phauxth, "~> 1.2"},
       {:bcrypt_elixir, "~> 1.0"},
       {:cowboy, "~> 1.0"},
-      {:phauxth, "~> 1.0"},
       {:argon2_elixir, "~> 1.2"},
       {:bamboo, "~> 0.8"},
       {:edeliver, "~> 1.4.2"},
