@@ -7,6 +7,8 @@ defmodule Fitcrm.Accounts.User do
     field :email, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    field :type, :string
+    field :name, :string
     field :sessions, {:map, :integer}, default: %{}
 
     timestamps()
@@ -14,15 +16,15 @@ defmodule Fitcrm.Accounts.User do
 
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email])
-    |> validate_required([:email])
+    |> cast(attrs, [:email, :name, :type])
+    |> validate_required([:email, :name, :type])
     |> unique_email
   end
 
   def create_changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :password])
-    |> validate_required([:email, :password])
+    |> cast(attrs, [:email, :password, :name, :type])
+    |> validate_required([:email, :password, :name, :type])
     |> unique_email
     |> validate_password(:password)
     |> put_pass_hash

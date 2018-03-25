@@ -1,9 +1,21 @@
-<h2>Show User</h2>
+<h2>Example User Stats</h2>
 
 <ul>
 
   <li>
+    <strong>Name:</strong>
+    <%= @user.name %>
+  </li>
+  <li>
     <strong>Email:</strong>
+    <%= @user.email %>
+  </li>
+  <li>
+    <strong>Authentication Level:</strong>
+    <%= @user.type %>
+  </li>
+  <li>
+    <strong>Subscriptions Active:</strong>
     <%= @user.email %>
   </li>
 
