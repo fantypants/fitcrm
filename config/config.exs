@@ -17,6 +17,11 @@ config :fitcrm, FitcrmWeb.Endpoint,
   pubsub: [name: Fitcrm.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+# Phauxth authentication configuration
+config :phauxth,
+  token_salt: "P7hD4M65",
+  endpoint: FitcrmWeb.Endpoint
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

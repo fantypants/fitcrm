@@ -2,10 +2,14 @@
 #
 #     mix run priv/repo/seeds.exs
 #
-# Inside the script, you can read and write to any of your
-# repositories directly:
+# It is also run when you use the command `mix ecto.setup`
 #
-#     Fitcrm.Repo.insert!(%Fitcrm.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+
+users = [
+  %{email: "admin@dbfitness.com", password: "password"},
+  %{email: "matthewmjeaton@gmail.com", password: "password"}
+]
+
+for user <- users do
+  {:ok, _} = Fitcrm.Accounts.create_user(user)
+end
