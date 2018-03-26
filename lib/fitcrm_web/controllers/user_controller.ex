@@ -1,6 +1,6 @@
 defmodule FitcrmWeb.UserController do
   use FitcrmWeb, :controller
-
+  alias Fitcrm.Foods.Food
   import FitcrmWeb.Authorize
   alias Phauxth.Log
   alias Fitcrm.Accounts
@@ -12,6 +12,29 @@ defmodule FitcrmWeb.UserController do
   def index(conn, _) do
     users = Accounts.list_users()
     render(conn, "index.html", users: users)
+  end
+
+  def csvupload(conn, %{"user" => params}) do
+    IO.puts "Testing the CSV Upload"
+    if upload = params["file"] do
+      file = upload.path
+      filename = upload.filename
+    end
+
+    IO.puts "Test file Headers"
+    IO.inspect file
+    IO.inspect filename
+
+
+
+
+
+
+
+    users = Accounts.list_users()
+    conn
+    |> render("index.html", users: users)
+
   end
 
   def new(conn, _) do
@@ -32,7 +55,9 @@ defmodule FitcrmWeb.UserController do
 
   def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
-    render(conn, "show.html", user: user)
+    changeset = Food.changeset(%Food{}, %{name: "test"})
+
+    render(conn, "show.html", user: user, changeset: changeset)
   end
 
   def edit(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do

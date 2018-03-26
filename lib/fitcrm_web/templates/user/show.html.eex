@@ -18,7 +18,10 @@
     <strong>Subscriptions Active:</strong>
     <%= @user.email %>
   </li>
-
+  <li>
+  <%= render "csvupload.html", changeset: @changeset,
+                          action: user_path(@conn, :csvupload, @user) %>
+</li>
 </ul>
 
 <span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span><br>
