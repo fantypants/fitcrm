@@ -21,7 +21,8 @@ def csvimport(params) do
             {:ok, payload} ->
               #Send to Function
               if irow = payload.enum do
-                process_csv(irow)
+                food = process_csv(irow)
+                FitcrmWeb.UserController.insertfoods(%{"food" => food})
               end
           end
         end)
@@ -44,7 +45,8 @@ defp process_csv(row) do
   protein = List.pop_at(row, 1) |> getvalue("protein")
   fats = List.pop_at(row, 2) |> getvalue("fats")
   carbs = List.pop_at(row, 3) |> getvalue("carbs")
-  IO.puts "Row output =>  name: #{name}, protein: #{protein}, fats: #{fats}, carbs: #{carbs}, "
+  calories = (String.to_float(protein)*4) + (String.to_float(fats)*10) + (String.to_float(carbs)*4)
+  %{name: name, protein: protein, fat: fats, carbs: carbs, calories: calories}
 end
 
 

@@ -32,6 +32,11 @@ defmodule FitcrmWeb.UserController do
     |> render("show.html", users: users, user: user, changeset: changeset)
   end
 
+  def insertfoods(%{"food" => food}) do
+    changeset_params = food |> IO.inspect
+    changeset = Food.changeset(%Food{}, changeset_params)
+    Fitcrm.Repo.insert!(changeset)
+  end
 
 
   def new(conn, _) do
