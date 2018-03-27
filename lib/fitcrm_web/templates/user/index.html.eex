@@ -15,6 +15,28 @@
       </td>
     </tr>
 <% end %>
+</tbody>
+</table>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Protein</th>
+      <th>Fat</th>
+      <th>Carbs</th>
+      <th>Total Calories</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for food <- @foods do %>
+    <tr>
+      <td><%= food.name %></td>
+      <td><%= food.protein %></td>
+      <td><%= food.fat %></td>
+      <td><%= food.carbs %></td>
+      <td><%= food.calories %></td>
+    </tr>
+<% end %>
   </tbody>
 </table>
 

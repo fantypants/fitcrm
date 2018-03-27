@@ -12,7 +12,8 @@ defmodule FitcrmWeb.UserController do
 
   def index(conn, _) do
     users = Accounts.list_users()
-    render(conn, "index.html", users: users)
+    foods = Fitcrm.Repo.all(Food)
+    render(conn, "index.html", users: users, foods: foods)
   end
 
   def csvupload(%Plug.Conn{assigns: %{current_user: user}} = conn, params) do
