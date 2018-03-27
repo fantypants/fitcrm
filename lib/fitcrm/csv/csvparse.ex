@@ -1,4 +1,5 @@
 defmodule Fitcrm.Csv.Csvparse do
+  alias Fitcrm.Csv.Csvparse
 
   @moduledoc """
 

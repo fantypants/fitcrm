@@ -1,5 +1,5 @@
 defmodule Fitcrm.Csv.StringReader do
-
+alias Fitcrm.Csv.StringReader
   @moduledoc """
   Reads a string and returns a list of lists of strings.
   """

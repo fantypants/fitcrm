@@ -1,5 +1,5 @@
 defmodule Fitcrm.Csv.Writer do
-
+alias Fitcrm.Csv.Writer
   @moduledoc """
   The writer takes a list (write_row) or a list of lists (wrote) and returns
   a string containing a single row or newline-separated rows.

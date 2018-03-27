@@ -4,6 +4,7 @@ defmodule FitcrmWeb.UserController do
   import FitcrmWeb.Authorize
   alias Phauxth.Log
   alias Fitcrm.Accounts
+  alias Fitcrm.Tools
 
   # the following plugs are defined in the controllers/authorize.ex file
   plug :user_check when action in [:index, :show]
@@ -14,28 +15,24 @@ defmodule FitcrmWeb.UserController do
     render(conn, "index.html", users: users)
   end
 
-  def csvupload(conn, %{"user" => params}) do
-    IO.puts "Testing the CSV Upload"
-    if upload = params["file"] do
-      file = upload.path
-      filename = upload.filename
+  def csvupload(%Plug.Conn{assigns: %{current_user: user}} = conn, params) do
+    if param = params["food"] do
+      id = params["id"]
+      csv = params["food"]
+      if upload = csv["file"] do
+         Tools.Io.csvimport(csv)
+      end
+    else
+      id = params["id"]
     end
-
-    IO.puts "Test file Headers"
-    IO.inspect file
-    IO.inspect filename
-
-
-
-
-
-
-
+    user = (id == to_string(user.id) and user) || Accounts.get(id)
     users = Accounts.list_users()
+    changeset = Food.changeset(%Food{}, %{name: "test"})
     conn
-    |> render("index.html", users: users)
-
+    |> render("show.html", users: users, user: user, changeset: changeset)
   end
+
+
 
   def new(conn, _) do
     changeset = Accounts.change_user(%Accounts.User{})

@@ -1,5 +1,5 @@
 defmodule Fitcrm.Csv.FileReader do
-
+alias Fitcrm.Csv.FileReader
   @moduledoc """
   Reads UTF-8 characters from a file and returns a Stream of lists of
   strings.

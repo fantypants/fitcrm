@@ -14,10 +14,9 @@ defmodule FitcrmWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/users", UserController do
-      get "/csvupload", UserController, :csvupload
-      post "/csvupload", UserController, :csvupload
-    end
+    resources "/users", UserController
+    get "users/:id/csvupload", UserController, :csvupload
+    post "users/:id/csvupload", UserController, :csvupload
     resources "/sessions", SessionController, only: [:new, :create, :delete]
   end
 

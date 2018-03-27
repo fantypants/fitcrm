@@ -1,5 +1,5 @@
 defmodule Fitcrm.Csv.IOReader do
-
+alias Fitcrm.Csv.IOReader
   @moduledoc """
   Reads characters from a device and returns a Stream of lists of strings.
 
