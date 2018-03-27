@@ -51,8 +51,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :fitcrm, Fitcrm.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "seasoft",
+  password: "seasoft",
   database: "fitcrm_dev",
   hostname: "localhost",
   pool_size: 10
