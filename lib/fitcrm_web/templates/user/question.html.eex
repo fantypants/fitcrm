@@ -1,0 +1,11 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>User Questionaire</th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= render "questionform.html", changeset: @changeset,
+                          action: user_path(@conn, :question, @user) %>
+</tbody>
+</table>
