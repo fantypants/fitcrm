@@ -5,6 +5,7 @@ defmodule FitcrmWeb.UserController do
   alias Phauxth.Log
   alias Fitcrm.Accounts
   alias Fitcrm.Tools
+  alias Fitcrm.Accounts.User
 
   # the following plugs are defined in the controllers/authorize.ex file
   plug :user_check when action in [:index, :show]
@@ -14,6 +15,72 @@ defmodule FitcrmWeb.UserController do
     users = Accounts.list_users()
     foods = Fitcrm.Repo.all(Food)
     render(conn, "index.html", users: users, foods: foods)
+  end
+
+  defp calculate_tdee(%{"sex" => sex, "height" => height, "mass" => mass, "activity" => activity, "age" => age}) do
+    case sex do
+      "male" ->
+        bmr = 66 + (13.7 * String.to_integer(mass)) +(5 * String.to_integer(height)) - (6.8 * String.to_integer(age))
+      "female" ->
+        bmr = 655 + (9.6 * String.to_integer(mass)) +(1.8 * String.to_integer(height)) - (4.7 * String.to_integer(age))
+    end
+    scaleActivity(bmr, activity)
+  end
+
+  defp scaleActivity(bmr, activity) do
+    case activity do
+      "0" ->
+        result = bmr * 1.2
+      "1" ->
+        result = bmr * 1.375
+      "2" ->
+        result = bmr * 1.55
+      "3" ->
+         result = bmr * 1.725
+      "4" ->
+        result = bmr * 1.9
+    end
+    result
+  end
+
+  def newquestion(conn, %{"id" => id}) do
+    changeset = User.changeset(%User{}, %{name: "name"})
+    params = %{"mass" => 0, "weight" => 0, "age" => 0, "height" => 0, "sex" => "male", "activity" => 0}
+    question(conn, %{"id" => id, "user" => params})
+  end
+
+  def question(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id, "user" => params}) do
+    IO.puts "form question working"
+    IO.inspect conn
+    changeset = User.changeset(%User{}, %{name: "name"})
+    users = Accounts.list_users()
+    user = (id == to_string(user.id) and user) || Accounts.get(id)
+
+# Question Params
+    weight = params["mass"] #|> String.to_float
+    height = params["height"] #|> String.to_integer
+    activity = params["activity"] #|> String.to_integer
+    age = params["age"] #|> String.to_integer
+    sex = params["sex"]
+  #  params = %{"sex" => sex, "height" => height, "mass" => weight, "activity" => activity, "age" => age}
+  #  bmr = calculate_tdee(params) |> IO.inspect
+  #  tdee = scaleActivity(bmr, activity) |> IO.inspect
+# End Result
+# Now push result into DB
+
+#user_params = %{"age" => age, "sex" => sex, "weight" => weight, "height" => height, "activity" => activity, "bmr" => bmr, "tdee" => tdee}
+
+#case Accounts.update_user(user, user_params) do
+#  {:ok, user} ->
+#    success(conn, "User updated successfully", user_path(conn, :show, user))
+
+#  {:error, %Ecto.Changeset{} = changeset} ->
+#    render(conn, "edit.html", user: user, changeset: changeset)
+#end
+
+
+
+    render(conn, "questionform.html", changeset: changeset, users: users, user: user)
   end
 
   def csvupload(%Plug.Conn{assigns: %{current_user: user}} = conn, params) do

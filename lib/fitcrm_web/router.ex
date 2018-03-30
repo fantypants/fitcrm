@@ -17,6 +17,10 @@ defmodule FitcrmWeb.Router do
     resources "/users", UserController
     get "users/:id/csvupload", UserController, :csvupload
     post "users/:id/csvupload", UserController, :csvupload
+    get "users/:id/question", UserController, :question
+    get "users/:id/newquestion", UserController, :newquestion
+    post "users/:id/newquestion", UserController, :newquestion
+    post "users/:id/question", UserController, :question
     resources "/sessions", SessionController, only: [:new, :create, :delete]
   end
 
