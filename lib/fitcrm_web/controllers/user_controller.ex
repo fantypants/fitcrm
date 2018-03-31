@@ -19,25 +19,25 @@ defmodule FitcrmWeb.UserController do
 
   defp calculate_tdee(%{"sex" => sex, "height" => height, "mass" => mass, "activity" => activity, "age" => age}) do
     case sex do
-      "male" ->
-        bmr = 66 + (13.7 * String.to_integer(mass)) +(5 * String.to_integer(height)) - (6.8 * String.to_integer(age))
-      "female" ->
-        bmr = 655 + (9.6 * String.to_integer(mass)) +(1.8 * String.to_integer(height)) - (4.7 * String.to_integer(age))
+      "Male" ->
+        bmr = 66 + (13.7 * mass) +(5 * height) - (6.8 * age)
+      "Female" ->
+        bmr = 655 + (9.6 * mass) +(1.8 * height) - (4.7 * age)
     end
-    scaleActivity(bmr, activity)
+    bmr
   end
 
   defp scaleActivity(bmr, activity) do
     case activity do
-      "0" ->
+      0 ->
         result = bmr * 1.2
-      "1" ->
+      1 ->
         result = bmr * 1.375
-      "2" ->
+      2 ->
         result = bmr * 1.55
-      "3" ->
+      3 ->
          result = bmr * 1.725
-      "4" ->
+      4 ->
         result = bmr * 1.9
     end
     result
@@ -57,14 +57,17 @@ defmodule FitcrmWeb.UserController do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
 
 # Question Params
-    weight = params["mass"] #|> String.to_float
-    height = params["height"] #|> String.to_integer
+  #need to work out how to prevent ill submitted forms
+    weight = params["mass"]
+    height = params["height"]
     activity = params["activity"] #|> String.to_integer
     age = params["age"] #|> String.to_integer
     sex = params["sex"]
-  #  params = %{"sex" => sex, "height" => height, "mass" => weight, "activity" => activity, "age" => age}
-  #  bmr = calculate_tdee(params) |> IO.inspect
-  #  tdee = scaleActivity(bmr, activity) |> IO.inspect
+    cystic = params["cystic"]
+   params_new = modifyQuestionResults(%{"sex" => sex, "height" => height, "mass" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
+
+    bmr = calculate_tdee(params_new) |> IO.inspect
+    tdee = scaleActivity(bmr, params_new["activity"]) |> IO.inspect
 # End Result
 # Now push result into DB
 
@@ -81,6 +84,35 @@ defmodule FitcrmWeb.UserController do
 
 
     render(conn, "questionform.html", changeset: changeset, users: users, user: user)
+  end
+
+  defp modifyQuestionResults(%{"sex" => s, "height" => h, "mass" => w, "activity" => act, "age" => a, "cystic" => c}) do
+    case act do
+      "Sedentary" ->
+        nact = 0
+      "Light"
+        nact = 1
+      "Moderate"
+        nact = 2
+      "Heavy"
+        nact = 3
+      "Athlete"
+        nact = 4
+    end
+    weight = w |> convert |> elem(0)
+    height = h |> convert |> elem(0)
+    age = a |> String.to_integer
+    nact
+    %{"sex" => s, "height" => height, "mass" => weight, "activity" => nact, "age" => age}
+  end
+
+  defp convert(val) do
+    case val do
+      "" ->
+        ""
+      _->
+      Float.parse(val)
+    end
   end
 
   def csvupload(%Plug.Conn{assigns: %{current_user: user}} = conn, params) do
