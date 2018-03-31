@@ -68,22 +68,30 @@ defmodule FitcrmWeb.UserController do
 
     bmr = calculate_tdee(params_new) |> IO.inspect
     tdee = scaleActivity(bmr, params_new["activity"]) |> IO.inspect
+    changesetmap = compileResults(user, params_new, bmr, tdee) |> IO.inspect
 # End Result
 # Now push result into DB
 
 #user_params = %{"age" => age, "sex" => sex, "weight" => weight, "height" => height, "activity" => activity, "bmr" => bmr, "tdee" => tdee}
 
-#case Accounts.update_user(user, user_params) do
-#  {:ok, user} ->
-#    success(conn, "User updated successfully", user_path(conn, :show, user))
+case Accounts.update_user(user, changesetmap) do
+  {:ok, user} ->
+    success(conn, "User updated successfully", user_path(conn, :show, user))
 
-#  {:error, %Ecto.Changeset{} = changeset} ->
-#    render(conn, "edit.html", user: user, changeset: changeset)
-#end
+  {:error, %Ecto.Changeset{} = changeset} ->
+    IO.inspect changeset
+    render(conn, "edit.html", user: user, changeset: changeset)
+end
 
 
 
     render(conn, "questionform.html", changeset: changeset, users: users, user: user)
+  end
+
+  defp compileResults(user, map, bmr, tdee) do
+    IO.inspect user
+    new = %{"bmr" => bmr, "tdee" => tdee}
+    Map.merge(map, new)
   end
 
   defp modifyQuestionResults(%{"sex" => s, "height" => h, "mass" => w, "activity" => act, "age" => a, "cystic" => c}) do
@@ -158,6 +166,8 @@ defmodule FitcrmWeb.UserController do
   def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
     changeset = Food.changeset(%Food{}, %{name: "test"})
+
+    IO.inspect user
 
     render(conn, "show.html", user: user, changeset: changeset)
   end

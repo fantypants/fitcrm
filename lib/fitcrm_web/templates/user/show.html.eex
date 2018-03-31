@@ -18,6 +18,36 @@
     <strong>Subscriptions Active:</strong>
     <%= @user.email %>
   </li>
+
+
+  <li>
+    <strong>Age:</strong>
+    <%= @user.age %>
+  </li>
+  <li>
+    <strong>Weight:</strong>
+    <%= @user.weight %>
+  </li>
+  <li>
+    <strong>Height:</strong>
+    <%= @user.height %>
+  </li>
+  <li>
+    <strong>Sex:</strong>
+    <%= @user.sex %>
+  </li>
+  <li>
+    <strong>BMR:</strong>
+    <%= @user.bmr %>
+  </li>
+  <li>
+    <strong>TDEE:</strong>
+    <%= @user.tdee %>
+  </li>
+
+
+
+
   <li>
   <%= render "csvupload.html", changeset: @changeset,
                           action: user_path(@conn, :csvupload, @user) %>
