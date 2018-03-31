@@ -5,39 +5,47 @@
     </div>
   <% end %>
 
+
+
+<div class="form-group">
+  <%= label f, :Gender, class: "control-label" %>
+  <%= select f, :sex, ["Male", "Female"] %>
+</div>
+
+<div class="form-group">
+  <%= label f, :"Daily Average Activity Level", class: "control-label" %>
+  <%= select f, :activity, ["Sedentary", "Light", "Moderate", "Heavy", "Athelete"] %>
+  <%= error_tag f, :activity %>
+</div>
+
+<div class="form-group">
+  <%= label f, :age, class: "control-label" %>
+  <%= text_input f, :age, class: "form-control" %>
+  <%= error_tag f, :age %>
+</div>
+
+<div class="form-group">
+  <%= label f, :"Height (cm)", class: "control-label" %>
+  <%= text_input f, :height, class: "form-control" %>
+  <%= error_tag f, :height %>
+</div>
+
+
   <div class="form-group">
-    <%= label f, :height, class: "control-label" %>
-    <%= text_input f, :height, class: "form-control" %>
-    <%= error_tag f, :height %>
-  </div>
-  <div class="form-group">
-    <%= label f, :mass, class: "control-label" %>
+    <%= label f, :"Weight (kg)", class: "control-label" %>
     <%= text_input f, :mass, class: "form-control" %>
     <%= error_tag f, :mass %>
   </div>
-  <div class="form-group">
-    <%= label f, :activity, class: "control-label" %>
-    <%= text_input f, :activity, class: "form-control" %>
-    <%= error_tag f, :activity %>
-  </div>
+
+
+
 
   <div class="form-group">
-    <%= label f, :csytic, class: "control-label" %>
-    <%= text_input f, :csytic, class: "form-control" %>
+    <%= label f, :"Do you have cystic fybrosis", class: "control-label" %>
+    <%= select f, :cystic, ["Yes", "No"] %>
     <%= error_tag f, :csytic %>
   </div>
 
-  <div class="form-group">
-    <%= label f, :age, class: "control-label" %>
-    <%= text_input f, :age, class: "form-control" %>
-    <%= error_tag f, :age %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :sex, class: "control-label" %>
-    <%= text_input f, :sex, class: "form-control" %>
-    <%= error_tag f, :sex %>
-  </div>
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
