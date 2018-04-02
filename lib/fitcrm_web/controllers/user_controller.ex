@@ -18,9 +18,17 @@ defmodule FitcrmWeb.UserController do
     render(conn, "index.html", users: users, foods: foods)
   end
 
+  def foodindex(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
+    foods = Fitcrm.Repo.all(Food)
+    users = Accounts.list_users()
+    user = (id == to_string(user.id) and user) || Accounts.get(id)
+    changeset = Food.changeset(%Food{}, %{name: "test"})
+    render(conn, "foodindex.html", foods: foods, users: users, changeset: changeset, user: user)
+  end
+
   defp user_state(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     IO.puts "checking the user states"
-    user = (id == to_string(user.id) and user) || Accounts.get(id) |> IO.inspect
+    user = (id == to_string(user.id) and user) || Accounts.get(id)
     #Get Struct data to check
     tdee? = user |> Map.fetch!(:tdee) |> IO.inspect
     case tdee? do
@@ -91,8 +99,9 @@ defmodule FitcrmWeb.UserController do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
     users = Accounts.list_users()
     changeset = Food.changeset(%Food{}, %{name: "test"})
+    foods = Fitcrm.Repo.all(Food)
     conn
-    |> render("show.html", users: users, user: user, changeset: changeset)
+    |> render("foodindex.html", users: users, user: user, changeset: changeset, foods: foods)
   end
 
   def insertfoods(%{"food" => food}) do

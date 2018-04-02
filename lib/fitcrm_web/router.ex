@@ -21,6 +21,8 @@ defmodule FitcrmWeb.Router do
     get "users/:id/newquestion", UserController, :newquestion
     post "users/:id/newquestion", UserController, :newquestion
     post "users/:id/question", UserController, :question
+    get "users/:id/foods", UserController, :foodindex
+    post "users/:id/foods", UserController, :foodindex
     resources "/sessions", SessionController, only: [:new, :create, :delete]
   end
 

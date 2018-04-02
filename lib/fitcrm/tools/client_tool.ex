@@ -17,6 +17,12 @@ defmodule Fitcrm.Tools.ClientTool do
       params_new = PhysicsTool.modifyQuestionResults(%{"sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
       bmr = PhysicsTool.calculate_tdee(params_new) |> IO.inspect
       tdee = PhysicsTool.scaleActivity(bmr, params_new["activity"]) |> IO.inspect
+      case cystic do
+        "Yes" ->
+          tdee = tdee * 0.4
+        "No" ->
+          tdee = tdee
+      end
       changesetmap = PhysicsTool.compileResults(user, params_new, bmr, tdee) |> IO.inspect
       changesetmap
     end

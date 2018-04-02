@@ -38,13 +38,13 @@ defmodule Fitcrm.Tools.PhysicsTool do
         case act do
           "Sedentary" ->
             nact = 0
-          "Light"
+          "Light" ->
             nact = 1
-          "Moderate"
+          "Moderate" ->
             nact = 2
-          "Heavy"
+          "Heavy" ->
             nact = 3
-          "Athlete"
+          "Athlete" ->
             nact = 4
         end
         weight = w |> convert |> elem(0)
