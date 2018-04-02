@@ -6,6 +6,7 @@ defmodule FitcrmWeb.UserController do
   alias Fitcrm.Accounts
   alias Fitcrm.Tools
   alias Fitcrm.Accounts.User
+  alias Fitcrm.Tools.ClientTool
 
   # the following plugs are defined in the controllers/authorize.ex file
   plug :user_check when action in [:index, :show]
@@ -17,35 +18,31 @@ defmodule FitcrmWeb.UserController do
     render(conn, "index.html", users: users, foods: foods)
   end
 
-  defp calculate_tdee(%{"sex" => sex, "height" => height, "mass" => mass, "activity" => activity, "age" => age}) do
-    case sex do
-      "Male" ->
-        bmr = 66 + (13.7 * mass) +(5 * height) - (6.8 * age)
-      "Female" ->
-        bmr = 655 + (9.6 * mass) +(1.8 * height) - (4.7 * age)
+  defp user_state(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
+    IO.puts "checking the user states"
+    user = (id == to_string(user.id) and user) || Accounts.get(id) |> IO.inspect
+    #Get Struct data to check
+    tdee? = user |> Map.fetch!(:tdee) |> IO.inspect
+    case tdee? do
+      nil ->
+        IO.puts "Not setup"
+        #Redirect to Client Setup
+        :new
+      KeyError ->
+        IO.puts "Not setup"
+        #Redirect to Client Setup
+        :new
+      _->
+      IO.puts "Client succesfully onboarded"
+      #Setup already -- don't do anything
+      :exists
     end
-    bmr
   end
 
-  defp scaleActivity(bmr, activity) do
-    case activity do
-      0 ->
-        result = bmr * 1.2
-      1 ->
-        result = bmr * 1.375
-      2 ->
-        result = bmr * 1.55
-      3 ->
-         result = bmr * 1.725
-      4 ->
-        result = bmr * 1.9
-    end
-    result
-  end
 
   def newquestion(conn, %{"id" => id}) do
     changeset = User.changeset(%User{}, %{name: "name"})
-    params = %{"mass" => 0, "weight" => 0, "age" => 0, "height" => 0, "sex" => "male", "activity" => 0}
+    params = %{"weight" => "0", "age" => "0", "height" => "0", "sex" => "Male", "activity" => "Sedentary", "cystic" => "No"}
     question(conn, %{"id" => id, "user" => params})
   end
 
@@ -56,72 +53,28 @@ defmodule FitcrmWeb.UserController do
     users = Accounts.list_users()
     user = (id == to_string(user.id) and user) || Accounts.get(id)
 
-# Question Params
-  #need to work out how to prevent ill submitted forms
-    weight = params["mass"]
-    height = params["height"]
-    activity = params["activity"] #|> String.to_integer
-    age = params["age"] #|> String.to_integer
-    sex = params["sex"]
-    cystic = params["cystic"]
-   params_new = modifyQuestionResults(%{"sex" => sex, "height" => height, "mass" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
+    current_state = user_state(conn, %{"id" => id})
+    case current_state do
+      :new ->
+        changesetmap = ClientTool.onboardclient(%{"user" => user, "params" => params})
+        case Accounts.update_user(user, changesetmap) do
+          {:ok, user} ->
+            success(conn, "User updated successfully", user_path(conn, :show, user))
 
-    bmr = calculate_tdee(params_new) |> IO.inspect
-    tdee = scaleActivity(bmr, params_new["activity"]) |> IO.inspect
-    changesetmap = compileResults(user, params_new, bmr, tdee) |> IO.inspect
-# End Result
-# Now push result into DB
-
-#user_params = %{"age" => age, "sex" => sex, "weight" => weight, "height" => height, "activity" => activity, "bmr" => bmr, "tdee" => tdee}
-
-case Accounts.update_user(user, changesetmap) do
-  {:ok, user} ->
-    success(conn, "User updated successfully", user_path(conn, :show, user))
-
-  {:error, %Ecto.Changeset{} = changeset} ->
-    IO.inspect changeset
-    render(conn, "edit.html", user: user, changeset: changeset)
-end
-
-
+          {:error, %Ecto.Changeset{} = changeset} ->
+            IO.inspect changeset
+            render(conn, "edit.html", user: user, changeset: changeset)
+        end
+      :exists ->
+        conn
+        |> put_flash(:info, "User Already Setup")
+        |> render("show.html", user: user, changeset: changeset)
+      end
 
     render(conn, "questionform.html", changeset: changeset, users: users, user: user)
   end
 
-  defp compileResults(user, map, bmr, tdee) do
-    IO.inspect user
-    new = %{"bmr" => bmr, "tdee" => tdee}
-    Map.merge(map, new)
-  end
 
-  defp modifyQuestionResults(%{"sex" => s, "height" => h, "mass" => w, "activity" => act, "age" => a, "cystic" => c}) do
-    case act do
-      "Sedentary" ->
-        nact = 0
-      "Light"
-        nact = 1
-      "Moderate"
-        nact = 2
-      "Heavy"
-        nact = 3
-      "Athlete"
-        nact = 4
-    end
-    weight = w |> convert |> elem(0)
-    height = h |> convert |> elem(0)
-    age = a |> String.to_integer
-    nact
-    %{"sex" => s, "height" => height, "mass" => weight, "activity" => nact, "age" => age}
-  end
-
-  defp convert(val) do
-    case val do
-      "" ->
-        ""
-      _->
-      Float.parse(val)
-    end
-  end
 
   def csvupload(%Plug.Conn{assigns: %{current_user: user}} = conn, params) do
     if param = params["food"] do

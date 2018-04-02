@@ -1,21 +1,38 @@
 # Fitcrm
 
-To start your Phoenix server:
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+# Modules
+- Questionaire
+- Meals
+- Foods
+- Uploader
+- UI/UX
+- Workout Plans
+- API
+- Auth
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
-# fitcrm
+## Questionaire
+- Initial form - DONE
+- Placement and Direction
+  - Where in Templates?
+    - User config, but uses a switch to determine if calculated (One time setup)
+  - Where does it redirect too?
+    - Directs back to the users template/index page
+  - Direction
+    - User logs in
+    - Checks Initial User setup
+    - User hasn't setup
+    - Redirects to form
+    - Submits form
+    - All relevant data compiled and sent to DB
+    - Results shown in the users page 
+- Templates
+  - Form
+  - Results
+  - User Index
+- Database control
+  - Needs to check initial Configuration
+  - Inserts Results into DB
+  - Can update if needed
+- Validation
+- Display
