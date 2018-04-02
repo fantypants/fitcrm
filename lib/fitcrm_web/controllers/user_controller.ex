@@ -40,10 +40,11 @@ defmodule FitcrmWeb.UserController do
   end
 
 
-  def newquestion(conn, %{"id" => id}) do
+  def newquestion(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     changeset = User.changeset(%User{}, %{name: "name"})
-    params = %{"weight" => "0", "age" => "0", "height" => "0", "sex" => "Male", "activity" => "Sedentary", "cystic" => "No"}
-    question(conn, %{"id" => id, "user" => params})
+    user = (id == to_string(user.id) and user) || Accounts.get(id)
+    #params = %{"weight" => "0", "age" => "0", "height" => "0", "sex" => "Male", "activity" => "Sedentary", "cystic" => "No"}
+    render(conn, "questionform.html", changeset: changeset, user: user)
   end
 
   def question(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id, "user" => params}) do
@@ -53,9 +54,9 @@ defmodule FitcrmWeb.UserController do
     users = Accounts.list_users()
     user = (id == to_string(user.id) and user) || Accounts.get(id)
 
-    current_state = user_state(conn, %{"id" => id})
-    case current_state do
-      :new ->
+    #current_state = user_state(conn, %{"id" => id})
+    #case current_state do
+    #  :new ->
         changesetmap = ClientTool.onboardclient(%{"user" => user, "params" => params})
         case Accounts.update_user(user, changesetmap) do
           {:ok, user} ->
@@ -65,13 +66,14 @@ defmodule FitcrmWeb.UserController do
             IO.inspect changeset
             render(conn, "edit.html", user: user, changeset: changeset)
         end
-      :exists ->
-        conn
-        |> put_flash(:info, "User Already Setup")
-        |> render("show.html", user: user, changeset: changeset)
-      end
+    #  :exists ->
+    #    conn
+    #    |> put_flash(:info, "User Already Setup")
+    #    |> render("show.html", user: user, changeset: changeset)
+    #  end
 
-    render(conn, "questionform.html", changeset: changeset, users: users, user: user)
+  #  render(conn, "questionform.html", changeset: changeset, users: users, user: user)
+  render(conn, "show.html", user: user, changeset: changeset)
   end
 
 

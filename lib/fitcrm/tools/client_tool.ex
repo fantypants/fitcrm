@@ -7,12 +7,13 @@ defmodule Fitcrm.Tools.ClientTool do
     alias Fitcrm.Tools.PhysicsTool
 
     def onboardclient(%{"user" => user, "params" => params}) do
-      weight = params["weight"]
-      height = params["height"]
-      activity = params["activity"]
-      age = params["age"]
-      sex = params["sex"]
-      cystic = params["cystic"]
+      IO.puts "omboarded"
+      weight = params["weight"] |> IO.inspect
+      height = params["height"] |> IO.inspect
+      activity = params["activity"] |> IO.inspect
+      age = params["age"] |> IO.inspect
+      sex = params["sex"] |> IO.inspect
+      cystic = params["cystic"] |> IO.inspect
       params_new = PhysicsTool.modifyQuestionResults(%{"sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
       bmr = PhysicsTool.calculate_tdee(params_new) |> IO.inspect
       tdee = PhysicsTool.scaleActivity(bmr, params_new["activity"]) |> IO.inspect

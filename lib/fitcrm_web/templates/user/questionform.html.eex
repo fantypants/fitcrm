@@ -33,8 +33,8 @@
 
   <div class="form-group">
     <%= label f, :"Weight (kg)", class: "control-label" %>
-    <%= text_input f, :mass, class: "form-control" %>
-    <%= error_tag f, :mass %>
+    <%= text_input f, :weight, class: "form-control" %>
+    <%= error_tag f, :weight %>
   </div>
 
 
