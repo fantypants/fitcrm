@@ -1,0 +1,8 @@
+<h2>Show meal</h2>
+
+<ul>
+
+</ul>
+
+<span><%= link "Edit", to: meal_path(@conn, :edit, @meal) %></span>
+<span><%= link "Back", to: meal_path(@conn, :index) %></span>

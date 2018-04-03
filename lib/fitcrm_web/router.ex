@@ -24,6 +24,7 @@ defmodule FitcrmWeb.Router do
     get "users/:id/foods", UserController, :foodindex
     post "users/:id/foods", UserController, :foodindex
     resources "/sessions", SessionController, only: [:new, :create, :delete]
+    resources "/meals", MealController
   end
 
 end
