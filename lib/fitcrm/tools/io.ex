@@ -80,11 +80,12 @@ meal_name = fst |> elem(0)
 end
 
 defp transitionMap(meal) do
-  meal |> Enum.group_by(fn(a) -> a["meal"] end) |> Enum.map(fn(a) -> IO.inspect a end)
+  meals = meal |> Enum.map(fn(a) -> %{mealname: elem(Map.fetch(a, "meal"), 1).name, food: {elem(Map.fetch(a, "foods"), 1).name, elem(Map.fetch(a, "foods"), 1).qty}} end) |> IO.inspect
+
 end
 
 
-
+#cottoncause.com
 
 
 
