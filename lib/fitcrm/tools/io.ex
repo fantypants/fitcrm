@@ -22,13 +22,13 @@ def csvimport(params) do
               #Send to Function
               if irow = payload.enum do
                 IO.puts "Processing in IROW"
-                getFields(irow)
-                #food = process_csv(irow)
-                #FitcrmWeb.UserController.insertfoods(%{"food" => food})
+                #getFields(irow)
+                food = process_csv(irow)
+                FitcrmWeb.UserController.insertfoods(%{"food" => food})
               end
           end
         end)
-        transitionMap(meals)
+        #transitionMap(meals)
     end
 
 end
@@ -48,10 +48,16 @@ defp process_csv(row) do
   protein = List.pop_at(row, 1) |> getvalue("protein")
   fats = List.pop_at(row, 2) |> getvalue("fats")
   carbs = List.pop_at(row, 3) |> getvalue("carbs")
+  meal_ident = List.pop_at(row, 4) |> getvalue("meal_ident") |> split_meal_id |> IO.inspect
+  IO.puts "Running Calories"
   calories = (String.to_float(protein)*4) + (String.to_float(fats)*10) + (String.to_float(carbs)*4)
-  %{name: name, protein: protein, fat: fats, carbs: carbs, calories: calories}
+
+  %{name: name, protein: protein, fat: fats, carbs: carbs, calories: calories, meal_ident: meal_ident}
 end
 
+defp split_meal_id(value) do
+  value |> String.split(",") |> Enum.map(fn(a) -> String.to_integer(a) end)
+end
 
 
 defp getvalue(element, field) do
@@ -62,7 +68,8 @@ defp getvalue(element, field) do
       {:error, "Failed at: Empty #{field} field"}
       ""
     _->
-      field
+    IO.puts "field is:"
+      field |> IO.inspect
   end
 end
 
@@ -80,7 +87,10 @@ meal_name = fst |> elem(0)
 end
 
 defp transitionMap(meal) do
-  meals = meal |> Enum.map(fn(a) -> %{mealname: elem(Map.fetch(a, "meal"), 1).name, food: {elem(Map.fetch(a, "foods"), 1).name, elem(Map.fetch(a, "foods"), 1).qty}} end) |> IO.inspect
+  meals = meal |> Enum.map(fn(a) ->
+    %{mealname: elem(Map.fetch(a, "meal"), 1).name, food: {elem(Map.fetch(a, "foods"), 1).name, elem(Map.fetch(a, "foods"), 1).qty}}
+  end)
+    |> IO.inspect
 
 end
 

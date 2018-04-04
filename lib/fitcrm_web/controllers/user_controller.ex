@@ -105,6 +105,7 @@ defmodule FitcrmWeb.UserController do
   end
 
   def insertfoods(%{"food" => food}) do
+    IO.puts "In food insert"
     changeset_params = food |> IO.inspect
     changeset = Food.changeset(%Food{}, changeset_params)
     Fitcrm.Repo.insert!(changeset)
