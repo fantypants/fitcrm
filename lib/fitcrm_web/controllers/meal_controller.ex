@@ -61,7 +61,7 @@ defmodule FitcrmWeb.MealController do
 
       if upload = meal_params["file"] do
          # PROCESS CSV
-         Tools.Io.csvimport(meal_params)
+         Tools.Io.csvimport_meal(meal_params)
 
          #changeset = Tools.Io.csvimport(csv)
          #case Fitcrm.Repo.insert(changeset) do

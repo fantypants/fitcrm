@@ -19,7 +19,7 @@ defmodule FitcrmWeb.UserController do
   end
 
   def foodindex(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
-    foods = Fitcrm.Repo.all(Food)
+    foods = Fitcrm.Repo.all(Food) |> IO.inspect
     users = Accounts.list_users()
     user = (id == to_string(user.id) and user) || Accounts.get(id)
     changeset = Food.changeset(%Food{}, %{name: "test"})
@@ -109,6 +109,19 @@ defmodule FitcrmWeb.UserController do
     changeset_params = food |> IO.inspect
     changeset = Food.changeset(%Food{}, changeset_params)
     Fitcrm.Repo.insert!(changeset)
+  end
+
+  def updatefood(id, meal) do
+    IO.puts "In food insert"
+    food = Fitcrm.Repo.get!(Food, id)
+    food = Ecto.Changeset.change food, meal_id: String.to_integer(meal)
+    Fitcrm.Repo.update! food
+    case Fitcrm.Repo.update food do
+      {:ok, struct}       ->
+        IO.puts "updated"# Updated with success
+      {:error, changeset} ->
+        IO.puts "Error"
+    end
   end
 
 

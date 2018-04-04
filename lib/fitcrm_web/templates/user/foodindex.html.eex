@@ -14,6 +14,7 @@
       <th>Fat</th>
       <th>Carbs</th>
       <th>Total Calories</th>
+      <th>Quantity</th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +25,7 @@
       <td><%= food.fat %></td>
       <td><%= food.carbs %></td>
       <td><%= food.calories %></td>
+      <td><%= food.quantity %></td>
     </tr>
 <% end %>
   </tbody>
