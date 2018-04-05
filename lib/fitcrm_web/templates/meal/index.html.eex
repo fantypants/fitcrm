@@ -10,7 +10,11 @@
   <tbody>
 <%= for meal <- @meals do %>
     <tr>
-
+      <td> <%= meal.name %> </td>
+      <td> <%= meal.carbs %> </td>
+      <td> <%= meal.fat %> </td>
+      <td> <%= meal.protein %> </td>
+      <td> <%= meal.calories %> </td>
       <td class="text-right">
         <span><%= link "Show", to: meal_path(@conn, :show, meal), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Edit", to: meal_path(@conn, :edit, meal), class: "btn btn-default btn-xs" %></span>

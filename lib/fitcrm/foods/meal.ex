@@ -10,8 +10,8 @@ defmodule Fitcrm.Foods.Meal do
     field :fat, :float
     field :carbs, :float
     field :protein, :float
+    field :foodid, {:array, :integer}
 
-    has_many :foods, Fitcrm.Foods.Food
 
     timestamps()
   end
@@ -21,8 +21,7 @@ defmodule Fitcrm.Foods.Meal do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :calories, :fat, :carbs, :protein])
-    |> cast_assoc(:foods)
-    |> validate_required([:name, :calories, :fat, :carbs, :protein])
+    |> cast(params, [:name, :foodid, :calories, :fat, :carbs, :protein])
+    |> validate_required([:name, :foodid, :calories, :fat, :carbs, :protein])
   end
 end

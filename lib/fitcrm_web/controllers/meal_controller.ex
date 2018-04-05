@@ -47,6 +47,12 @@ defmodule FitcrmWeb.MealController do
     Fitcrm.Repo.insert!(changeset)
   end
 
+  def insertMeal(%{"meal" => meal}) do
+    changeset_params = meal |> IO.inspect
+    changeset = Meal.changeset(%Meal{}, changeset_params)
+    Fitcrm.Repo.insert!(changeset)
+  end
+
 
 
 
@@ -61,8 +67,8 @@ defmodule FitcrmWeb.MealController do
 
       if upload = meal_params["file"] do
          # PROCESS CSV
-         Tools.Io.csvimport_meal(meal_params)
-
+         meal = Tools.Io.csvimport_meal(meal_params)
+         #insertMeal(%{"meal" => meal})
          #changeset = Tools.Io.csvimport(csv)
          #case Fitcrm.Repo.insert(changeset) do
         #   {:ok, meal} ->

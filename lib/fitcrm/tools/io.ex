@@ -64,9 +64,9 @@ def csvimport_meal(params) do
               #Send to Function
               if irow = payload.enum do
                 IO.puts "Processing in IROW"
-                getFields(irow) |> IO.inspect
+                meal = getFields(irow) |> IO.inspect
                 #food = process_csv(irow)
-                #FitcrmWeb.UserController.insertfoods(%{"food" => food})
+                FitcrmWeb.MealController.insertMeal(%{"meal" => meal})
               end
           end
         end)
@@ -121,8 +121,11 @@ meal_ident = List.pop_at(row, 0) |> elem(0)
 name = List.pop_at(row, 1) |> elem(0)
 type = List.pop_at(row, 2) |> elem(0)
 recipe = List.pop_at(row, 3) |> elem(0)
-food_id = getFood(meal_ident) |>  updateFoods(meal_ident) |> IO.inspect
-%{name: name, type: type, recipe: recipe, meal_ident: meal_ident}
+foodid = getFood(meal_ident) |> IO.inspect
+stats = getfoodStats(foodid) |> IO.inspect
+
+original = %{name: name, type: type, recipe: recipe, foodid: foodid}
+Map.merge(original, stats) |> IO.inspect
 end
 
 defp transitionMap(meal) do
@@ -149,6 +152,26 @@ end
 
 defp updateFoods(list, meal_id) do
   list |> Enum.map(fn(a) -> FitcrmWeb.UserController.updatefood(a, meal_id) end)
+end
+
+defp getfoodStats(id_map) do
+c = id_map |> Enum.map(fn(a) -> retrieveFoodValueC(Fitcrm.Repo.get!(Food, a)) end) |> Enum.sum
+p = id_map |> Enum.map(fn(a) -> retrieveFoodValueP(Fitcrm.Repo.get!(Food, a)) end) |> Enum.sum
+f = id_map |> Enum.map(fn(a) -> retrieveFoodValueF(Fitcrm.Repo.get!(Food, a)) end) |> Enum.sum
+tc = id_map |> Enum.map(fn(a) -> retrieveFoodValueTC(Fitcrm.Repo.get!(Food, a)) end) |> Enum.sum
+%{carbs: c, protein: p, fat: f, calories: tc}
+end
+defp retrieveFoodValueC(struct) do
+  struct.carbs
+end
+defp retrieveFoodValueP(struct) do
+  struct.protein
+end
+defp retrieveFoodValueF(struct) do
+  struct.fat
+end
+defp retrieveFoodValueTC(struct) do
+  struct.calories
 end
 
 
