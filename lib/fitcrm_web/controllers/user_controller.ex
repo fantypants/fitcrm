@@ -165,6 +165,19 @@ defmodule FitcrmWeb.UserController do
     end
   end
 
+  def deletefood(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
+    food = Fitcrm.Repo.get!(Food, id)
+    users = Accounts.list_users()
+    foods = Fitcrm.Repo.all(Food)
+    # Here we use delete! (with a bang) because we expect
+    # it to always work (and if it does not, it will raise).
+    Fitcrm.Repo.delete!(food)
+
+    conn
+    |> put_flash(:info, "Meal deleted successfully.")
+    |> index(user: users, foods: foods)
+  end
+
   def delete(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
     {:ok, _user} = Accounts.delete_user(user)
 

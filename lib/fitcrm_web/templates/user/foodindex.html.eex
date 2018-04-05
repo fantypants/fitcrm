@@ -26,6 +26,7 @@
       <td><%= food.carbs %></td>
       <td><%= food.calories %></td>
       <td><%= food.quantity %></td>
+      <td><span><%= link "Delete Food ONLY IF NECESSARY", to: user_path(@conn, :deletefood, food, @users) %></span><td>
     </tr>
 <% end %>
   </tbody>
