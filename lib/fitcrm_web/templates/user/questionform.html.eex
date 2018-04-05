@@ -41,7 +41,7 @@
 
 
   <div class="form-group">
-    <%= label f, :"Do you have cystic fybrosis", class: "control-label" %>
+    <%= label f, :"Do you have PCOS", class: "control-label" %>
     <%= select f, :cystic, ["Yes", "No"] %>
     <%= error_tag f, :csytic %>
   </div>

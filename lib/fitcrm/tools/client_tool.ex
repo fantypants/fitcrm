@@ -19,7 +19,7 @@ defmodule Fitcrm.Tools.ClientTool do
       tdee = PhysicsTool.scaleActivity(bmr, params_new["activity"]) |> IO.inspect
       case cystic do
         "Yes" ->
-          tdee = tdee * 0.4
+          tdee = tdee - 600
         "No" ->
           tdee = tdee
       end
