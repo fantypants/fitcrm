@@ -85,7 +85,9 @@ defmodule FitcrmWeb.MealController do
 
   def show(conn, %{"id" => id}) do
     meal = Fitcrm.Repo.get!(Meal, id)
-    render(conn, "show.html", meal: meal)
+    foodids = meal.foodid
+    foods = foodids |> Enum.map(fn(a) -> %{name: Fitcrm.Repo.get!(Food, a).name, p: Fitcrm.Repo.get!(Food, a).protein, c: Fitcrm.Repo.get!(Food, a).carbs, f: Fitcrm.Repo.get!(Food, a).fat, cal: Fitcrm.Repo.get!(Food, a).calories, q: Fitcrm.Repo.get!(Food, a).quantity}  end)
+    render(conn, "show.html", meal: meal, foods: foods)
   end
 
   def edit(conn, %{"id" => id}) do

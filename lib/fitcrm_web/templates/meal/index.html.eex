@@ -3,17 +3,20 @@
 <table class="table">
   <thead>
     <tr>
-
-      <th></th>
+      <th>Name</th>
+      <th>Protein</th>
+      <th>Carbs</th>
+      <th>Fat</th>
+      <th>Calories</th>
     </tr>
   </thead>
   <tbody>
 <%= for meal <- @meals do %>
     <tr>
       <td> <%= meal.name %> </td>
+      <td> <%= meal.protein %> </td>
       <td> <%= meal.carbs %> </td>
       <td> <%= meal.fat %> </td>
-      <td> <%= meal.protein %> </td>
       <td> <%= meal.calories %> </td>
       <td class="text-right">
         <span><%= link "Show", to: meal_path(@conn, :show, meal), class: "btn btn-default btn-xs" %></span>

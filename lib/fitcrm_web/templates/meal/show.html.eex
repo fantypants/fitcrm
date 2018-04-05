@@ -1,8 +1,59 @@
-<h2>Show meal</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> <%= @meal.name %> </td>
+    </tr>
+  </tbody>
+</table>
 
-<ul>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Protein</th>
+      <th>Carbs</th>
+      <th>Fat</th>
+      <th>Calories</th>
+      <th>Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for food <- @foods do %>
+    <tr>
+      <td> <%= food.name %> </td>
+      <td> <%= food.p %> </td>
+      <td> <%= food.c %> </td>
+      <td> <%= food.f %> </td>
+      <td> <%= food.cal %> </td>
+      <td> <%= food.q %> </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
 
-</ul>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Total Protein</th>
+      <th> Total Carbs </th>
+      <th> Total Fat </th>
+      <th> Total Calories </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> <%= @meal.protein %> </td>
+      <td> <%= @meal.carbs %> </td>
+      <td> <%= @meal.fat %> </td>
+      <td> <%= @meal.calories %> </td>
+    </tr>
+  </tbody>
+</table>
 
 <span><%= link "Edit", to: meal_path(@conn, :edit, @meal) %></span>
 <span><%= link "Back", to: meal_path(@conn, :index) %></span>
