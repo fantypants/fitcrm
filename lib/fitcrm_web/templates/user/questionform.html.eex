@@ -37,13 +37,16 @@
     <%= error_tag f, :weight %>
   </div>
 
-
-
-
   <div class="form-group">
     <%= label f, :"Do you have PCOS", class: "control-label" %>
     <%= select f, :cystic, ["Yes", "No"] %>
     <%= error_tag f, :csytic %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :"Do you have IR", class: "control-label" %>
+    <%= select f, :ir, ["Yes", "No"] %>
+    <%= error_tag f, :ir %>
   </div>
 
 
