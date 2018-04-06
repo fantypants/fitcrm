@@ -55,5 +55,5 @@
   </tbody>
 </table>
 
-<span><%= link "Edit", to: meal_path(@conn, :edit, @meal) %></span>
+
 <span><%= link "Back", to: meal_path(@conn, :index) %></span>
