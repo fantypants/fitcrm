@@ -1,0 +1,6 @@
+<h2>New workout</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: workout_path(@conn, :create) %>
+
+<span><%= link "Back", to: workout_path(@conn, :index) %></span>
