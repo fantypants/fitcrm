@@ -1,8 +1,26 @@
 <h2>Show workout</h2>
 
-<ul>
 
-</ul>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Excercise</th>
+        <th>Reps</th>
+      </tr>
+    </thead>
+    <tbody>
+  <%= for work <- @excercises do %>
+      <tr>
+        <td> <%= work.day %> </td>
+        <td> <%= work.name %> </td>
+        <td> <%= work.reps %> </td>
+
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+
 
 <span><%= link "Edit", to: workout_path(@conn, :edit, @workout) %></span>
 <span><%= link "Back", to: workout_path(@conn, :index) %></span>

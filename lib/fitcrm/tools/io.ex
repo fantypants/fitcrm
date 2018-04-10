@@ -206,9 +206,8 @@ defp gatherExcerciseFields(row) do
   day = List.pop_at(row, 0) |> elem(0)
   excercise = List.pop_at(row, 1) |> elem(0)
   reps = List.pop_at(row, 2) |> elem(0)
-  excercise = %{name: excercise, reps: reps}
-  day = %{dayofweek: day}
-  %{"days" => day, "excercises" => excercise}
+  %{name: excercise, reps: reps, day: day}
+
 end
 
 

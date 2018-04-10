@@ -2,6 +2,7 @@ defmodule FitcrmWeb.WorkoutController do
   use FitcrmWeb, :controller
   alias Fitcrm.Plan.Workout
   import Plug.Conn
+  import Ecto.Query
   import Phoenix.Controller
   import FitcrmWeb.Router.Helpers
   import FitcrmWeb.Authorize
@@ -12,6 +13,7 @@ defmodule FitcrmWeb.WorkoutController do
   alias Fitcrm.Tools
   alias Fitcrm.Accounts.User
   alias Fitcrm.Tools.ClientTool
+  alias Fitcrm.Plan.Excercise
 
   plug :user_check when action in [:index, :show]
   plug :id_check when action in [:edit, :update, :delete]
@@ -27,10 +29,23 @@ defmodule FitcrmWeb.WorkoutController do
   end
 
   def create(conn, %{"workout" => workout_params}) do
+    IO.inspect workout_params
     if upload = workout_params["file"] do
        excercise_params = Tools.Io.csvimport_workout(workout_params)
     end
-    new_workout_params = Map.merge(workout_params, excercise_params)
+    notes = workout_params["notes"]
+    name = workout_params["name"]
+    workouts = %{notes: notes, name: name}
+    excercises = [%{
+      day: "Monday",
+      name: "This",
+      reps: "that"}]
+    new_workout_params = %{
+      "excercises" => excercises,
+      "name" => "gggggg",
+      "notes" => "hhhhh"
+    }
+    IO.inspect new_workout_params
     changeset = Workout.changeset(%Workout{}, new_workout_params)
     case Fitcrm.Repo.insert(changeset) do
       {:ok, workout} ->
@@ -38,13 +53,15 @@ defmodule FitcrmWeb.WorkoutController do
         |> put_flash(:info, "Workout created successfully.")
         |> redirect(to: workout_path(conn, :show, workout))
       {:error, changeset} ->
+        IO.inspect changeset
         render(conn, "new.html", changeset: changeset)
     end
   end
 
   def show(conn, %{"id" => id}) do
-    workout = Fitcrm.Repo.get!(Workout, id)
-    render(conn, "show.html", workout: workout)
+    workout = Fitcrm.Repo.get!(Workout, id) |> Fitcrm.Repo.preload(:excercises) |> IO.inspect
+    excercises = Fitcrm.Repo.all(from e in Excercise, where: e.workout_id == ^id)
+    render(conn, "show.html", workout: workout, excercises: excercises)
   end
 
   def edit(conn, %{"id" => id}) do
