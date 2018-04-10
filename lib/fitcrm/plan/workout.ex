@@ -6,7 +6,7 @@ defmodule Fitcrm.Plan.Workout do
       field :name, :string
       field :notes, :string
 
-      has_many :days, Fitcrm.Plan.Day
+
       has_many :excercises, Fitcrm.Plan.Excercise
     timestamps()
   end
@@ -17,8 +17,7 @@ defmodule Fitcrm.Plan.Workout do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name, :notes])
-    |> cast_assoc(:days)
     |> cast_assoc(:excercises)
-    |> validate_required([])
+    |> validate_required([:name, :notes])
   end
 end

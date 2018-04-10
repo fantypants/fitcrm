@@ -6,6 +6,8 @@ defmodule Fitcrm.Plan.Excercise do
   schema "excercises" do
     field :name, :string
     field :reps, :string
+    field :day, :string
+
 
     belongs_to :workouts, Fitcrm.Plan.Workout
     timestamps()
