@@ -72,7 +72,34 @@ def csvimport_meal(params) do
         end)
         #transitionMap(meals)
     end
+end
 
+def csvimport_workout(params) do
+  if upload = params["file"] do
+    file = upload.path
+    filename = upload.filename
+  end
+    csv = Csvparse.read(file)
+    case csv do
+      {:error, message} ->
+        IO.puts "Hander incorrect csv"
+      {:ok, stream} ->
+        workouts = stream
+        |> Task.async_stream(&parse_csv(&1), max_concurrency: System.schedulers_online*2)
+        |> Enum.map(fn row ->
+          case row do
+            {:error, message} ->
+              IO.puts "Incorrect row in CSV"
+            {:ok, payload} ->
+              #Send to Function
+              if irow = payload.enum do
+                IO.puts "Processing in IROW"
+                gatherExcerciseFields(irow)
+              end
+          end
+        end)
+        #transitionMap(meals)
+    end
 end
 
 defp parse_csv(stream) do
@@ -172,6 +199,16 @@ defp retrieveFoodValueF(struct) do
 end
 defp retrieveFoodValueTC(struct) do
   struct.calories
+end
+
+
+defp gatherExcerciseFields(row) do
+  day = List.pop_at(row, 0) |> elem(0)
+  excercise = List.pop_at(row, 1) |> elem(0)
+  reps = List.pop_at(row, 2) |> elem(0)
+  excercise = %{name: excercise, reps: reps}
+  day = %{dayofweek: day}
+  %{"days" => day, "excercises" => excercise}
 end
 
 

@@ -27,8 +27,11 @@ defmodule FitcrmWeb.WorkoutController do
   end
 
   def create(conn, %{"workout" => workout_params}) do
-    changeset = Workout.changeset(%Workout{}, workout_params)
-
+    if upload = workout_params["file"] do
+       excercise_params = Tools.Io.csvimport_workout(workout_params)
+    end
+    new_workout_params = Map.merge(workout_params, excercise_params)
+    changeset = Workout.changeset(%Workout{}, new_workout_params)
     case Fitcrm.Repo.insert(changeset) do
       {:ok, workout} ->
         conn
