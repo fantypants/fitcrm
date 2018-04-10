@@ -1,9 +1,27 @@
 <h2>Show workout</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Workout</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for work <- @excercises do %>
+    <tr>
+    <td>Name:  <%= @workout.name %> </td>
+    </tr>
+    <tr>
+      <td>Notes:  <%= @workout.notes %> </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
 
 
   <table class="table">
     <thead>
       <tr>
+
         <th>Day</th>
         <th>Excercise</th>
         <th>Reps</th>
