@@ -6,14 +6,18 @@
     </tr>
   </thead>
   <tbody>
-<%= for work <- @excercises do %>
     <tr>
     <td>Name:  <%= @workout.name %> </td>
     </tr>
     <tr>
+    <td>Type:  <%= @workout.type %> </td>
+    </tr>
+    <tr>
+    <td>Level:  <%= @workout.level %> </td>
+    </tr>
+    <tr>
       <td>Notes:  <%= @workout.notes %> </td>
     </tr>
-<% end %>
   </tbody>
 </table>
 

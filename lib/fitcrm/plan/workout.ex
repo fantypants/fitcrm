@@ -5,6 +5,8 @@ defmodule Fitcrm.Plan.Workout do
   schema "workouts" do
       field :name, :string
       field :notes, :string
+      field :type, :string
+      field :level, :string
 
 
       has_many :excercises, Fitcrm.Plan.Excercise
@@ -16,8 +18,8 @@ defmodule Fitcrm.Plan.Workout do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :notes])
+    |> cast(params, [:name, :notes, :type, :level])
     |> cast_assoc(:excercises)
-    |> validate_required([:name, :notes])
+    |> validate_required([:name, :notes, :type, :level])
   end
 end

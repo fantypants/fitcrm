@@ -4,12 +4,24 @@
   <thead>
     <tr>
 
-      <th></th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Level</th>
     </tr>
   </thead>
   <tbody>
 <%= for workout <- @workouts do %>
     <tr>
+      <td>
+        <%= workout.name %>
+      </td>
+
+      <td>
+          <%= workout.type %>
+      </td>
+      <td>
+          <%= workout.level %>
+      </td>
 
       <td class="text-right">
         <span><%= link "Show", to: workout_path(@conn, :show, workout), class: "btn btn-default btn-xs" %></span>

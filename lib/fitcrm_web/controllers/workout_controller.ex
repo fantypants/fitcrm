@@ -35,15 +35,19 @@ defmodule FitcrmWeb.WorkoutController do
     end
     notes = workout_params["notes"]
     name = workout_params["name"]
+    type = workout_params["type"]
+    level = workout_params["level"]
     workouts = %{notes: notes, name: name}
     excercises = [%{
       day: "Monday",
       name: "This",
       reps: "that"}]
     new_workout_params = %{
-      "excercises" => excercises,
-      "name" => "gggggg",
-      "notes" => "hhhhh"
+      "excercises" => excercise_params,
+      "name" => name,
+      "notes" => notes,
+      "type" => type,
+      "level" => level
     }
     IO.inspect new_workout_params
     changeset = Workout.changeset(%Workout{}, new_workout_params)
@@ -59,7 +63,7 @@ defmodule FitcrmWeb.WorkoutController do
   end
 
   def show(conn, %{"id" => id}) do
-    workout = Fitcrm.Repo.get!(Workout, id) |> Fitcrm.Repo.preload(:excercises) |> IO.inspect
+    workout = Fitcrm.Repo.get!(Workout, id) #|> Fitcrm.Repo.preload(:excercises) |> IO.inspect
     excercises = Fitcrm.Repo.all(from e in Excercise, where: e.workout_id == ^id)
     render(conn, "show.html", workout: workout, excercises: excercises)
   end
