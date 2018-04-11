@@ -5,7 +5,7 @@ BUILD_USER="deploy"
 BUILD_AT="/tmp/edeliver/$APP/builds"
 
 RELEASE_DIR="/tmp/edeliver/$APP/builds/_build/prod/rel/$APP"
-RELEASE_VERSION=0.0.1
+RELEASE_VERSION=0.0.2
 # prevent re-installing node modules; this defaults to "."
 GIT_CLEAN_PATHS="_build rel priv/static"
 
