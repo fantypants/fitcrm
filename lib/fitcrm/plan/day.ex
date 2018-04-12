@@ -7,6 +7,8 @@ defmodule Fitcrm.Plan.Day do
     field :dayofweek, :string
 
     belongs_to :excercises, Fitcrm.Plan.Excercise
+    has_many :meals, Fitcrm.Plan.Meal
+    has_many :workouts, Fitcrm.Plan.Workout
     timestamps()
   end
 
@@ -16,6 +18,8 @@ defmodule Fitcrm.Plan.Day do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:dayofweek, :excercise_id])
+    |> cast_assoc(:meals)
+    |> cast_assoc(:workouts)
     |> validate_required([:dayofweek, :excercise_id])
   end
 end
