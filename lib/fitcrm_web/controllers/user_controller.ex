@@ -61,26 +61,14 @@ defmodule FitcrmWeb.UserController do
     changeset = User.changeset(%User{}, %{name: "name"})
     users = Accounts.list_users()
     user = (id == to_string(user.id) and user) || Accounts.get(id)
-
-    #current_state = user_state(conn, %{"id" => id})
-    #case current_state do
-    #  :new ->
         changesetmap = ClientTool.onboardclient(%{"user" => user, "params" => params})
         case Accounts.update_user(user, changesetmap) do
           {:ok, user} ->
             success(conn, "User updated successfully", user_path(conn, :show, user))
-
           {:error, %Ecto.Changeset{} = changeset} ->
             IO.inspect changeset
             render(conn, "edit.html", user: user, changeset: changeset)
         end
-    #  :exists ->
-    #    conn
-    #    |> put_flash(:info, "User Already Setup")
-    #    |> render("show.html", user: user, changeset: changeset)
-    #  end
-
-  #  render(conn, "questionform.html", changeset: changeset, users: users, user: user)
   render(conn, "show.html", user: user, changeset: changeset)
   end
 
@@ -156,6 +144,8 @@ defmodule FitcrmWeb.UserController do
   end
 
   def update(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user" => user_params}) do
+    IO.inspect user_params
+
     case Accounts.update_user(user, user_params) do
       {:ok, user} ->
         success(conn, "User updated successfully", user_path(conn, :show, user))

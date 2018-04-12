@@ -23,9 +23,11 @@ defmodule Fitcrm.Accounts.User do
 
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex])
-    |> validate_required([:email])
+    |> cast(attrs, [:email, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex, :password])
+    |> validate_required([:email, :password])
     |> unique_email
+    |> validate_password(:password)
+    |> put_pass_hash
   end
 
   def create_changeset(%User{} = user, attrs) do

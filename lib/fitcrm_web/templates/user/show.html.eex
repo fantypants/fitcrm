@@ -50,6 +50,6 @@
 </li>
 </ul>
 
-<span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span><br>
+<span><%= link "Change Password", to: user_path(@conn, :edit, @user) %></span><br>
 <span><%= link "Back", to: user_path(@conn, :index) %></span>
 <span><%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %></span>
