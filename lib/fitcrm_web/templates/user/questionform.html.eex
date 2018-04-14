@@ -1,3 +1,84 @@
+<style>
+
+*[data-tooltip] {
+    position: relative;
+}
+
+*[data-tooltip]::after {
+    content: attr(data-tooltip);
+
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 150px;
+
+    pointer-events: none;
+    opacity: 0;
+    -webkit-transition: opacity .15s ease-in-out;
+    -moz-transition: opacity .15s ease-in-out;
+    -ms-transition: opacity .15s ease-in-out;
+    -o-transition: opacity .15s ease-in-out;
+    transition: opacity .15s ease-in-out;
+
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    background: #fefdcd;
+    padding: 2px 2px;
+    border: 1px solid #c0c0c0;
+    box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
+}
+
+*[data-tooltip]:hover::after {
+    opacity: 1;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+</style>
+
 <%= form_for @changeset, user_path(@conn, :question, @user), fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -72,6 +153,24 @@ function checkGender(){
     break;
     case "Female":
     to_hide.style.display = "block";
+    tooltip();
+  };
+};
+
+//document.getElementById("cys").addEventListener("onmouseover", tooltip);
+
+function tooltip(){
+  var gender = document.getElementById("user_sex").value;
+  switch(gender){
+    case "Male":
+    console.log("NO PCOS");
+    break;
+    case "Female":
+      document.getElementById("cys").addEventListener("mouseenter",function(){
+        console.log("mouse over")
+        //document.getElementById("tips").style.display = "block";
+      });
+
   };
 };
 
@@ -96,10 +195,15 @@ function checkGender(){
     <%= error_tag f, :weight %>
   </div>
 
+
+<div data-tooltip="your tooltip message"></div>
+
+
   <div class="form-group" id="cys">
     <%= label f, :"Do you have PCOS", class: "control-label" %>
     <%= select f, :cystic, ["Yes", "No"] %>
     <%= error_tag f, :csytic %>
+
   </div>
 
   <div class="form-group">
