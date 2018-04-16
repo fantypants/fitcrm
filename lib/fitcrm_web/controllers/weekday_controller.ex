@@ -71,16 +71,31 @@ defmodule FitcrmWeb.WeekdayController do
     bid= Map.fetch!(weekday, :breakfast)
     lid= Map.fetch!(weekday, :lunch)
     did= Map.fetch!(weekday, :dinner)
-    meals = %{
-      b: Fitcrm.Repo.get!(Meal,bid).name,
-      l: Fitcrm.Repo.get!(Meal,lid).name,
-      d: Fitcrm.Repo.get!(Meal,did).name
-    }
+
+    mealids = [bid, lid, did]
+    meals = mealids |> Enum.map(fn(a) -> %{
+      name: Fitcrm.Repo.get!(Meal, a).name,
+      type: "mealtype test",
+      foodids: Fitcrm.Repo.get!(Meal,a).foodid
+      } end)
+    mealsfull = meals |> Enum.map(fn(a) -> %{name: a.name, type: a.type, foodids: getfullmeal(a.foodids)} end) |> IO.inspect
+
     excercises = weekday.excercises |> Enum.map(fn(a) -> %{
       name: Fitcrm.Repo.get!(Excercise, a).name,
       reps: Fitcrm.Repo.get!(Excercise, a).reps}
     end)
-    render(conn, "show.html", weekday: weekday, excercises: excercises, meals: meals)
+    render(conn, "show.html", weekday: weekday, excercises: excercises, mealsfull: mealsfull)
+  end
+
+  def getfullmeal(foodids) do
+    foods = foodids |> Enum.map(fn(a) -> %{
+      name: Fitcrm.Repo.get!(Food, a).name,
+      p: Fitcrm.Repo.get!(Food, a).protein,
+      c: Fitcrm.Repo.get!(Food, a).carbs,
+      f: Fitcrm.Repo.get!(Food, a).fat,
+      cal: Fitcrm.Repo.get!(Food, a).calories,
+      q: Fitcrm.Repo.get!(Food, a).quantity}
+    end)
   end
 
   def edit(conn, %{"id" => id}) do

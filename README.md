@@ -58,3 +58,4 @@
 - Dinner
 - Excercise
 - Make each meal have its correct properties and food, (create function which does this to use in each function)
+- Add Meal type

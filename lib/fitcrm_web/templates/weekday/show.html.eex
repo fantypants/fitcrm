@@ -10,13 +10,17 @@
     </tr>
   </thead>
   <tbody>
-
+    <%= for meal <- @mealsfull do %>
     <tr>
-      <td> <%= @meals.b %> </td>
-    <td>  <%= @meals.l %> </td>
-    <td>  <%= @meals.d %> </td>
+      <td> <%= meal.name %> </td>
+      <td> <%= meal.type %> </td>
+      <%= for food <- meal.foodids do %>
+      <tr>
+        <td>  <%= food.name %> </td>
+      </tr>
+    <% end %>
     </tr>
-
+    <% end %>
   </tbody>
 </table>
 
