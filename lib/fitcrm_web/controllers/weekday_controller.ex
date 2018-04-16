@@ -71,14 +71,14 @@ defmodule FitcrmWeb.WeekdayController do
     bid= Map.fetch!(weekday, :breakfast)
     lid= Map.fetch!(weekday, :lunch)
     did= Map.fetch!(weekday, :dinner)
-
     mealids = [bid, lid, did]
     meals = mealids |> Enum.map(fn(a) -> %{
       name: Fitcrm.Repo.get!(Meal, a).name,
       type: "mealtype test",
+      recipe: "Just chuck the ingredients in the microwave mate",
       foodids: Fitcrm.Repo.get!(Meal,a).foodid
       } end)
-    mealsfull = meals |> Enum.map(fn(a) -> %{name: a.name, type: a.type, foodids: getfullmeal(a.foodids)} end) |> IO.inspect
+    mealsfull = meals |> Enum.map(fn(a) -> %{name: a.name, type: a.type, recipe: a.recipe, foodids: getfullmeal(a.foodids)} end) |> IO.inspect
 
     excercises = weekday.excercises |> Enum.map(fn(a) -> %{
       name: Fitcrm.Repo.get!(Excercise, a).name,

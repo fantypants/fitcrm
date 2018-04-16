@@ -1,6 +1,9 @@
 <h2>Show weekday</h2>
 
 
+
+
+
 <table class="table">
   <thead>
     <tr>
@@ -12,14 +15,28 @@
   <tbody>
     <%= for meal <- @mealsfull do %>
     <tr>
-      <td> <%= meal.name %> </td>
-      <td> <%= meal.type %> </td>
-      <%= for food <- meal.foodids do %>
+      <td><strong> <%= meal.name %> </strong> </td>
+      <td> <strong><%= meal.type %> </strong></td>
+      <td> <strong><%= meal.recipe %> </strong></td>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Food</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for food <- meal.foodids do %>
       <tr>
-        <td>  <%= food.name %> </td>
+        <td> <%= food.name %> </td>
+        <td> <%= food.q %> </td>
       </tr>
-    <% end %>
-    </tr>
+        <% end %>
+    </tbody>
+  </table>
+  </tr>
+
     <% end %>
   </tbody>
 </table>
