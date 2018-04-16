@@ -47,3 +47,14 @@
 - CSV Uploads
 - Process the file
 - Add Foods to the DB and then Corresponding ID into the MEal DB with correct qty for the id
+
+
+## Users and days
+- Each day has a workouts and has meals
+- Three Meals to a day
+- One workout to a day
+- Breakfast
+- Lunch
+- Dinner
+- Excercise
+- Make each meal have its correct properties and food, (create function which does this to use in each function)

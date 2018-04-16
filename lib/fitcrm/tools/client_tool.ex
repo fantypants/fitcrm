@@ -8,6 +8,7 @@ defmodule Fitcrm.Tools.ClientTool do
     alias Fitcrm.Tools.PhysicsTool
     alias Fitcrm.Plan.Workout
     alias Fitcrm.Foods.Meal
+    alias Fitcrm.Plan.Excercise
 
     def onboardclient(%{"user" => user, "params" => params}) do
       IO.puts "omboarded"
@@ -57,10 +58,23 @@ defmodule Fitcrm.Tools.ClientTool do
       lquery = from m in Meal, where: m.calories <= ^lcals, select: m.id
       dquery = from m in Meal, where: m.calories <= ^dcals, select: m.id
       breakfast = Fitcrm.Repo.all(bquery)
-      lunch = Fitcrm.Repo.all(lquery) 
-      dinner = Fitcrm.Repo.all(dquery) 
+      lunch = Fitcrm.Repo.all(lquery)
+      dinner = Fitcrm.Repo.all(dquery)
       %{breakfast: breakfast, lunch: lunch, dinner: dinner}
 
+    end
+
+    def selectMeals(b_id, l_id, d_id) do
+      b = b_id |> List.first
+      l = l_id |> List.first
+      d = d_id |> List.first
+      %{"breakfast" => b, "lunch" => l, "dinner" => d}
+    end
+
+    def selectWorkout(id, day) do
+      query = from e in Excercise, where: e.workout_id == ^id
+      ids = Fitcrm.Repo.all(query) |> Enum.filter(fn(a) -> a.day == day end) |> Enum.map(fn(a) -> a.id end)
+      %{"excercises" => ids}
     end
 
 

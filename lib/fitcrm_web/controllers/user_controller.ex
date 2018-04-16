@@ -133,9 +133,6 @@ defmodule FitcrmWeb.UserController do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
     changeset = Food.changeset(%Food{}, %{name: "test"})
     #tdee = user.tdee
-    #Tools.ClientTool.getWorkoutID("Beginner","Shred")
-    #Tools.ClientTool.getMealID(tdee)
-
     render(conn, "show.html", user: user, changeset: changeset)
   end
 

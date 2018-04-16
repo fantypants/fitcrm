@@ -1,0 +1,45 @@
+<h2>Show weekday</h2>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>When</th>
+      <th>Recipe</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td> <%= @meals.b %> </td>
+    <td>  <%= @meals.l %> </td>
+    <td>  <%= @meals.d %> </td>
+    </tr>
+
+  </tbody>
+</table>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Excercise Name</th>
+        <th>Excercise Reps</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for ex <- @excercises do %>
+      <tr>
+        <td>   <%= ex.name %> </td>
+        <td>   <%= ex.reps %> </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+
+
+
+
+<span><%= link "Edit", to: weekday_path(@conn, :edit, @weekday) %></span>
+<span><%= link "Back", to: weekday_path(@conn, :index) %></span>

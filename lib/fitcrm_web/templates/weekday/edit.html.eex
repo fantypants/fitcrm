@@ -1,0 +1,6 @@
+<h2>Edit weekday</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: weekday_path(@conn, :update, @weekday) %>
+
+<span><%= link "Back", to: weekday_path(@conn, :index) %></span>
