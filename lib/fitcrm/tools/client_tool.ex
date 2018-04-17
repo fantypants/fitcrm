@@ -72,10 +72,29 @@ defmodule Fitcrm.Tools.ClientTool do
     end
 
     def selectWorkout(id, day) do
+      case day do
+        "Monday" ->
+          day_int = "1"
+        "Tuesday" ->
+          day_int = "2"
+        "Wednesday" ->
+          day_int = "3"
+        "Thursday" ->
+          day_int = "4"
+        "Friday" ->
+          day_int = "5"
+        "Saturday" ->
+          day_int = "6"
+        "Sunday" ->
+          day_int = "7"
+      end
+      IO.puts "Day params"
+      IO.inspect day_int
       query = from e in Excercise, where: e.workout_id == ^id
-      ids = Fitcrm.Repo.all(query) |> Enum.filter(fn(a) -> a.day == day end) |> Enum.map(fn(a) -> a.id end)
+      ids = Fitcrm.Repo.all(query) |> Enum.filter(fn(a) -> a.day == day_int end) |> IO.inspect |> Enum.map(fn(a) -> a.id end)
       %{"excercises" => ids}
     end
+
 
 
 

@@ -5,6 +5,7 @@ defmodule Fitcrm.Plan.Weekday do
 
   schema "weekdays" do
     field :breakfast, :integer
+    field :day, :string
     field :lunch, :integer
     field :dinner, :integer
     field :excercises, {:array, :integer}
@@ -17,7 +18,7 @@ defmodule Fitcrm.Plan.Weekday do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:breakfast, :lunch, :dinner, :excercises])
-    |> validate_required([:breakfast, :lunch, :dinner, :excercises])
+    |> cast(params, [:breakfast, :lunch, :dinner, :excercises, :day])
+    |> validate_required([:breakfast, :lunch, :dinner, :excercises, :day])
   end
 end

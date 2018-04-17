@@ -31,22 +31,12 @@ defmodule FitcrmWeb.WeekdayController do
   end
 
   def create(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"weekday" => weekday_params}) do
-    IO.puts "Old params"
-    IO.inspect weekday_params
     user_id = user.id
     user_tdee = user.tdee
-
-
     workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
-    selected_workouts = Tools.ClientTool.selectWorkout(workout_id, "1") |> IO.inspect
+    selected_workouts = Tools.ClientTool.selectWorkout(workout_id, weekday_params["day"])
     meal_ids = Tools.ClientTool.getMealID(user_tdee)
     selected_meals = Tools.ClientTool.selectMeals(meal_ids.breakfast, meal_ids.lunch, meal_ids.dinner)
-    # Retrieve Workouts applicable
-    # Get the corresponding ID and insert into DB
-    #weekday_params |> Map.put(:breakfast, selected_meals.b)
-    #weekday_params |> Map.put(:lunch, selected_meals.l)
-    #weekday_params |> Map.put(:dinner, selected_meals.d)
-    IO.puts "new params"
     intermediate_params = weekday_params |> Map.merge(selected_meals)
     new_params = intermediate_params |> Map.merge(selected_workouts)
     changeset = Weekday.changeset(%Weekday{}, new_params)

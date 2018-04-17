@@ -1,9 +1,17 @@
 <h2>Show weekday</h2>
 
-
-
-
-
+<table class="table">
+  <thead>
+    <tr>
+      <th>Day</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong> <%= @weekday.day %> </strong> </td>
+    </tr>
+  </tbody>
+</table>
 <table class="table">
   <thead>
     <tr>
