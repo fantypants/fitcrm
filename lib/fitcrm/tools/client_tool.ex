@@ -15,16 +15,16 @@ defmodule Fitcrm.Tools.ClientTool do
 
     def onboardclient(%{"user" => user, "params" => params}) do
       IO.puts "omboarded"
-      weight = params["weight"] |> IO.inspect
-      height = params["height"] |> IO.inspect
-      activity = params["activity"] |> IO.inspect
-      age = params["age"] |> IO.inspect
-      sex = params["sex"] |> IO.inspect
-      cystic = params["cystic"] |> IO.inspect
-      ir = params["ir"] |> IO.inspect
+      weight = params["weight"] 
+      height = params["height"] 
+      activity = params["activity"] 
+      age = params["age"] 
+      sex = params["sex"] 
+      cystic = params["cystic"] 
+      ir = params["ir"] 
       params_new = PhysicsTool.modifyQuestionResults(%{"sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
       bmr = PhysicsTool.calculate_tdee(params_new) |> IO.inspect
-      tdee_original = PhysicsTool.scaleActivity(bmr, params_new["activity"]) |> IO.inspect
+      tdee_original = PhysicsTool.scaleActivity(bmr, params_new["activity"])
       case cystic do
         "Yes" ->
           cyst1 = 600
@@ -39,7 +39,7 @@ defmodule Fitcrm.Tools.ClientTool do
           ir1 = 0
       end
       tdee = tdee_original - cyst1 - ir1
-      changesetmap = PhysicsTool.compileResults(user, params_new, bmr, tdee) |> IO.inspect
+      changesetmap = PhysicsTool.compileResults(user, params_new, bmr, tdee)
       changesetmap
     end
 
@@ -47,7 +47,7 @@ defmodule Fitcrm.Tools.ClientTool do
       IO.puts "Selecting appliciable workout"
       IO.puts "Variables: #{type} & #{level}"
       query = from w in Workout, where: w.type == ^type
-      workouts = Fitcrm.Repo.all(query) |> Enum.find(fn(a) -> a.level == level end) |> Map.fetch!(:id) |> IO.inspect
+      workouts = Fitcrm.Repo.all(query) |> Enum.find(fn(a) -> a.level == level end) |> Map.fetch!(:id)
     end
 
     def getMealID(tdee) do
@@ -77,7 +77,7 @@ defmodule Fitcrm.Tools.ClientTool do
     def selectWorkout(id, day) do
       day_int = daySelector(day)
       query = from e in Excercise, where: e.workout_id == ^id
-      ids = Fitcrm.Repo.all(query) |> Enum.filter(fn(a) -> a.day == day_int end) |> IO.inspect |> Enum.map(fn(a) -> a.id end)
+      ids = Fitcrm.Repo.all(query) |> Enum.filter(fn(a) -> a.day == day_int end) |> Enum.map(fn(a) -> a.id end)
       %{"excercises" => ids}
     end
 

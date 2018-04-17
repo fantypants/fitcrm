@@ -10,6 +10,7 @@ defmodule Fitcrm.Plan.Weekday do
     field :dinner, :integer
     field :excercises, {:array, :integer}
 
+    belongs_to :week, Fitcrm.Plan.Week
     timestamps()
   end
 
@@ -18,7 +19,7 @@ defmodule Fitcrm.Plan.Weekday do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:breakfast, :lunch, :dinner, :excercises, :day])
+    |> cast(params, [:breakfast, :lunch, :dinner, :excercises, :day, :week_id])
     |> validate_required([:breakfast, :lunch, :dinner, :excercises, :day])
   end
 end

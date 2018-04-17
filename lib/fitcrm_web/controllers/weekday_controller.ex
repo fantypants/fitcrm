@@ -16,6 +16,7 @@ defmodule FitcrmWeb.WeekdayController do
   alias Fitcrm.Accounts.User
   alias Fitcrm.Tools.ClientTool
   alias Fitcrm.Tools.Parent
+  alias Fitcrm.Plan.Week
 
   plug :user_check when action in [:index, :show]
   plug :id_check when action in [:edit, :update, :delete]
@@ -51,10 +52,23 @@ defmodule FitcrmWeb.WeekdayController do
     end
   end
 
+  def showweek(conn, %{"id" => id}) do
+    query = from w in Weekday, where: w.week_id == ^1
+    week = Fitcrm.Repo.get!(Week, 1)
+    weekdays = Fitcrm.Repo.all(query)
+
+    conn |> render("weeks.html", week: week, weekdays: weekdays)
+  end
+
   def show(conn, %{"id" => id}) do
     Tools.ClientTool.getDate()
     Tools.ClientTool.queryTargetDates(conn)
-    weekday = Fitcrm.Repo.get!(Weekday, id) |> IO.inspect
+    #createWeekMap(conn) |> IO.inspect
+    #create_week(conn)
+
+    Fitcrm.Repo.all(from w in Weekday, where: w.week_id == ^2) |> IO.inspect
+
+    weekday = Fitcrm.Repo.get!(Weekday, id)
     bid= Map.fetch!(weekday, :breakfast)
     lid= Map.fetch!(weekday, :lunch)
     did= Map.fetch!(weekday, :dinner)
@@ -105,6 +119,19 @@ defmodule FitcrmWeb.WeekdayController do
     end
   end
 
+  def create_day(%Plug.Conn{assigns: %{current_user: user}} = conn, day) do
+      IO.puts "Day is: #{day}"
+      user_id = user.id
+      user_tdee = user.tdee
+      weekday_params = %{"day" => day}
+      workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
+      selected_workouts = Tools.ClientTool.selectWorkout(workout_id, day)
+      meal_ids = Tools.ClientTool.getMealID(user_tdee)
+      selected_meals = Tools.ClientTool.selectMeals(meal_ids.breakfast, meal_ids.lunch, meal_ids.dinner)
+      int_params = weekday_params |> Map.merge(selected_meals)
+      int_params |> Map.merge(selected_workouts)
+  end
+
   def get_and_update(%Plug.Conn{assigns: %{current_user: user}} = conn, day_id) do
     weekday = Fitcrm.Repo.get!(Weekday, day_id)
     IO.puts "Day is:"
@@ -112,9 +139,6 @@ defmodule FitcrmWeb.WeekdayController do
     user_id = user.id
     user_tdee = user.tdee
     weekday_params = %{"day" => day, "id" => day_id}
-
-
-
     workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
     selected_workouts = Tools.ClientTool.selectWorkout(workout_id, day)
     meal_ids = Tools.ClientTool.getMealID(user_tdee)
@@ -130,6 +154,31 @@ defmodule FitcrmWeb.WeekdayController do
       {:error, changeset} ->
         IO.puts "Error Occured updatign changeset"
     end
+  end
+
+  def createWeekMap(conn) do
+    day_params = Tools.ClientTool.getDate()
+    day_params |> Enum.map(fn(a) -> create_day(conn, elem(a, 1)) end)
+  end
+
+  def create_week(%Plug.Conn{assigns: %{current_user: user}} = conn) do
+    day_params = createWeekMap(conn)
+    params = %{
+      "start" => Timex.local,
+      "end" => Timex.local,
+      "weekdays" => day_params
+    }
+    changeset= Week.changeset(%Week{}, params)
+    case Fitcrm.Repo.insert(changeset) do
+      {:ok, week} ->
+        IO.puts "Succesfully Updated"
+        IO.inspect week
+        IO.inspect changeset
+      {:error, changeset} ->
+        IO.puts "Error Occured updatign changeset"
+        IO.inspect changeset
+    end
+
   end
 
   def delete(conn, %{"id" => id}) do
