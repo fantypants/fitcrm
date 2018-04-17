@@ -12,6 +12,7 @@ defmodule Fitcrm.Application do
       supervisor(Fitcrm.Repo, []),
       # Start the endpoint when the application starts
       supervisor(FitcrmWeb.Endpoint, []),
+      worker(Fitcrm.Tools.Planner, [])
       # Start your own worker by calling: Fitcrm.Worker.start_link(arg1, arg2, arg3)
       # worker(Fitcrm.Worker, [arg1, arg2, arg3]),
     ]

@@ -15,6 +15,7 @@ defmodule FitcrmWeb.WeekdayController do
   alias Fitcrm.Plan.Excercise
   alias Fitcrm.Accounts.User
   alias Fitcrm.Tools.ClientTool
+  alias Fitcrm.Tools.Parent
 
   plug :user_check when action in [:index, :show]
   plug :id_check when action in [:edit, :update, :delete]
@@ -52,6 +53,8 @@ defmodule FitcrmWeb.WeekdayController do
 
   def show(conn, %{"id" => id}) do
     Tools.ClientTool.getDate()
+    Tools.Parent.init([2,3,5])
+    #Tools.Parent.Process.sleep 2_000
     weekday = Fitcrm.Repo.get!(Weekday, id) |> IO.inspect
     bid= Map.fetch!(weekday, :breakfast)
     lid= Map.fetch!(weekday, :lunch)
