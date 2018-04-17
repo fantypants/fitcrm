@@ -59,3 +59,10 @@
 - Excercise
 - Make each meal have its correct properties and food, (create function which does this to use in each function)
 - Add Meal type
+
+
+## Week planner
+- Get Date
+- Set Date on Meal of creation
+- Set Expiry for 7 days
+- Plan the 7 days

@@ -1,6 +1,6 @@
 defmodule FitcrmWeb.WeekdayController do
   use FitcrmWeb, :controller
-
+  use Timex
   alias Fitcrm.Plan.Weekday
   import Plug.Conn
   import Ecto.Query
@@ -40,12 +40,6 @@ defmodule FitcrmWeb.WeekdayController do
     intermediate_params = weekday_params |> Map.merge(selected_meals)
     new_params = intermediate_params |> Map.merge(selected_workouts)
     changeset = Weekday.changeset(%Weekday{}, new_params)
-
-
-
-
-
-
     case Fitcrm.Repo.insert(changeset) do
       {:ok, weekday} ->
         conn
@@ -57,6 +51,7 @@ defmodule FitcrmWeb.WeekdayController do
   end
 
   def show(conn, %{"id" => id}) do
+    Tools.ClientTool.getDate()
     weekday = Fitcrm.Repo.get!(Weekday, id) |> IO.inspect
     bid= Map.fetch!(weekday, :breakfast)
     lid= Map.fetch!(weekday, :lunch)

@@ -1,4 +1,5 @@
 defmodule Fitcrm.Tools.ClientTool do
+    use Timex
     import Ecto.Query
     alias Fitcrm.Tools.ClientTool
     alias FitcrmWeb.UserController
@@ -72,28 +73,52 @@ defmodule Fitcrm.Tools.ClientTool do
     end
 
     def selectWorkout(id, day) do
-      case day do
-        "Monday" ->
-          day_int = "1"
-        "Tuesday" ->
-          day_int = "2"
-        "Wednesday" ->
-          day_int = "3"
-        "Thursday" ->
-          day_int = "4"
-        "Friday" ->
-          day_int = "5"
-        "Saturday" ->
-          day_int = "6"
-        "Sunday" ->
-          day_int = "7"
-      end
-      IO.puts "Day params"
-      IO.inspect day_int
+      day_int = daySelector(day)
       query = from e in Excercise, where: e.workout_id == ^id
       ids = Fitcrm.Repo.all(query) |> Enum.filter(fn(a) -> a.day == day_int end) |> IO.inspect |> Enum.map(fn(a) -> a.id end)
       %{"excercises" => ids}
     end
+
+    defp daySelector(day) do
+      case day do
+        "Monday" ->
+          "1"
+        "Tuesday" ->
+          "2"
+        "Wednesday" ->
+          "3"
+        "Thursday" ->
+          "4"
+        "Friday" ->
+          "5"
+        "Saturday" ->
+          "6"
+        "Sunday" ->
+          "7"
+      end
+    end
+
+    def getDate() do
+      localDTG = Timex.today
+      weekdayNumber = Timex.weekday(localDTG) |> IO.inspect
+      day = Timex.day_name(weekdayNumber) |> IO.inspect
+      weekdays = setupWeek(day) |> IO.inspect
+    end
+
+    defp setupWeek(day) do
+      day_int = daySelector(day)
+      localDTG = Timex.today
+      [
+        Date.add(Timex.local, 0),
+        Date.add(Timex.local, 1),
+        Date.add(Timex.local, 2),
+        Date.add(Timex.local, 3),
+        Date.add(Timex.local, 4),
+        Date.add(Timex.local, 5),
+        Date.add(Timex.local, 6)
+      ] |> Enum.map(fn(a) -> {daySelector(Timex.day_name(Timex.weekday(a))), Timex.day_name(Timex.weekday(a))} end)
+    end
+
 
 
 
