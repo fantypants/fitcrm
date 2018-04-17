@@ -10,6 +10,8 @@ defmodule Fitcrm.Tools.ClientTool do
     alias Fitcrm.Plan.Workout
     alias Fitcrm.Foods.Meal
     alias Fitcrm.Plan.Excercise
+    alias Fitcrm.Plan.Weekday
+    alias FitcrmWeb.WeekdayController
 
     def onboardclient(%{"user" => user, "params" => params}) do
       IO.puts "omboarded"
@@ -98,11 +100,17 @@ defmodule Fitcrm.Tools.ClientTool do
       end
     end
 
+    def getCurrentDay() do
+      localDTG = Timex.today
+      weekdayNumber = Timex.weekday(localDTG)
+      Timex.day_name(weekdayNumber)
+    end
+
     def getDate() do
       localDTG = Timex.today
-      weekdayNumber = Timex.weekday(localDTG) |> IO.inspect
-      day = Timex.day_name(weekdayNumber) |> IO.inspect
-      weekdays = setupWeek(day) |> IO.inspect
+      weekdayNumber = Timex.weekday(localDTG)
+      day = Timex.day_name(weekdayNumber)
+      weekdays = setupWeek(day)
     end
 
     defp setupWeek(day) do
@@ -118,6 +126,15 @@ defmodule Fitcrm.Tools.ClientTool do
         Date.add(Timex.local, 6)
       ] |> Enum.map(fn(a) -> {daySelector(Timex.day_name(Timex.weekday(a))), Timex.day_name(Timex.weekday(a))} end)
     end
+
+    def queryTargetDates(conn) do
+      day = "Monday"
+      currentDate = Timex.local |> IO.inspect
+      query = from w in Weekday, where: w.day == ^day, select: w.id
+      Fitcrm.Repo.all(query) |> Enum.each(fn(a) -> WeekdayController.get_and_update(conn, a) end)
+    end
+
+
 
 
 

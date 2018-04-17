@@ -1,5 +1,6 @@
 defmodule Fitcrm.Tools.Planner do
   use GenServer
+  alias Fitcrm.Tools.ClientTool
 
   def start_link do
     GenServer.start_link(__MODULE__, %{})
@@ -18,6 +19,7 @@ defmodule Fitcrm.Tools.Planner do
 
   defp schedule_work() do
     IO.puts "Supervisor for the planner is online"
-    Process.send_after(self(), :work, 2 * 60 * 60 * 1000) # In 2 hours
+    ClientTool.getDate
+    Process.send_after(self(), :work, 60 * 1000) # In 5 Seconds
   end
 end

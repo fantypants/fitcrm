@@ -53,8 +53,7 @@ defmodule FitcrmWeb.WeekdayController do
 
   def show(conn, %{"id" => id}) do
     Tools.ClientTool.getDate()
-    Tools.Parent.init([2,3,5])
-    #Tools.Parent.Process.sleep 2_000
+    Tools.ClientTool.queryTargetDates(conn)
     weekday = Fitcrm.Repo.get!(Weekday, id) |> IO.inspect
     bid= Map.fetch!(weekday, :breakfast)
     lid= Map.fetch!(weekday, :lunch)
@@ -103,6 +102,33 @@ defmodule FitcrmWeb.WeekdayController do
         |> redirect(to: weekday_path(conn, :show, weekday))
       {:error, changeset} ->
         render(conn, "edit.html", weekday: weekday, changeset: changeset)
+    end
+  end
+
+  def get_and_update(%Plug.Conn{assigns: %{current_user: user}} = conn, day_id) do
+    weekday = Fitcrm.Repo.get!(Weekday, day_id)
+    IO.puts "Day is:"
+    day = Tools.ClientTool.getCurrentDay |> IO.inspect
+    user_id = user.id
+    user_tdee = user.tdee
+    weekday_params = %{"day" => day, "id" => day_id}
+
+
+
+    workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
+    selected_workouts = Tools.ClientTool.selectWorkout(workout_id, day)
+    meal_ids = Tools.ClientTool.getMealID(user_tdee)
+    selected_meals = Tools.ClientTool.selectMeals(meal_ids.breakfast, meal_ids.lunch, meal_ids.dinner)
+    int_params = weekday_params |> Map.merge(selected_meals)
+    new_params = int_params |> Map.merge(selected_workouts)
+    changeset = Weekday.changeset(weekday, new_params)
+    case Fitcrm.Repo.update(changeset) do
+      {:ok, weekday} ->
+        IO.puts "Succesfully Updated"
+        IO.inspect weekday
+        IO.inspect changeset
+      {:error, changeset} ->
+        IO.puts "Error Occured updatign changeset"
     end
   end
 
