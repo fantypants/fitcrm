@@ -148,18 +148,17 @@ meal_ident = List.pop_at(row, 0) |> elem(0)
 name = List.pop_at(row, 1) |> elem(0)
 type = List.pop_at(row, 2) |> elem(0)
 recipe = List.pop_at(row, 3) |> elem(0)
-foodid = getFood(meal_ident) |> IO.inspect
-stats = getfoodStats(foodid) |> IO.inspect
+foodid = getFood(meal_ident)
+stats = getfoodStats(foodid)
 
 original = %{name: name, type: type, recipe: recipe, foodid: foodid}
-Map.merge(original, stats) |> IO.inspect
+Map.merge(original, stats)
 end
 
 defp transitionMap(meal) do
   meals = meal |> Enum.map(fn(a) ->
     %{mealname: elem(Map.fetch(a, "meal"), 1).name, food: {elem(Map.fetch(a, "foods"), 1).name, elem(Map.fetch(a, "foods"), 1).qty}}
   end)
-    |> IO.inspect
 end
 
 defp getFood(id) do
