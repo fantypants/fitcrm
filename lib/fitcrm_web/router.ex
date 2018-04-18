@@ -14,7 +14,14 @@ defmodule FitcrmWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/users", UserController
+    resources "/users", UserController do
+      resources "/weekdays", WeekdayController
+      get "/weeks", WeekdayController, :showweek
+    end
+    resources "/sessions", SessionController, only: [:new, :create, :delete]
+    resources "/meals", MealController
+    resources "/workouts", WorkoutController
+    resources "/weekdays", WeekdayController
     get "users/:id/csvupload", UserController, :csvupload
     post "users/:id/csvupload", UserController, :csvupload
     get "users/:id/question", UserController, :question
@@ -25,11 +32,7 @@ defmodule FitcrmWeb.Router do
     post "users/:id/foods", UserController, :foodindex
     get "users/:id/foods/deletefood", UserController, :deletefood
     post "users/:id/foods/deletefood", UserController, :deletefood
-    resources "/sessions", SessionController, only: [:new, :create, :delete]
-    resources "/meals", MealController
-    resources "/workouts", WorkoutController
-    resources "/weekdays", WeekdayController
-    get "users/:id/weeks", WeekdayController, :showweek
+
 
   end
 

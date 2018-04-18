@@ -1,0 +1,30 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+
+  <div class="form-group">
+    <%= label f, :breakfast, class: "control-label" %>
+    <%= select f, :breakfast, Enum.map(@breakfast, &{&1.name, &1.id}) %>
+    <%= error_tag f, :breakfast %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :lunch, class: "control-label" %>
+    <%= select f, :lunch, Enum.map(@lunch, &{&1.name, &1.id}) %>
+    <%= error_tag f, :lunch %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :dinner, class: "control-label" %>
+    <%= select f, :dinner, Enum.map(@dinner, &{&1.name, &1.id}) %>
+    <%= error_tag f, :dinner %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

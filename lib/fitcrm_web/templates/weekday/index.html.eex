@@ -20,13 +20,13 @@
       <td><%= weekday.excercises %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: weekday_path(@conn, :show, weekday), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: weekday_path(@conn, :edit, weekday), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: weekday_path(@conn, :delete, weekday), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span><%= link "Show", to: user_weekday_path(@conn, :show, @user, weekday), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: user_weekday_path(@conn, :edit, @user, weekday), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: user_weekday_path(@conn, :delete, @user, weekday), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New weekday", to: weekday_path(@conn, :new) %></span>
+<span><%= link "New weekday", to: user_weekday_path(@conn, :new, @user) %></span>

@@ -70,5 +70,5 @@
 
 
 
-<span><%= link "Edit", to: weekday_path(@conn, :edit, @weekday) %></span>
-<span><%= link "Back", to: weekday_path(@conn, :index) %></span>
+<span><%= link "Edit", to: user_weekday_path(@conn, :edit, @s, @weekday) %></span>
+<span><%= link "Back", to: user_weekday_path(@conn, :index, @user) %></span>

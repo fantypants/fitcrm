@@ -41,13 +41,17 @@ defmodule FitcrmWeb.Authorize do
     need_login(conn)
   end
 
-  def id_check(
-        %Plug.Conn{params: %{"id" => id}, assigns: %{current_user: current_user}} = conn,
-        _opts
-      ) do
+  def id_check(%Plug.Conn{params: %{"id" => id}, assigns: %{current_user: current_user}} = conn,_opts) do
+    IO.inspect conn
     (id == to_string(current_user.id) and conn) ||
       error(conn, "You are not authorized to view this page", user_path(conn, :index))
   end
+
+  def id_check(%Plug.Conn{params: %{"user_id" => user_id, "id" => id}, assigns: %{current_user: current_user}} = conn,_opts) do
+    (user_id == to_string(current_user.id) and conn) ||
+      error(conn, "You are not authorized to view this page", user_path(conn, :index))
+  end
+
 
   def success(conn, message, path) do
     conn

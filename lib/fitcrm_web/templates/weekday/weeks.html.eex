@@ -23,7 +23,7 @@
     <%= for day <- @weekdays do %>
     <tr>
       <td> <%= day.day %> </td>
-      <td><span><%= link "Show", to: weekday_path(@conn, :show, day), class: "btn btn-danger btn-xs" %></span></td>
+      <td><span><%= link "Show", to: user_weekday_path(@conn, :show, @current_user, day), class: "btn btn-danger btn-xs" %></span></td>
     </tr>
     <% end %>
   </tbody>

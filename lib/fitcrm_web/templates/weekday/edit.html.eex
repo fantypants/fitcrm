@@ -1,6 +1,6 @@
 <h2>Edit weekday</h2>
 
-<%= render "form.html", changeset: @changeset,
-                        action: weekday_path(@conn, :update, @weekday) %>
+<%= render "form_changefood.html", changeset: @changeset, meals: @meals, breakfast: @breakfast, lunch: @lunch, dinner: @dinner,
+                        action: user_weekday_path(@conn, :update, @user, @weekday) %>
 
-<span><%= link "Back", to: weekday_path(@conn, :index) %></span>
+<span><%= link "Back", to: user_weekday_path(@conn, :index, @user) %></span>
