@@ -1,0 +1,17 @@
+<h2>WEEKS</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Weeks</th>
+
+    </tr>
+  </thead>
+  <tbody>
+<%= for week <- @weeks do %>
+    <tr>
+      <td><%= week.id %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

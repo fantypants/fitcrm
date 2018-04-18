@@ -23,7 +23,6 @@ defmodule FitcrmWeb.WeekdayController do
 
   def index(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
     user = user.id
-    ClientTool.getPlanDates(conn)
     weekdays = Fitcrm.Repo.all(Weekday)
     render(conn, "index.html", weekdays: weekdays, user: user)
   end
@@ -55,19 +54,25 @@ defmodule FitcrmWeb.WeekdayController do
   end
 
   def showweek(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user_id" => user_id}) do
-    query = from w in Weekday, where: w.week_id == ^1
-    week = Fitcrm.Repo.get!(Week, 1)
+    query = from w in Weekday, where: w.week_id == ^10
+    Fitcrm.Repo.all(Week) |> IO.inspect
+    week = Fitcrm.Repo.get!(Week, 10)
     weekdays = Fitcrm.Repo.all(query)
     user = (user_id == to_string(user.id) and user) || Accounts.get(user_id)
     conn |> render("weeks.html", week: week, weekdays: weekdays, user: user)
   end
 
+  def weekindex(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user_id" => user_id}) do
+    weeks = Fitcrm.Repo.all(Week)
+    conn |> render("weekindex.html", weeks: weeks)
+  end
+
   def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     #user = (user_id == to_string(user.id) and user) || Accounts.get(user_id)
-    Tools.ClientTool.getDate()
-    Tools.ClientTool.queryTargetDates(conn)
+    #Tools.ClientTool.getDate()
+    #Tools.ClientTool.queryTargetDates(conn)
     #createWeekMap(conn) |> IO.inspect
-    #create_week(conn)
+    create_week(conn)
     Fitcrm.Repo.all(from w in Weekday, where: w.week_id == ^2) |> IO.inspect
     users = [user.id]
     s = user.id
@@ -142,10 +147,9 @@ defmodule FitcrmWeb.WeekdayController do
       int_params |> Map.merge(selected_workouts)
   end
 
-  def get_and_update(%Plug.Conn{assigns: %{current_user: user}} = conn, day_id) do
+  def get_and_update(%Plug.Conn{assigns: %{current_user: user}} = conn, day_id, day) do
     weekday = Fitcrm.Repo.get!(Weekday, day_id)
     IO.puts "Day is:"
-    day = Tools.ClientTool.getCurrentDay |> IO.inspect
     user_id = user.id
     user_tdee = user.tdee
     weekday_params = %{"day" => day, "id" => day_id}
@@ -178,15 +182,16 @@ defmodule FitcrmWeb.WeekdayController do
 
   def create_week(%Plug.Conn{assigns: %{current_user: user}} = conn) do
     day_params = createWeekMap(conn)
+  end_date = Timex.local |> Date.add(7) |> IO.inspect
     params = %{
       "start" => Timex.local,
-      "end" => Timex.local,
+      "end" => Timex.to_naive_datetime(end_date),
       "weekdays" => day_params
     }
     changeset= Week.changeset(%Week{}, params)
     case Fitcrm.Repo.insert(changeset) do
       {:ok, week} ->
-        IO.puts "Succesfully Updated"
+        IO.puts "Succesfully Inserted New Week"
         IO.inspect week
         IO.inspect changeset
       {:error, changeset} ->
@@ -196,17 +201,33 @@ defmodule FitcrmWeb.WeekdayController do
 
   end
 
-  def updateDays(ids) do
-
+  def getDay(day) do
+    case day do
+      "Monday" ->
+        "Tuesday"
+      "Tuesday" ->
+        "Wednesday"
+      "Wednesday" ->
+        "Thursday"
+      "Thursday" ->
+        "Friday"
+      "Friday" ->
+        "Saturday"
+      "Saturday" ->
+        "Sunday"
+      "Sunday" ->
+        "Monday"
+      end
   end
 
   def update_week(%Plug.Conn{assigns: %{current_user: user}} = conn, id) do
-    day_params = createWeekMap(conn)
     week = Fitcrm.Repo.get!(Week, id) |> Fitcrm.Repo.preload(:weekdays)
+    day_params = createWeekMap(conn) |> Enum.map(fn(a) -> a["day"] end)
+    week.weekdays |> Enum.map(fn(a) -> get_and_update(conn, a.id, getDay(a.day)) end) |> IO.inspect
+
     params = %{
       "start" => Timex.local,
-      "end" => Timex.local,
-      "weekdays" => day_params
+      "end" => Timex.local
     }
     changeset= Week.changeset(week, params)
     case Fitcrm.Repo.update(changeset) do
@@ -214,6 +235,7 @@ defmodule FitcrmWeb.WeekdayController do
         IO.puts "Succesfully Updated"
         IO.inspect week
         IO.inspect changeset
+
       {:error, changeset} ->
         IO.puts "Error Occured While Updating the Week changeset"
         IO.inspect changeset
