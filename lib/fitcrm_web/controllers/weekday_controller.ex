@@ -21,8 +21,9 @@ defmodule FitcrmWeb.WeekdayController do
   plug :user_check when action in [:index, :show]
   #plug :id_check when action in [:update, :delete]
 
-  def index(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user_id" => user_id}) do
-    user = (user_id == to_string(user.id) and user) || Accounts.get(user_id)
+  def index(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
+    user = user.id
+    ClientTool.getPlanDates(conn)
     weekdays = Fitcrm.Repo.all(Weekday)
     render(conn, "index.html", weekdays: weekdays, user: user)
   end
@@ -130,7 +131,7 @@ defmodule FitcrmWeb.WeekdayController do
 
   def create_day(%Plug.Conn{assigns: %{current_user: user}} = conn, day) do
       IO.puts "Day is: #{day}"
-      user_id = user.user_id
+      user_id = user.id
       user_tdee = user.tdee
       weekday_params = %{"day" => day}
       workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
@@ -145,7 +146,7 @@ defmodule FitcrmWeb.WeekdayController do
     weekday = Fitcrm.Repo.get!(Weekday, day_id)
     IO.puts "Day is:"
     day = Tools.ClientTool.getCurrentDay |> IO.inspect
-    user_id = user.user_id
+    user_id = user.id
     user_tdee = user.tdee
     weekday_params = %{"day" => day, "id" => day_id}
     workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
@@ -190,6 +191,31 @@ defmodule FitcrmWeb.WeekdayController do
         IO.inspect changeset
       {:error, changeset} ->
         IO.puts "Error Occured updatign changeset"
+        IO.inspect changeset
+    end
+
+  end
+
+  def updateDays(ids) do
+
+  end
+
+  def update_week(%Plug.Conn{assigns: %{current_user: user}} = conn, id) do
+    day_params = createWeekMap(conn)
+    week = Fitcrm.Repo.get!(Week, id) |> Fitcrm.Repo.preload(:weekdays)
+    params = %{
+      "start" => Timex.local,
+      "end" => Timex.local,
+      "weekdays" => day_params
+    }
+    changeset= Week.changeset(week, params)
+    case Fitcrm.Repo.update(changeset) do
+      {:ok, week} ->
+        IO.puts "Succesfully Updated"
+        IO.inspect week
+        IO.inspect changeset
+      {:error, changeset} ->
+        IO.puts "Error Occured While Updating the Week changeset"
         IO.inspect changeset
     end
 

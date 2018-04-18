@@ -11,17 +11,18 @@ defmodule Fitcrm.Tools.ClientTool do
     alias Fitcrm.Foods.Meal
     alias Fitcrm.Plan.Excercise
     alias Fitcrm.Plan.Weekday
+    alias Fitcrm.Plan.Week
     alias FitcrmWeb.WeekdayController
 
     def onboardclient(%{"user" => user, "params" => params}) do
       IO.puts "omboarded"
-      weight = params["weight"] 
-      height = params["height"] 
-      activity = params["activity"] 
-      age = params["age"] 
-      sex = params["sex"] 
-      cystic = params["cystic"] 
-      ir = params["ir"] 
+      weight = params["weight"]
+      height = params["height"]
+      activity = params["activity"]
+      age = params["age"]
+      sex = params["sex"]
+      cystic = params["cystic"]
+      ir = params["ir"]
       params_new = PhysicsTool.modifyQuestionResults(%{"sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
       bmr = PhysicsTool.calculate_tdee(params_new) |> IO.inspect
       tdee_original = PhysicsTool.scaleActivity(bmr, params_new["activity"])
@@ -76,9 +77,11 @@ defmodule Fitcrm.Tools.ClientTool do
 
     def selectWorkout(id, day) do
       day_int = daySelector(day)
+      IO.puts "DAY FROM WORKOUT SELECTOR IS"
+      IO.inspect day
       query = from e in Excercise, where: e.workout_id == ^id
-      ids = Fitcrm.Repo.all(query) |> Enum.filter(fn(a) -> a.day == day_int end) |> Enum.map(fn(a) -> a.id end)
-      %{"excercises" => ids}
+      ids = Fitcrm.Repo.all(query) |> Enum.filter(fn(a) -> a.day == day_int end) |> Enum.map(fn(a) -> "#{a.id}" end)
+      %{"excercises" => ids} |> IO.inspect
     end
 
     defp daySelector(day) do
@@ -107,7 +110,7 @@ defmodule Fitcrm.Tools.ClientTool do
     end
 
     def getDate() do
-      localDTG = Timex.today
+      localDTG = Timex.local
       weekdayNumber = Timex.weekday(localDTG)
       day = Timex.day_name(weekdayNumber)
       weekdays = setupWeek(day)
@@ -132,6 +135,28 @@ defmodule Fitcrm.Tools.ClientTool do
       currentDate = Timex.local |> IO.inspect
       query = from w in Weekday, where: w.day == ^day, select: w.id
       Fitcrm.Repo.all(query) |> Enum.each(fn(a) -> WeekdayController.get_and_update(conn, a) end)
+    end
+
+    def getPlanDates(conn) do
+      finish_date = Timex.local |> Date.add(1) |>  Timex.to_naive_datetime |> IO.inspect
+      query = Week
+      finishes = Fitcrm.Repo.all(query) |> Enum.map(fn(a) -> %{id: a.id, finish: stripDate(a.end, "#{finish_date}")} end)
+      updateSelector(conn, finishes)
+    end
+
+    defp updateSelector(conn, map) do
+      map |> Enum.each(fn(a) ->
+        if a.finish !== true do
+          WeekdayController.update_week(conn, a.id)
+        end
+         end)
+    end
+
+
+    defp stripDate(date, finish) do
+      IO.puts "Variables that will compare: #{date}, #{finish}"
+      td = String.split(finish) |> List.first
+      trimmed = String.starts_with?("#{date}", td)
     end
 
 

@@ -86,7 +86,7 @@ h1 .subtitle {
 
 
 .main {
-  background-color: #6d0000;
+  background-color: #f5f5f5;
   position: relative; }
 
 a {
@@ -2044,7 +2044,7 @@ input.ct-red + span + label + span.switch-right {
     }
     .overwritten {
         font-family: "Lato", sans-serif;
-        background-color: #afafaf;
+        background-color: #f5f5f5;
     }
 
     .sidenav {
