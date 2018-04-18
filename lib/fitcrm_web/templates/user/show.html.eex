@@ -1,5 +1,24 @@
 <h2>Example User Stats</h2>
 
+<table class="table">
+  <thead>
+    <tr>
+      <th>Subscription Level</th>
+      <th>Subscription Active?</th>
+      <th>Subscription Plan Generated?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong> <%= @subscription.type %> </strong> </td>
+      <td><strong> <%= @subscription.status %> </strong> </td>
+      <td><strong> <%= @subscription.plan %> </strong> </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
 <ul>
 
   <li>

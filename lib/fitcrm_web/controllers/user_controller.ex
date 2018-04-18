@@ -7,6 +7,7 @@ defmodule FitcrmWeb.UserController do
   alias Fitcrm.Tools
   alias Fitcrm.Accounts.User
   alias Fitcrm.Tools.ClientTool
+  alias Fitcrm.Plan.Week
 
   # the following plugs are defined in the controllers/authorize.ex file
   plug :user_check when action in [:index, :show]
@@ -133,7 +134,15 @@ defmodule FitcrmWeb.UserController do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
     changeset = Food.changeset(%Food{}, %{name: "test"})
     #tdee = user.tdee
-    render(conn, "show.html", user: user, changeset: changeset)
+    option = Fitcrm.Repo.all(Week) |> Enum.empty? |> IO.inspect
+    case option do
+      false ->
+        plan = "Generated"
+      true ->
+        plan = "Not Generated"
+    end
+    subscription = %{type: "Test", status: "Active", plan: plan}
+    render(conn, "show.html", user: user, changeset: changeset, subscription: subscription)
   end
 
   def edit(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
