@@ -61,17 +61,15 @@ defmodule FitcrmWeb.WeekdayController do
     conn |> render("weeks.html", week: week, weekdays: weekdays, user: user)
   end
 
-  def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id, "user_id" => user_id}) do
+  def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     #user = (user_id == to_string(user.id) and user) || Accounts.get(user_id)
     Tools.ClientTool.getDate()
     Tools.ClientTool.queryTargetDates(conn)
     #createWeekMap(conn) |> IO.inspect
     #create_week(conn)
-    IO.puts "user id is "
-    IO.inspect user_id
     Fitcrm.Repo.all(from w in Weekday, where: w.week_id == ^2) |> IO.inspect
     users = [user.id]
-    s = user_id
+    s = user.id
     weekday = Fitcrm.Repo.get!(Weekday, id)
     bid= Map.fetch!(weekday, :breakfast)
     lid= Map.fetch!(weekday, :lunch)
@@ -115,10 +113,12 @@ defmodule FitcrmWeb.WeekdayController do
   end
 
   def update(conn, %{"id" => id, "weekday" => weekday_params}) do
-    weekday = Repo.get!(Weekday, id)
+    IO.puts "Weekday Params are: "
+    IO.inspect weekday_params
+    weekday = Fitcrm.Repo.get!(Weekday, id)
     changeset = Weekday.changeset(weekday, weekday_params)
 
-    case Repo.update(changeset) do
+    case Fitcrm.Repo.update(changeset) do
       {:ok, weekday} ->
         conn
         |> put_flash(:info, "Weekday updated successfully.")
