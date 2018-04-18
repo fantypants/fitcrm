@@ -11,29 +11,79 @@
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
-  <body>
+
+
+<div id="mySidenav" class="sidenav">
+<a href="<%= page_path @conn, :index %>">Home</a>
+<%= if @current_user do %>
+ <a href="<%= user_path(@conn, :index) %>">Users</a>
+ <a href="<%= user_path(@conn, :foodindex, @current_user.id) %>">Foods</a>
+ <a href="<%= workout_path(@conn, :index) %>">Workouts</a>
+ <a href="<%= meal_path @conn, :index %>">Meals</a>
+ <a href="<%= user_weekday_path(@conn, :showweek, @current_user.id) %>">Weeks</a>
+ <a href="<%= user_weekday_path(@conn, :index, @current_user.id) %>">Days</a>
+ <a href="<%= user_path(@conn, :show, @current_user.id) %>"><%= @current_user.email %></a>
+ <%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %>
+<% else %>
+ <a href="<%= user_path @conn, :new %>">New user</a>
+ <a href="<%= session_path @conn, :new %>">Login</a>
+<% end %>
+</div>
+
+<div id="navbar-full">
+   <div id="navbar">
+   <!--
+       navbar-default can be changed with navbar-ct-blue navbar-ct-azzure navbar-ct-red navbar-ct-green navbar-ct-orange
+       -->
+       <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="important">
+         <div class="alert alert-success hidden">
+           <div class="container">
+               <b>Lorem ipsum</b> dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+           </div>
+         </div>
+
+         <div class="container">
+           <!-- Brand and toggle get grouped for better mobile display -->
+           <div class="navbar-header navbar-right">
+             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+             </button>
+             <a class="navbar-brand" href="#gsdk">SSMPA</a>
+             <ul class="nav navbar-nav">
+             <ul class="nav navbar-nav navbar-right">
+                   <li><a href="#gsdk">Register</a></li>
+                   <li><button href="#gsdk" class="btn btn-round btn-default">Sign in</button></li>
+              </ul>
+           </div>
+
+           <!-- Collect the nav links, forms, and other content for toggling -->
+           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+
+           </div><!-- /.navbar-collapse -->
+         </div><!-- /.container-fluid -->
+       </nav>
+       <div class="blurred-container">
+           <div class="img-src" style="background-image: url('assets/img/bg.jpg')"></div>
+       </div>
+   </div><!--  end navbar -->
+
+</div> <!-- end menu-dropdown -->
+
+
+
+<!-- Use any element to open the sidenav -->
+
+
+<!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+<div id="main">
+  <body class="overwritten">
+
     <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="<%= page_path @conn, :index %>">Home</a></li>
-              <%= if @current_user do %>
-              <li><a href="<%= user_path(@conn, :index) %>">Users</a></li>
-              <li><a href="<%= user_path(@conn, :foodindex, @current_user.id) %>">Foods</a></li>
-              <li><a href="<%= workout_path(@conn, :index) %>">Workouts</a></li>
-              <li><a href="<%= meal_path @conn, :index %>">Meals</a></li>
-              <li><a href="<%= user_weekday_path(@conn, :showweek, @current_user.id) %>">Weeks</a></li>
-              <li><a href="<%= user_weekday_path(@conn, :index, @current_user.id) %>">Days</a></li>
-              <li><a href="<%= user_path(@conn, :show, @current_user.id) %>"><%= @current_user.email %></a></li>
-              <li><%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %></li>
-              <% else %>
-              <li><a href="<%= user_path @conn, :new %>">New user</a></li>
-              <li><a href="<%= session_path @conn, :new %>">Login</a></li>
-              <% end %>
-          </ul>
-        </nav>
-        <span class="logo"></span>
-      </header>
+
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
@@ -45,4 +95,10 @@
     </div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
+</div>
+
+
+
+
+
 </html>
