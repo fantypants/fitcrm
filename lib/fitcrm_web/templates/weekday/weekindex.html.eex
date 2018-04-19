@@ -4,13 +4,13 @@
   <thead>
     <tr>
       <th>Weeks</th>
-
     </tr>
   </thead>
   <tbody>
 <%= for week <- @weeks do %>
     <tr>
       <td><%= week.id %></td>
+      <td><span><%= link "Show", to: user_weekday_path(@conn, :showweek, @user, week), class: "btn btn-default btn-xs" %></span></td>
     </tr>
 <% end %>
   </tbody>

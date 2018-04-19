@@ -20,7 +20,7 @@
  <a href="<%= user_path(@conn, :foodindex, @current_user.id) %>">Foods</a>
  <a href="<%= workout_path(@conn, :index) %>">Workouts</a>
  <a href="<%= meal_path @conn, :index %>">Meals</a>
- <a href="<%= user_weekday_path(@conn, :showweek, @current_user.id) %>">Weeks</a>
+  <a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>">Weeks</a>
  <a href="<%= user_weekday_path(@conn, :index, @current_user.id) %>">Days</a>
 
  <%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %>
@@ -54,8 +54,8 @@
                <%= if @current_user do %>
                <a href="<%= user_path(@conn, :show, @current_user.id) %>"><%= @current_user.email %></a>
                <% else %>
-                   <li><a href="#gsdk">Register</a></li>
-                   <li><button href="#gsdk" class="btn btn-round btn-default">Sign in</button></li>
+               <a href="<%= user_path @conn, :new %>">New user</a>
+               <a href="<%= session_path @conn, :new %>">Login</a>
               <% end %>
               </ul>
            </div>
@@ -80,10 +80,9 @@
 
 
 <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
-<div id="main">
   <body class="overwritten">
 
-    <div class="container">
+    <div class="container" id="render">
 
 
 
@@ -95,7 +94,7 @@
     </div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
-</div>
+
 
 
 

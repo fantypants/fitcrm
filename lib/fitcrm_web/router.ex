@@ -16,7 +16,7 @@ defmodule FitcrmWeb.Router do
     get "/", PageController, :index
     resources "/users", UserController do
       resources "/weekdays", WeekdayController
-      get "/weeks", WeekdayController, :showweek
+      get "/weeks/:week_id", WeekdayController, :showweek
       get "/weekindex", WeekdayController, :weekindex
     end
     resources "/sessions", SessionController, only: [:new, :create, :delete]
