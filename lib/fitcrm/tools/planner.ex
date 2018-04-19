@@ -19,7 +19,7 @@ defmodule Fitcrm.Tools.Planner do
 
   defp schedule_work() do
     IO.puts "Supervisor for the planner is online"
-    #ClientTool.getPlanDates()
-    Process.send_after(self(), :work, 60 * 1000) # In 5 Seconds
+    ClientTool.getPlanDates()
+    Process.send_after(self(), :work, 24 * 60 * 1000) # In 5 Seconds
   end
 end
