@@ -196,35 +196,56 @@ defmodule FitcrmWeb.UserController do
   end
 
   def setup(conn, %{"id" => id}) do
-
-    ## fix onboard
-    user = Fitcrm.Repo.get!(User, id)
+    # Get the total query and see if it exists
     query = from w in Week, where: w.user_id == ^id, select: w.id
     w_whole = Fitcrm.Repo.all(query)
     option = w_whole |> Enum.empty?
-    case option do
-      false ->
-        plan_stat = "Plan has been generated"
-        week_id = List.first(w_whole)
-        week = Fitcrm.Repo.get!(Week, week_id)
-      true ->
-        plan_stat = "Not Generated"
-        week_id = 0
-        week = Fitcrm.Repo.all(Week)
-    end
-
-
+    user = Fitcrm.Repo.get!(User, id)
     question = Fitcrm.Repo.get!(User, id).tdee
     case question do
       nil ->
+        i_stage = 0
         question_stat = "Not Completed"
       _->
       question_stat = "Completed"
+      case option do
+        nil ->
+          FitcrmWeb.WeekdayController.create_week(conn)
+          i_stage = 1
+        _->
+          i_stage = 1
+      end
     end
+
+    case i_stage do
+      0 ->
+        stage = 1
+      1 ->
+        stage = 2
+    end
+
+    case stage do
+      1 -> user_setup = "question"
+      2 -> user_setup = "complete"
+    end
+
+    case user_setup do
+      "question" ->
+          IO.puts "Do nothing"
+          plan_stat = "Not Generated"
+          week_id = "0"
+          week = "Not generated"
+      "complete"->
+         week_id = List.first(w_whole)
+         week = Fitcrm.Repo.get!(Week, week_id)
+         plan_stat = "Plan has been generated"
+    end
+    IO.inspect user_setup
+
     status = %{
       plan: plan_stat,
       question: question_stat}
-    conn |> render("setup.html", user: user, week: week, status: status)
+    conn |> render("setup.html", user: user, week: week, status: status, user_setup: user_setup)
   end
 
   def deletefood(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
