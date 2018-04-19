@@ -1,12 +1,14 @@
 <table class="table">
   <thead>
     <tr>
+      <th> User ID </th>
       <th> Start Date </th>
       <th> End Date </th>
     </tr>
   </thead>
   <tbody>
     <tr>
+      <td> <strong><%= @week.user_id %> </strong></td>
       <td><strong> <%= @week.start %> </strong> </td>
       <td><strong> <%= @week.end %> </strong> </td>
     </tr>

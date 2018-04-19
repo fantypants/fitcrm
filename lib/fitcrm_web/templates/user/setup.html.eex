@@ -1,0 +1,11 @@
+<h2> Welcome <%= @user.name %> to your new Journey! </h2>
+<h3> First, before we begin there are a few steps to get started </h3>
+<h3> The first step is to determine your physcal attributes to ensure our program is custom tailored to you, and you only!</h3>
+
+
+
+<h3><span> Step 1: <strong><%= link "Complete Questionaire", to: user_path(@conn, :newquestion, @user) %></strong></span> Status: <%= @status.question %></h3>
+<h3><span> Step 2: <strong><%= link "Customize my meals", to: user_weekday_path(@conn, :showweek, @user, @week.id)%></strong></span> Status: <%= @status.plan %></h3>
+
+
+<h4> Please follow the links below to complete the setup, you can return anytime by selecting setup from your user dashboard </h4>

@@ -3,6 +3,7 @@ defmodule FitcrmWeb.Authorize do
   import Plug.Conn
   import Phoenix.Controller
   import FitcrmWeb.Router.Helpers
+  alias FitcrmWeb.UserController
 
   # This function can be used to customize the `action` function in
   # the controller so that only authenticated users can access each route.
@@ -66,11 +67,23 @@ defmodule FitcrmWeb.Authorize do
     |> halt
   end
 
-  def login_success(conn, path) do
+  def login_success(conn, path, id) do
     path = get_session(conn, :request_path) || path
-
+    user = get_session(conn, :user)
     delete_session(conn, :request_path)
-    |> success("You have been logged in", get_session(conn, :request_path) || path)
+    |> success("You have been logged in", onboardPatch(conn, path, id))
+  end
+
+  defp onboardPatch(conn, path, id) do
+    path = get_session(conn, :request_path) || path
+    onboard? = UserController.onboardProcess(conn, id)
+
+    case onboard? do
+      :valid ->
+        get_session(conn, :request_path) || path
+      :onboard ->
+        conn |> user_path(:setup, id)
+      end
   end
 
   def need_login(conn) do

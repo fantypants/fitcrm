@@ -18,6 +18,8 @@ defmodule Fitcrm.Accounts.User do
     field :tdee, :float
     field :sessions, {:map, :integer}, default: %{}
 
+    has_many :weeks, Fitcrm.Plan.Week
+
     timestamps()
   end
 
@@ -26,6 +28,7 @@ defmodule Fitcrm.Accounts.User do
     |> cast(attrs, [:email, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex, :password])
     |> validate_required([:email])
     |> unique_email
+    |> cast_assoc(:weeks)
     |> validate_password(:password)
     |> put_pass_hash
   end
@@ -35,6 +38,7 @@ defmodule Fitcrm.Accounts.User do
     |> cast(attrs, [:email, :password, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex])
     |> validate_required([:email, :password])
     |> unique_email
+    |> cast_assoc(:weeks)
     |> validate_password(:password)
     |> put_pass_hash
   end

@@ -8,6 +8,7 @@ defmodule Fitcrm.Plan.Week do
     field :end, :naive_datetime
 
     has_many :weekdays, Fitcrm.Plan.Weekday
+    belongs_to :user, Fitcrm.Accounts.User
     timestamps()
   end
 
@@ -16,8 +17,8 @@ defmodule Fitcrm.Plan.Week do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:start, :end])
+    |> cast(params, [:start, :end, :user_id])
     |> cast_assoc(:weekdays)
-    |> validate_required([:start, :end])
+    |> validate_required([:start, :end, :user_id])
   end
 end

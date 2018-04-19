@@ -68,11 +68,7 @@ defmodule FitcrmWeb.WeekdayController do
   end
 
   def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
-    #user = (user_id == to_string(user.id) and user) || Accounts.get(user_id)
-    #Tools.ClientTool.getDate()
-    #Tools.ClientTool.queryTargetDates(conn)
-    #createWeekMap(conn) |> IO.inspect
-    create_week(conn)
+    #create_week(conn)
     Fitcrm.Repo.all(from w in Weekday, where: w.week_id == ^2) |> IO.inspect
     users = [user.id]
     s = user.id
@@ -182,8 +178,10 @@ defmodule FitcrmWeb.WeekdayController do
 
   def create_week(%Plug.Conn{assigns: %{current_user: user}} = conn) do
     day_params = createWeekMap(conn)
-  end_date = Timex.local |> Date.add(7) |> IO.inspect
+    user_id = user.id
+    end_date = Timex.local |> Date.add(7) |> IO.inspect
     params = %{
+      "user_id" => user_id,
       "start" => Timex.local,
       "end" => Timex.to_naive_datetime(end_date),
       "weekdays" => day_params

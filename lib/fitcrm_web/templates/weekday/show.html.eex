@@ -4,11 +4,13 @@
   <thead>
     <tr>
       <th>Day</th>
+      
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><strong> <%= @weekday.day %> </strong> </td>
+
     </tr>
   </tbody>
 </table>

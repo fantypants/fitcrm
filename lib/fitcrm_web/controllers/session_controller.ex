@@ -4,6 +4,7 @@ defmodule FitcrmWeb.SessionController do
   import FitcrmWeb.Authorize
   alias Fitcrm.Accounts
   alias Phauxth.Login
+  alias FitcrmWeb.UserController
 
   plug :guest_check when action in [:new, :create]
   plug :id_check when action in [:delete]
@@ -19,9 +20,10 @@ defmodule FitcrmWeb.SessionController do
       {:ok, user} ->
         session_id = Login.gen_session_id("F")
         Accounts.add_session(user, session_id, System.system_time(:second))
-    
+        IO.puts "get info"
+        IO.inspect user
         Login.add_session(conn, session_id, user.id)
-        |> login_success(user_path(conn, :index))
+        |> login_success(user_path(conn, :index), user.id)
 
       {:error, message} ->
         error(conn, message, session_path(conn, :new))

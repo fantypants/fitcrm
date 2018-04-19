@@ -1,6 +1,9 @@
 defmodule FitcrmWeb.UserController do
   use FitcrmWeb, :controller
   alias Fitcrm.Foods.Food
+  alias FitcrmWeb.UserController
+  import Plug.Conn
+  import Ecto.Query
   import FitcrmWeb.Authorize
   alias Phauxth.Log
   alias Fitcrm.Accounts
@@ -132,6 +135,7 @@ defmodule FitcrmWeb.UserController do
 
   def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
+
     changeset = Food.changeset(%Food{}, %{name: "test"})
     #tdee = user.tdee
     option = Fitcrm.Repo.all(Week) |> Enum.empty? |> IO.inspect
@@ -160,6 +164,59 @@ defmodule FitcrmWeb.UserController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", user: user, changeset: changeset)
     end
+  end
+
+
+  defp checkExistingPlan(user_id) do
+    # This checks for a result in the db for the users plan
+    query = from w in Week, where: w.user_id == ^user_id
+    onboard? = Fitcrm.Repo.all(query) |> Enum.empty?
+    case onboard? do
+      false ->
+        {:valid, "Client has already onboarded"}
+      true ->
+        {:onboard, "Client hasn't onboarded"}
+    end
+  end
+
+  def onboardProcess(conn, user_id) do
+    IO.puts "Onboarding Client #{user_id}"
+    # client logs in
+    # This checks if the client has a subscription
+    # For each subscription it checks the necessary plan to see if it's created
+    exists? = checkExistingPlan(user_id)
+    case exists? do
+      {:valid, payload} ->
+        :valid
+      {:onboard, payload} ->
+        :onboard
+    end
+  end
+
+  def setup(conn, %{"id" => id}) do
+    user = Fitcrm.Repo.get!(User, id)
+    query = from w in Week, where: w.user_id == ^id, select: w.id
+    w_whole = Fitcrm.Repo.all(query)
+    option = w_whole |> Enum.empty?
+    case option do
+      false ->
+        plan_stat = "Plan has been generated"
+      true ->
+        plan_stat = "Not Generated"
+    end
+    week_id = List.first(w_whole)
+    week = Fitcrm.Repo.get!(Week, week_id)
+    question = Fitcrm.Repo.get!(User, id).tdee
+    case question do
+      nil ->
+        question_stat = "Not Completed"
+      _->
+      question_stat = "Completed"
+    end
+    status = %{
+      plan: plan_stat,
+      question: question_stat}
+    conn |> render("setup.html", user: user, week: week, status: status)
   end
 
   def deletefood(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do

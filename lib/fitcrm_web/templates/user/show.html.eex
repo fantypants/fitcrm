@@ -18,57 +18,60 @@
 </table>
 
 
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Authentication Level</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @user.name %></td>
+      <td><%= @user.email %></td>
+      <td><%= @user.type %></td>
+    </tr>
+  </tbody>
+</table>
 
-<ul>
+<table class="table">
+  <thead>
+    <tr>
+      <th> Age </th>
+      <th> Weight </th>
+      <th> Height </th>
+      <th> Sex </th>
+      <th> BMR </th>
+      <th> TDEE </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @user.age %></td>
+      <td><%= @user.weight %></td>
+      <td><%= @user.height %></td>
+      <td><%= @user.sex %> </td>
+      <td><%= @user.bmr %> </td>
+      <td><%= @user.tdee %> </td>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @user.name %>
-  </li>
-  <li>
-    <strong>Email:</strong>
-    <%= @user.email %>
-  </li>
-  <li>
-    <strong>Authentication Level:</strong>
-    <%= @user.type %>
-  </li>
-  <li>
-    <strong>Subscriptions Active:</strong>
-    <%= @user.email %>
-  </li>
+    </tr>
+  </tbody>
+</table>
 
-
-  <li>
-    <strong>Age:</strong>
-    <%= @user.age %>
-  </li>
-  <li>
-    <strong>Weight:</strong>
-    <%= @user.weight %>
-  </li>
-  <li>
-    <strong>Height:</strong>
-    <%= @user.height %>
-  </li>
-  <li>
-    <strong>Sex:</strong>
-    <%= @user.sex %>
-  </li>
-  <li>
-    <strong>BMR:</strong>
-    <%= @user.bmr %>
-  </li>
-  <li>
-    <strong>TDEE:</strong>
-    <%= @user.tdee %>
-  </li>
-
-<li>
-<span><strong><%= link "Complete Questionaire", to: user_path(@conn, :newquestion, @user) %></strong></span>
-</li>
-</ul>
-
-<span><%= link "Change Password", to: user_path(@conn, :edit, @user) %></span><br>
-<span><%= link "Back", to: user_path(@conn, :index) %></span>
-<span><%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %></span>
+<table class="table">
+  <thead>
+    <tr>
+<th><span><%= link "User Setup", to: user_path(@conn, :setup, @user) %></span></th>
+</tr>
+    <tr>
+<th><span><%= link "Change Password", to: user_path(@conn, :edit, @user) %></span></th>
+</tr>
+<tr>
+<th><span><%= link "Back", to: user_path(@conn, :index) %></span></th>
+</tr>
+<tr>
+<th><span><%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %></span></th>
+</tr>
+</thead>
+</table>

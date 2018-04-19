@@ -33,6 +33,8 @@ defmodule FitcrmWeb.Router do
     post "users/:id/foods", UserController, :foodindex
     get "users/:id/foods/deletefood", UserController, :deletefood
     post "users/:id/foods/deletefood", UserController, :deletefood
+    get "users/:id/setup", UserController, :setup
+    put "users/:id/setup", UserController, :setup
 
 
   end
