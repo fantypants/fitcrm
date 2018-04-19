@@ -68,7 +68,7 @@ defmodule FitcrmWeb.WeekdayController do
   end
 
   def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
-    #create_week(conn)
+    #
     Fitcrm.Repo.all(from w in Weekday, where: w.week_id == ^2) |> IO.inspect
     users = [user.id]
     s = user.id

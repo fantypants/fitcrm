@@ -11,6 +11,7 @@ defmodule FitcrmWeb.UserController do
   alias Fitcrm.Accounts.User
   alias Fitcrm.Tools.ClientTool
   alias Fitcrm.Plan.Week
+  alias FitcrmWeb.WeekdayController
 
   # the following plugs are defined in the controllers/authorize.ex file
   plug :user_check when action in [:index, :show]
@@ -68,6 +69,7 @@ defmodule FitcrmWeb.UserController do
         changesetmap = ClientTool.onboardclient(%{"user" => user, "params" => params})
         case Accounts.update_user(user, changesetmap) do
           {:ok, user} ->
+            WeekdayController.create_week(conn)
             success(conn, "User updated successfully", user_path(conn, :show, user))
           {:error, %Ecto.Changeset{} = changeset} ->
             IO.inspect changeset
@@ -194,6 +196,8 @@ defmodule FitcrmWeb.UserController do
   end
 
   def setup(conn, %{"id" => id}) do
+
+    ## fix onboard
     user = Fitcrm.Repo.get!(User, id)
     query = from w in Week, where: w.user_id == ^id, select: w.id
     w_whole = Fitcrm.Repo.all(query)
@@ -201,11 +205,15 @@ defmodule FitcrmWeb.UserController do
     case option do
       false ->
         plan_stat = "Plan has been generated"
+        week_id = List.first(w_whole)
+        week = Fitcrm.Repo.get!(Week, week_id)
       true ->
         plan_stat = "Not Generated"
+        week_id = 0
+        week = Fitcrm.Repo.all(Week)
     end
-    week_id = List.first(w_whole)
-    week = Fitcrm.Repo.get!(Week, week_id)
+
+
     question = Fitcrm.Repo.get!(User, id).tdee
     case question do
       nil ->

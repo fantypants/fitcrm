@@ -77,7 +77,8 @@ defmodule FitcrmWeb.Authorize do
   defp onboardPatch(conn, path, id) do
     path = get_session(conn, :request_path) || path
     onboard? = UserController.onboardProcess(conn, id)
-
+    IO.puts "in middle of onboard"
+    IO.inspect id
     case onboard? do
       :valid ->
         get_session(conn, :request_path) || path
