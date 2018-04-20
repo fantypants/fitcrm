@@ -22,4 +22,9 @@ defmodule FitcrmWeb.PageController do
     changeset = Accounts.change_user(%Accounts.User{})
     render conn, "index.html", changeset: changeset
   end
+
+  def admindash(conn, _params) do
+    changeset = Accounts.change_user(%Accounts.User{})
+    render conn, "admin_dash.html", changeset: changeset
+  end
 end
