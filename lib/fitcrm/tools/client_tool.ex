@@ -137,17 +137,17 @@ defmodule Fitcrm.Tools.ClientTool do
       Fitcrm.Repo.all(query) |> Enum.each(fn(a) -> WeekdayController.get_and_update(conn, a) end)
     end
 
-    def getPlanDates(conn) do
+    def getPlanDates() do
       finish_date = Timex.local |> Date.add(1) |>  Timex.to_naive_datetime |> IO.inspect
       query = Week
       finishes = Fitcrm.Repo.all(query) |> Enum.map(fn(a) -> %{id: a.id, finish: stripDate(a.end, "#{finish_date}")} end)
-      updateSelector(conn, finishes)
+      updateSelector(finishes)
     end
 
-    defp updateSelector(conn, map) do
+    defp updateSelector(map) do
       map |> Enum.each(fn(a) ->
         if a.finish !== true do
-          WeekdayController.update_week(conn, a.id)
+          WeekdayController.update_week(a.id)
         end
          end)
     end

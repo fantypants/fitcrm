@@ -57,7 +57,7 @@ document.getElementById("fifty").style.display = "none";
 <script>
 document.getElementById("welcome").style.display = "block";
 document.getElementById("initial").style.display = "none";
-document.getElementById("zero").style.display = "block";
+document.getElementById("zero").style.display = "none";
 
 document.getElementById("next").addEventListener('click', function(){
   document.getElementById("welcome").style.display = "none";
@@ -68,8 +68,6 @@ document.getElementById("zero").style.display = "none";
 document.getElementById("back").addEventListener('click', function(){
   document.getElementById("welcome").style.display = "block";
   document.getElementById("initial").style.display = "none";
-
-
 });
 
 </script>

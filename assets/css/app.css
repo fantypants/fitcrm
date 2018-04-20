@@ -2060,7 +2060,7 @@ input.ct-red + span + label + span.switch-right {
 
         overflow-x: hidden;
         padding-top: 20px;
-        opacity: 0.7;
+        opacity: 0.9;
     }
 
     .sidenav a {

@@ -80,10 +80,11 @@ defmodule FitcrmWeb.WeekdayController do
     meals = mealids |> Enum.map(fn(a) -> %{
       name: Fitcrm.Repo.get!(Meal, a).name,
       type: "mealtype test",
+      id: a,
       recipe: "Just chuck the ingredients in the microwave mate",
       foodids: Fitcrm.Repo.get!(Meal,a).foodid
       } end)
-    mealsfull = meals |> Enum.map(fn(a) -> %{name: a.name, type: a.type, recipe: a.recipe, foodids: getfullmeal(a.foodids)} end) |> IO.inspect
+    mealsfull = meals |> Enum.map(fn(a) -> %{id: a.id, name: a.name, type: a.type, recipe: a.recipe, foodids: getfullmeal(a.foodids)} end) |> IO.inspect
     excercises = weekday.excercises |> Enum.map(fn(a) -> %{
       name: Fitcrm.Repo.get!(Excercise, a).name,
       reps: Fitcrm.Repo.get!(Excercise, a).reps}
@@ -130,10 +131,9 @@ defmodule FitcrmWeb.WeekdayController do
     end
   end
 
-  def create_day(%Plug.Conn{assigns: %{current_user: user}} = conn, day) do
+  def create_day(id, day) do
       IO.puts "Day is: #{day}"
-      user_id = user.id
-      user_tdee = user.tdee
+      user_tdee = Fitcrm.Repo.get!(User, id).tdee
       weekday_params = %{"day" => day}
       workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
       selected_workouts = Tools.ClientTool.selectWorkout(workout_id, day)
@@ -143,11 +143,10 @@ defmodule FitcrmWeb.WeekdayController do
       int_params |> Map.merge(selected_workouts)
   end
 
-  def get_and_update(%Plug.Conn{assigns: %{current_user: user}} = conn, day_id, day) do
+  def get_and_update(user_id, day_id, day) do
     weekday = Fitcrm.Repo.get!(Weekday, day_id)
     IO.puts "Day is:"
-    user_id = user.id
-    user_tdee = user.tdee
+    user_tdee = Fitcrm.Repo.get!(User, user_id).tdee
     weekday_params = %{"day" => day, "id" => day_id}
     workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
     selected_workouts = Tools.ClientTool.selectWorkout(workout_id, day)
@@ -171,14 +170,15 @@ defmodule FitcrmWeb.WeekdayController do
     meal_ids = Tools.ClientTool.getMealID(user_tdee)
   end
 
-  def createWeekMap(conn) do
+  def createWeekMap(user_id) do
     day_params = Tools.ClientTool.getDate()
-    day_params |> Enum.map(fn(a) -> create_day(conn, elem(a, 1)) end)
+    day_params |> Enum.map(fn(a) -> create_day(user_id, elem(a, 1)) end)
   end
 
   def create_week(%Plug.Conn{assigns: %{current_user: user}} = conn) do
-    day_params = createWeekMap(conn)
     user_id = user.id
+    day_params = createWeekMap(user_id)
+
     end_date = Timex.local |> Date.add(7) |> IO.inspect
     params = %{
       "user_id" => user_id,
@@ -218,14 +218,21 @@ defmodule FitcrmWeb.WeekdayController do
       end
   end
 
-  def update_week(%Plug.Conn{assigns: %{current_user: user}} = conn, id) do
+  def update_week(id) do
     week = Fitcrm.Repo.get!(Week, id) |> Fitcrm.Repo.preload(:weekdays)
-    day_params = createWeekMap(conn) |> Enum.map(fn(a) -> a["day"] end)
-    week.weekdays |> Enum.map(fn(a) -> get_and_update(conn, a.id, getDay(a.day)) end) |> IO.inspect
-
+    u_id = Map.fetch!(week, :user_id)
+    case u_id do
+      nil ->
+        user_id = 1
+      _->
+      user_id = u_id
+    end
+    day_params = createWeekMap(user_id) |> Enum.map(fn(a) -> a["day"] end)
+    week.weekdays |> Enum.map(fn(a) -> get_and_update(user_id, a.id, getDay(a.day)) end)
+    end_date = Timex.local |> Date.add(7)
     params = %{
       "start" => Timex.local,
-      "end" => Timex.local
+      "end" => Timex.to_naive_datetime(end_date)
     }
     changeset= Week.changeset(week, params)
     case Fitcrm.Repo.update(changeset) do
