@@ -70,7 +70,7 @@ defmodule FitcrmWeb.UserController do
         changesetmap = ClientTool.onboardclient(%{"user" => user, "params" => params})
         case Accounts.update_user(user, changesetmap) do
           {:ok, user} ->
-            WeekdayController.create_week(conn)
+            #WeekdayController.create_week(conn)
             success(conn, "User updated successfully", user_path(conn, :show, id))
           {:error, %Ecto.Changeset{} = changeset} ->
             IO.inspect changeset

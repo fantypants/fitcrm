@@ -10,7 +10,8 @@ defmodule FitcrmWeb.SessionController do
   plug :id_check when action in [:delete]
 
   def new(conn, _) do
-    render(conn, "new.html")
+    changeset = Accounts.change_user(%Accounts.User{})
+    render(conn, "new.html", changeset: changeset)
   end
 
   # If you are using Argon2 or Pbkdf2, add crypto: Comeonin.Argon2
