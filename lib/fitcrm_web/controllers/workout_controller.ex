@@ -20,7 +20,8 @@ defmodule FitcrmWeb.WorkoutController do
 
   def index(conn, _params) do
     workouts = Fitcrm.Repo.all(Workout)
-    render(conn, "index.html", workouts: workouts)
+    changeset = Accounts.change_user(%Accounts.User{})
+    render(conn, "index.html", workouts: workouts, changeset: changeset)
   end
 
   def new(conn, _params) do

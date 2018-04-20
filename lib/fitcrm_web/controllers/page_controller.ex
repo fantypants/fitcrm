@@ -14,6 +14,7 @@ defmodule FitcrmWeb.PageController do
   alias Fitcrm.Tools.ClientTool
   alias Fitcrm.Plan.Week
   alias FitcrmWeb.WeekdayController
+  alias Fitcrm.Foods.Meal
 
   def index(conn, _params) do
     #changeset_params = %{name: "eggs", fat: "15.0", protein: "4.0", carbs: "2.0", calories: "432"}
@@ -23,8 +24,20 @@ defmodule FitcrmWeb.PageController do
     render conn, "index.html", changeset: changeset
   end
 
-  def admindash(conn, _params) do
+  def admindash(conn, %{"user_id" => id}) do
+    admins = Fitcrm.Repo.all(from u in User, where: u.type == ^"Admin") |> Enum.count
+    users = Fitcrm.Repo.all(from u in User, where: u.type == ^"Client") |> Enum.count
+    meals = Fitcrm.Repo.all(Meal) |> Enum.count
+    plans = Fitcrm.Repo.all(Week) |> Enum.count
+    
+
+
+
+    system = %{meals: meals, plans: plans}
+    user_stats = %{totalusers: users, totaladmin: admins}
+
+
     changeset = Accounts.change_user(%Accounts.User{})
-    render conn, "admin_dash.html", changeset: changeset
+    render conn, "admin_dash.html", changeset: changeset, user_stats: user_stats, system: system
   end
 end

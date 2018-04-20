@@ -19,8 +19,8 @@ defmodule FitcrmWeb.MealController do
 
   def index(conn, _params) do
     meals = Fitcrm.Repo.all(Meal)
-
-    render(conn, "index.html", meals: meals)
+    changeset = Accounts.change_user(%Accounts.User{})
+    render(conn, "index.html", meals: meals, changeset: changeset)
   end
 
 

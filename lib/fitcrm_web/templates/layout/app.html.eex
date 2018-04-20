@@ -22,12 +22,13 @@
 
 
 <div id="mySidenav" class="sidenav">
-<a href="<%= page_path @conn, :index %>">Home</a>
 <%= if @current_user do %>
 <%= if @current_user.type == "Admin" do %>
- <a href="<%= user_path(@conn, :index) %>">Admin User Panel</a>
- <a href="<%= user_path(@conn, :show, @current_user.id) %>"> User Panel </a>
+<a href="<%= user_page_path(@conn, :admindash, @current_user.id) %>">Dashboard</a>
+ <a href="<%= user_path(@conn, :index) %>">Admin User Panel Index</a>
+ <a href="<%= user_path(@conn, :show, @current_user.id) %>">User Panel </a>
 <% else %>
+<a href="<%= page_path @conn, :index %>">Home</a>
 <a href="<%= user_path(@conn, :show, @current_user.id) %>"> User Panel </a>
 <% end %>
  <a href="<%= user_path(@conn, :foodindex, @current_user.id) %>">Foods</a>
@@ -40,6 +41,7 @@
 
 
 <% else %>
+<a href="<%= page_path @conn, :index %>">Home</a>
  <a href="" data-toggle="modal" data-target="#myModal">
    Login
  </a>

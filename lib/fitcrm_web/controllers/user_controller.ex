@@ -20,7 +20,8 @@ defmodule FitcrmWeb.UserController do
   def index(conn, _) do
     users = Accounts.list_users()
     foods = Fitcrm.Repo.all(Food)
-    render(conn, "index.html", users: users, foods: foods)
+    changeset = Accounts.change_user(%Accounts.User{})
+    render(conn, "index.html", users: users, foods: foods, changeset: changeset)
   end
 
   def foodindex(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
@@ -245,7 +246,9 @@ defmodule FitcrmWeb.UserController do
     status = %{
       plan: plan_stat,
       question: question_stat}
-    conn |> render("setup.html", user: user, week: week, status: status, user_setup: user_setup)
+
+      changeset = Accounts.change_user(%Accounts.User{})
+    conn |> render("setup.html", user: user, week: week, status: status, user_setup: user_setup, changeset: changeset)
   end
 
   def deletefood(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do

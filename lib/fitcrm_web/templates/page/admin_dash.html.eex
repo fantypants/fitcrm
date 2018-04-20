@@ -444,18 +444,11 @@ table.dataTable thead .sorting:after {
                         <i class="fa fa-comments fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">7</div>
-                        <div>New Users!</div>
+                        <div class="huge"><%= @user_stats.totaladmin %></div>
+                        <div>Admins</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
-                <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
     </div>
     <div class="col-lg-3 col-md-6">
@@ -466,18 +459,11 @@ table.dataTable thead .sorting:after {
                         <i class="fa fa-tasks fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">34</div>
-                        <div>Total Users</div>
+                        <div class="huge"><%= @user_stats.totalusers %></div>
+                        <div>Clients</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
-                <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
     </div>
     <div class="col-lg-3 col-md-6">
@@ -488,18 +474,11 @@ table.dataTable thead .sorting:after {
                         <i class="fa fa-shopping-cart fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">432</div>
-                        <div>Meals</div>
+                        <div class="huge"><%= @system.plans %></div>
+                        <div>Plans</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
-                <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
     </div>
     <div class="col-lg-3 col-md-6">
@@ -510,24 +489,41 @@ table.dataTable thead .sorting:after {
                         <i class="fa fa-support fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">1023</div>
-                        <div>P.Generated</div>
+                        <div class="huge"><%= @system.meals %></div>
+                        <div>Meals</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
-                <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
     </div>
 </div>
 
 <!-- NOTIFICATIONS PANEL -->
 <div class="row">
+
+    <div class="col-lg-8">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              <i class="fa fa-bell fa-fw"></i>System Statistics
+          </div>
+          <!-- /.panel-heading -->
+          <div class="panel-body">
+          <div class="list-group">
+            <h3> System Scheduler Online </h3>
+            <h4> Schedule Time: 24 hours </h4>
+            <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    <span class="sr-only">ACTIVE</span>
+                </div>
+            </div>
+            <a href="<%= meal_path @conn, :index %>" class="list-group-item"><i class="fa fa-comment fa-fw"></i>Upload Meals</a>
+            <a href="<%= user_path(@conn, :foodindex, @current_user.id) %>" class="list-group-item"><i class="fa fa-comment fa-fw"></i>upload Foods</a>
+            <a href="<%= workout_path(@conn, :index) %>" class="list-group-item"><i class="fa fa-comment fa-fw"></i>Upload Workouts</a>
+        </div>
+        </div>
+    </div>
+  </div>
+    <div class="col-lg-4">
 <div class="panel panel-default">
     <div class="panel-heading">
         <i class="fa fa-bell fa-fw"></i> Notifications Panel
@@ -586,5 +582,10 @@ table.dataTable thead .sorting:after {
     </div>
     <!-- /.panel-body -->
 </div>
-</DIV>
+</div>
+
 <!-- END NOTIFICATIONS PANEL -->
+
+
+
+</DIV>
