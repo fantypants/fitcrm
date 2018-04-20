@@ -197,6 +197,8 @@ defmodule FitcrmWeb.UserController do
   end
 
   def setup(conn, %{"id" => id}) do
+    IO.puts "User ID is"
+    IO.inspect id
     # Get the total query and see if it exists
     query = from w in Week, where: w.user_id == ^id, select: w.id
     w_whole = Fitcrm.Repo.all(query)
