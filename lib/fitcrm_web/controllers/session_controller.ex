@@ -20,10 +20,8 @@ defmodule FitcrmWeb.SessionController do
       {:ok, user} ->
         session_id = Login.gen_session_id("F")
         Accounts.add_session(user, session_id, System.system_time(:second))
-        IO.puts "get info"
-        IO.inspect user
         Login.add_session(conn, session_id, user.id)
-        |> login_success(user_path(conn, :index), user.id)
+        |> login_success(user_path(conn, :show, user.id), user.id)
 
       {:error, message} ->
         error(conn, message, session_path(conn, :new))

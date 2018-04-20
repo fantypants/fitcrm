@@ -18,20 +18,34 @@
 
 
 
+
+
+
 <div id="mySidenav" class="sidenav">
 <a href="<%= page_path @conn, :index %>">Home</a>
 <%= if @current_user do %>
- <a href="<%= user_path(@conn, :index) %>">Users</a>
+<%= if @current_user.type == "Admin" do %>
+ <a href="<%= user_path(@conn, :index) %>">Admin User Panel</a>
+ <a href="<%= user_path(@conn, :show, @current_user.id) %>"> User Panel </a>
+<% else %>
+<a href="<%= user_path(@conn, :show, @current_user.id) %>"> User Panel </a>
+<% end %>
  <a href="<%= user_path(@conn, :foodindex, @current_user.id) %>">Foods</a>
  <a href="<%= workout_path(@conn, :index) %>">Workouts</a>
  <a href="<%= meal_path @conn, :index %>">Meals</a>
   <a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>">Weeks</a>
  <a href="<%= user_weekday_path(@conn, :index, @current_user.id) %>">Days</a>
-
+<a href="<%= user_path(@conn, :show, @current_user.id) %>"><%= @current_user.email %></a>
  <%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %>
+
+
 <% else %>
- <a href="<%= user_path @conn, :new %>">New user</a>
- <a href="<%= session_path @conn, :new %>">Login</a>
+ <a href="" data-toggle="modal" data-target="#myModal">
+   Login
+ </a>
+ <a href="" data-toggle="modal" data-target="#register">
+   Register
+ </a>
 <% end %>
 </div>
 
@@ -53,16 +67,9 @@
          <div class="container">
            <!-- Brand and toggle get grouped for better mobile display -->
            <div class="navbar-header navbar-right">
-             <a class="navbar-brand" href="#gsdk">SSMPA</a>
-             <ul class="nav navbar-nav">
-             <ul class="nav navbar-nav navbar-right">
-               <%= if @current_user do %>
-               <a href="<%= user_path(@conn, :show, @current_user.id) %>"><%= @current_user.email %></a>
-               <% else %>
-               <a href="<%= user_path @conn, :new %>">New user</a>
-               <a href="<%= session_path @conn, :new %>">Login</a>
-              <% end %>
-              </ul>
+             <a class="navbar-brand" href="">SSMPA</a>
+             <div class="nav navbar-nav navbar-right">
+
            </div>
 
            <!-- Collect the nav links, forms, and other content for toggling -->
@@ -77,14 +84,118 @@
 
 
 
-<!-- Use any element to open the sidenav -->
+
 
 
 <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
   <body class="overwritten">
 
     <div class="container" id="render">
+      <div class="row">
+        <!-- MODAL DISPLAY -->
+        <div class="col-md-6">
+            <!-- Button trigger modal -->
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Login To SSMPA</h4>
+                  </div>
+                  <div class="modal-body">
+                    <h2>Login</h2>
 
+                    <%= form_for @conn, session_path(@conn, :create), [as: :session], fn f -> %>
+                      <%= if f.errors != [] do %>
+                        <div class="alert alert-danger">
+                          <p>Please check the errors below:</p>
+                        </div>
+                      <% end %>
+
+                      <div class="form-group">
+                        <%= label f, :email, class: "control-label" %>
+                        <%= text_input f, :email, class: "form-control" %>
+                        <%= error_tag f, :email %>
+                      </div>
+
+                      <div class="form-group">
+                        <%= label f, :password, class: "control-label" %>
+                        <%= password_input f, :password, class: "form-control" %>
+                        <%= error_tag f, :password %>
+                      </div>
+
+                      <div class="form-group">
+                        <%= submit "Login", class: "btn btn-primary" %>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END MODAL DISPLAY -->
+          <!-- MODAL DISPLAY -->
+          <div class="col-md-6">
+
+
+              <!-- Modal -->
+              <div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="registerLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title" id="myModalLabel">Register New Account</h4>
+                    </div>
+                    <div class="modal-body">
+                      <h2>Register</h2>
+                      <%= form_for @changeset, user_path(@conn, :create), fn f -> %>
+                        <%= if @changeset.action do %>
+                          <div class="alert alert-danger">
+                            <p>Please check the errors below.</p>
+                          </div>
+                        <% end %>
+
+                        <div class="form-group">
+                          <%= label f, :email, class: "control-label" %>
+                          <%= text_input f, :email, class: "form-control" %>
+                          <%= error_tag f, :email %>
+                        </div>
+                        <div class="form-group">
+                          <%= label f, :name, class: "control-label" %>
+                          <%= text_input f, :name, class: "form-control" %>
+                          <%= error_tag f, :name %>
+                        </div>
+                        <div class="form-group">
+                          <%= label f, :type, class: "control-label" %>
+                          <%= text_input f, :type, class: "form-control" %>
+                          <%= error_tag f, :type %>
+                        </div>
+
+                        <div class="form-group">
+                          <%= label f, :password, class: "control-label" %>
+                          <%= password_input f, :password, class: "form-control" %>
+                          <%= error_tag f, :password %>
+                        </div>
+
+                        <div class="form-group">
+                          <%= submit "Submit", class: "btn btn-primary" %>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END MODAL DISPLAY -->
+      </div>
 
 
 
