@@ -18,13 +18,16 @@ defmodule Fitcrm.Tools.ClientTool do
       IO.puts "omboarded"
       weight = params["weight"]
       height = params["height"]
+      plantype = params["plantype"]
+      planlevel = params["planlevel"]
       activity = params["activity"]
       age = params["age"]
       sex = params["sex"]
       cystic = params["cystic"]
       ir = params["ir"]
-      params_new = PhysicsTool.modifyQuestionResults(%{"sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
-      bmr = PhysicsTool.calculate_tdee(params_new) |> IO.inspect
+      params_new = PhysicsTool.modifyQuestionResults(%{"plantype" => plantype, "planlevel" => planlevel, "sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
+      bmr = PhysicsTool.calculate_tdee(params_new)
+      IO.inspect params_new
       tdee_original = PhysicsTool.scaleActivity(bmr, params_new["activity"])
       case cystic do
         "Yes" ->
@@ -41,7 +44,7 @@ defmodule Fitcrm.Tools.ClientTool do
       end
       tdee = tdee_original - cyst1 - ir1
       changesetmap = PhysicsTool.compileResults(user, params_new, bmr, tdee)
-      changesetmap
+      changesetmap |> IO.inspect
     end
 
     def getWorkoutID(level, type) do

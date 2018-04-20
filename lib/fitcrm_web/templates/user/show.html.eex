@@ -1,11 +1,4 @@
 <h2>Welcome back <%= @user.name %></h2>
-
-
-
-
-
-
-
 <table class="table">
   <thead>
     <tr>
@@ -40,6 +33,8 @@
       <th>Name</th>
       <th>Email</th>
       <th>Authentication Level</th>
+      <th>Workout Level</th>
+      <th>Workout Plan</th>
     </tr>
   </thead>
   <tbody>
@@ -47,6 +42,8 @@
       <td><%= @user.name %></td>
       <td><%= @user.email %></td>
       <td><%= @user.type %></td>
+      <td><%= @user.plantype %></td>
+      <td><%= @user.planlevel%></td>
     </tr>
   </tbody>
 </table>

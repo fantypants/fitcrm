@@ -34,7 +34,7 @@ defmodule Fitcrm.Tools.PhysicsTool do
         Map.merge(map, new)
       end
 
-      def modifyQuestionResults(%{"sex" => s, "height" => h, "weight" => w, "activity" => act, "age" => a, "cystic" => c}) do
+      def modifyQuestionResults(%{"plantype" => plantype, "planlevel" => planlevel,"sex" => s, "height" => h, "weight" => w, "activity" => act, "age" => a, "cystic" => c}) do
         case act do
           "Sedentary" ->
             nact = 0
@@ -51,7 +51,7 @@ defmodule Fitcrm.Tools.PhysicsTool do
         height = h |> convert |> elem(0)
         age = a |> String.to_integer
         nact
-        %{"sex" => s, "height" => height, "weight" => weight, "activity" => nact, "age" => age}
+        %{"plantype" => plantype, "planlevel" => planlevel,"sex" => s, "height" => height, "weight" => weight, "activity" => nact, "age" => age}
       end
 
       def convert(val) do

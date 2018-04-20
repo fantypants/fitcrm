@@ -11,6 +11,7 @@ defmodule FitcrmWeb.UserController do
   alias Fitcrm.Accounts.User
   alias Fitcrm.Tools.ClientTool
   alias Fitcrm.Plan.Week
+  alias Fitcrm.Plan.Workout
   alias FitcrmWeb.WeekdayController
 
   # the following plugs are defined in the controllers/authorize.ex file
@@ -57,26 +58,27 @@ defmodule FitcrmWeb.UserController do
   def newquestion(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     changeset = User.changeset(%User{}, %{name: "name"})
     user = (id == to_string(user.id) and user) || Accounts.get(id)
+    types = Fitcrm.Repo.all(Workout) |> Enum.map(&(&1.type)) |> IO.inspect
+    levels = Fitcrm.Repo.all(Workout) |> Enum.map(&(&1.level)) |> IO.inspect
     #params = %{"weight" => "0", "age" => "0", "height" => "0", "sex" => "Male", "activity" => "Sedentary", "cystic" => "No"}
-    render(conn, "questionform.html", changeset: changeset, user: user)
+    render(conn, "questionform.html", changeset: changeset, user: user, types: types, levels: levels)
   end
 
   def question(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id, "user" => params}) do
-    IO.puts "form question working"
-    IO.inspect conn
+    IO.puts "Question Form Submission"
+    IO.inspect params
     changeset = User.changeset(%User{}, %{name: "name"})
     users = Accounts.list_users()
     user = (id == to_string(user.id) and user) || Accounts.get(id)
         changesetmap = ClientTool.onboardclient(%{"user" => user, "params" => params})
         case Accounts.update_user(user, changesetmap) do
           {:ok, user} ->
-            #WeekdayController.create_week(conn)
+            WeekdayController.create_week(conn)
             success(conn, "User updated successfully", user_path(conn, :show, id))
           {:error, %Ecto.Changeset{} = changeset} ->
             IO.inspect changeset
             render(conn, "edit.html", user: user, changeset: changeset)
         end
-  render(conn, "show.html", user: user, changeset: changeset)
   end
 
 
@@ -201,10 +203,18 @@ defmodule FitcrmWeb.UserController do
     IO.inspect id
     # Get the total query and see if it exists
     query = from w in Week, where: w.user_id == ^id, select: w.id
-    w_whole = Fitcrm.Repo.all(query)
+    w_whole = Fitcrm.Repo.all(query) |> IO.inspect
     option = w_whole |> Enum.empty?
     user = Fitcrm.Repo.get!(User, id)
     question = Fitcrm.Repo.get!(User, id).tdee
+
+    case w_whole do
+      [] ->
+        i_stage = 0
+      _->
+        i_stage = 1
+    end
+
     case question do
       nil ->
         i_stage = 0
@@ -213,11 +223,21 @@ defmodule FitcrmWeb.UserController do
       question_stat = "Completed"
       case option do
         nil ->
-          FitcrmWeb.WeekdayController.create_week(conn)
-          i_stage = 1
+          case w_whole do
+            [] ->
+              i_stage = 0
+            _->
+              FitcrmWeb.WeekdayController.create_week(conn)
+              i_stage = 1
+          end
         _->
+        case w_whole do
+          [] ->
+          i_stage = 0
+          _->
           i_stage = 1
       end
+    end
     end
 
     case i_stage do

@@ -37,7 +37,9 @@ defmodule FitcrmWeb.WeekdayController do
   def create(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"weekday" => weekday_params}) do
     user_id = user.user_id
     user_tdee = user.tdee
-    workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
+    level = Fitcrm.Repo.get!(User, user_id).planlevel
+    type = Fitcrm.Repo.get!(User, user_id).plantype
+    workout_id = Tools.ClientTool.getWorkoutID(level,type)
     selected_workouts = Tools.ClientTool.selectWorkout(workout_id, weekday_params["day"])
     meal_ids = Tools.ClientTool.getMealID(user_tdee)
     selected_meals = Tools.ClientTool.selectMeals(meal_ids.breakfast, meal_ids.lunch, meal_ids.dinner)
@@ -59,8 +61,9 @@ defmodule FitcrmWeb.WeekdayController do
     Fitcrm.Repo.all(Week) |> IO.inspect
     week = Fitcrm.Repo.get!(Week, week_id)
     weekdays = Fitcrm.Repo.all(query)
+    changeset = Accounts.change_user(%Accounts.User{})
     user = (user_id == to_string(user.id) and user) || Accounts.get(user_id)
-    conn |> render("weeks.html", week: week, weekdays: weekdays, user: user)
+    conn |> render("weeks.html", week: week, weekdays: weekdays, user: user, changeset: changeset)
   end
 
   def weekindex(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user_id" => user_id}) do
@@ -74,6 +77,7 @@ defmodule FitcrmWeb.WeekdayController do
     Fitcrm.Repo.all(from w in Weekday, where: w.week_id == ^2) |> IO.inspect
     users = [user.id]
     s = user.id
+    changeset = Accounts.change_user(%Accounts.User{})
     weekday = Fitcrm.Repo.get!(Weekday, id)
     bid= Map.fetch!(weekday, :breakfast)
     lid= Map.fetch!(weekday, :lunch)
@@ -91,7 +95,7 @@ defmodule FitcrmWeb.WeekdayController do
       name: Fitcrm.Repo.get!(Excercise, a).name,
       reps: Fitcrm.Repo.get!(Excercise, a).reps}
     end)
-    render(conn, "show.html", weekday: weekday, excercises: excercises, mealsfull: mealsfull, users: users, s: s, user: user)
+    render(conn, "show.html", weekday: weekday, excercises: excercises, mealsfull: mealsfull, users: users, s: s, user: user, changeset: changeset)
   end
 
   def getfullmeal(foodids) do
@@ -136,8 +140,10 @@ defmodule FitcrmWeb.WeekdayController do
   def create_day(id, day) do
       IO.puts "Day is: #{day}"
       user_tdee = Fitcrm.Repo.get!(User, id).tdee
+      level = Fitcrm.Repo.get!(User, id).planlevel
+      type = Fitcrm.Repo.get!(User, id).plantype
       weekday_params = %{"day" => day}
-      workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
+      workout_id = Tools.ClientTool.getWorkoutID(level,type)
       selected_workouts = Tools.ClientTool.selectWorkout(workout_id, day)
       meal_ids = Tools.ClientTool.getMealID(user_tdee)
       selected_meals = Tools.ClientTool.selectMeals(meal_ids.breakfast, meal_ids.lunch, meal_ids.dinner)
@@ -150,7 +156,9 @@ defmodule FitcrmWeb.WeekdayController do
     IO.puts "Day is:"
     user_tdee = Fitcrm.Repo.get!(User, user_id).tdee
     weekday_params = %{"day" => day, "id" => day_id}
-    workout_id = Tools.ClientTool.getWorkoutID("Beginner","Shred")
+    level = Fitcrm.Repo.get!(User, user_id).planlevel
+    type = Fitcrm.Repo.get!(User, user_id).plantype
+    workout_id = Tools.ClientTool.getWorkoutID(level,type)
     selected_workouts = Tools.ClientTool.selectWorkout(workout_id, day)
     meal_ids = Tools.ClientTool.getMealID(user_tdee)
     selected_meals = Tools.ClientTool.selectMeals(meal_ids.breakfast, meal_ids.lunch, meal_ids.dinner)

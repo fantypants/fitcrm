@@ -1,0 +1,19 @@
+<div class="slidecontainer">
+  <input type="range" min="10" max="100" value="50" class="slider" id="age">
+</div>
+<p id="ageoutput"></p>
+
+<script>
+var slider = document.getElementById("age");
+var output = document.getElementById("ageform");
+output.innerHTML = slider.value; // Display the default slider value
+output.innerText = slider.value;
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+    output.innerHTML = this.value;
+    output.innerText = slider.value;
+    //output.outerHTML = this.value;
+    var ages = console.log("New age", document.getElementById("ageform"));
+    //document.getElementById("user_age").value = this.value;
+}
+</script>
