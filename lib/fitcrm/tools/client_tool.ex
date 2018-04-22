@@ -149,7 +149,7 @@ defmodule Fitcrm.Tools.ClientTool do
 
     defp updateSelector(map) do
       map |> Enum.each(fn(a) ->
-        if a.finish !== true do
+        if a.finish == true do
           WeekdayController.update_week(a.id)
         end
          end)
