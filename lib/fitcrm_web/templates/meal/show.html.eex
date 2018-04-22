@@ -2,11 +2,13 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th> Type </th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td> <%= @meal.name %> </td>
+      <td> <%= @meal.type %>
     </tr>
   </tbody>
 </table>
@@ -26,6 +28,7 @@
 <%= for food <- @foods do %>
     <tr>
       <td> <%= food.name %> </td>
+
       <td> <%= food.p %> </td>
       <td> <%= food.c %> </td>
       <td> <%= food.f %> </td>

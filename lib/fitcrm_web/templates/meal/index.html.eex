@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th> Type </th>
       <th>Protein</th>
       <th>Carbs</th>
       <th>Fat</th>
@@ -14,6 +15,7 @@
 <%= for meal <- @meals do %>
     <tr>
       <td> <%= meal.name %> </td>
+      <td> <%= meal.type %> </td>
       <td> <%= meal.protein %> </td>
       <td> <%= meal.carbs %> </td>
       <td> <%= meal.fat %> </td>

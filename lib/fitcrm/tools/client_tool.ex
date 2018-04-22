@@ -61,20 +61,20 @@ defmodule Fitcrm.Tools.ClientTool do
       lcals = 0.75*0.4*tdee
       dcals = 0.75*0.6*tdee
       IO.puts "Calorie Variables => Breakfast: #{bcals}, Lunch: #{lcals}, Dinner: #{dcals}"
-      bquery = from m in Meal, where: m.calories <= ^bcals, select: m.id
-      lquery = from m in Meal, where: m.calories <= ^lcals, select: m.id
-      dquery = from m in Meal, where: m.calories <= ^dcals, select: m.id
-      breakfast = Fitcrm.Repo.all(bquery)
-      lunch = Fitcrm.Repo.all(lquery)
-      dinner = Fitcrm.Repo.all(dquery)
+      bquery = from m in Meal, where: m.calories <= ^bcals
+      lquery = from m in Meal, where: m.calories <= ^lcals
+      dquery = from m in Meal, where: m.calories <= ^dcals
+      breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.type == "Breakfast" end) |> Enum.map(fn(a) -> a.id end)
+      lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.type == "Lunch" end) |> Enum.map(fn(a) -> a.id end)
+      dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.type == "Dinner" end) |> Enum.map(fn(a) -> a.id end)
       %{breakfast: breakfast, lunch: lunch, dinner: dinner}
 
     end
 
     def selectMeals(b_id, l_id, d_id) do
-      b = b_id |> List.first
-      l = l_id |> List.first
-      d = d_id |> List.first
+      b = b_id |> Enum.random
+      l = l_id |> Enum.random
+      d = d_id |> Enum.random
       %{"breakfast" => b, "lunch" => l, "dinner" => d}
     end
 

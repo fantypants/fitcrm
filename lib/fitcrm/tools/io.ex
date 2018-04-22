@@ -44,7 +44,7 @@ def csvimport(params) do
 
 end
 
-def csvimport_meal(params) do
+def csvimport_meal(conn, params) do
   if upload = params["file"] do
     file = upload.path
     filename = upload.filename
@@ -66,7 +66,7 @@ def csvimport_meal(params) do
                 IO.puts "Processing in IROW"
                 meal = getFields(irow) |> IO.inspect
                 #food = process_csv(irow)
-                FitcrmWeb.MealController.insertMeal(%{"meal" => meal})
+                FitcrmWeb.MealController.insertMeal(conn, %{"meal" => meal})
               end
           end
         end)

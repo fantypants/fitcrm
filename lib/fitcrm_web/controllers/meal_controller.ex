@@ -48,10 +48,23 @@ defmodule FitcrmWeb.MealController do
     Fitcrm.Repo.insert!(changeset)
   end
 
-  def insertMeal(%{"meal" => meal}) do
+  def insertMeal(conn, %{"meal" => meal}) do
     changeset_params = meal |> IO.inspect
     changeset = Meal.changeset(%Meal{}, changeset_params)
-    Fitcrm.Repo.insert!(changeset)
+    case Fitcrm.Repo.insert(changeset) do
+      {:ok, changeset} ->
+        IO.puts "Meals inserted"
+        conn
+           |> put_flash(:info, "Meal created successfully.")
+          |> redirect(to: meal_path(conn, :index))
+        {:error, changeset} ->
+          IO.puts "Error inserting meal"
+          IO.inspect changeset
+          conn
+             |> put_flash(:info, "Meal created successfully.")
+            |> redirect(to: meal_path(conn, :index))
+
+    end
   end
 
 
@@ -68,7 +81,8 @@ defmodule FitcrmWeb.MealController do
 
       if upload = meal_params["file"] do
          # PROCESS CSV
-         meal = Tools.Io.csvimport_meal(meal_params)
+         changeset = Accounts.change_user(%Accounts.User{})
+         meal = Tools.Io.csvimport_meal(conn, meal_params)
          #insertMeal(%{"meal" => meal})
          #changeset = Tools.Io.csvimport(csv)
          #case Fitcrm.Repo.insert(changeset) do
@@ -81,14 +95,15 @@ defmodule FitcrmWeb.MealController do
         # end
       end
     meals = Fitcrm.Repo.all(Meal)
-    render(conn, "index.html", meals: meals)
+    render(conn, "index.html", meals: meals, changeset: changeset)
   end
 
   def show(conn, %{"id" => id}) do
     meal = Fitcrm.Repo.get!(Meal,id)
     foodids = meal.foodid
+    changeset = Accounts.change_user(%Accounts.User{})
     foods = foodids |> Enum.map(fn(a) -> %{name: Fitcrm.Repo.get!(Food, a).name, p: Fitcrm.Repo.get!(Food, a).protein, c: Fitcrm.Repo.get!(Food, a).carbs, f: Fitcrm.Repo.get!(Food, a).fat, cal: Fitcrm.Repo.get!(Food, a).calories, q: Fitcrm.Repo.get!(Food, a).quantity}  end)
-    render(conn, "show.html", meal: meal, foods: foods)
+    render(conn, "show.html", meal: meal, foods: foods, changeset: changeset)
   end
 
   def edit(conn, %{"id" => id}) do

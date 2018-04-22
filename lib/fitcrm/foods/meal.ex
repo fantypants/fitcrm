@@ -24,6 +24,7 @@ defmodule Fitcrm.Foods.Meal do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name, :foodid, :calories, :fat, :carbs, :protein, :day_id, :recipe, :type])
+    |> unique_constraint(:name)
     |> validate_required([:name, :foodid, :calories, :fat, :carbs, :protein, :type, :recipe])
   end
 end

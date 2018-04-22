@@ -85,7 +85,7 @@ defmodule FitcrmWeb.WeekdayController do
     mealids = [bid, lid, did]
     meals = mealids |> Enum.map(fn(a) -> %{
       name: Fitcrm.Repo.get!(Meal, a).name,
-      type: "mealtype test",
+      type: Fitcrm.Repo.get!(Meal, a).type,
       id: a,
       recipe: "Just chuck the ingredients in the microwave mate",
       foodids: Fitcrm.Repo.get!(Meal,a).foodid

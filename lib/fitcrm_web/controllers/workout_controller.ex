@@ -66,7 +66,8 @@ defmodule FitcrmWeb.WorkoutController do
   def show(conn, %{"id" => id}) do
     workout = Fitcrm.Repo.get!(Workout, id) #|> Fitcrm.Repo.preload(:excercises) |> IO.inspect
     excercises = Fitcrm.Repo.all(from e in Excercise, where: e.workout_id == ^id)
-    render(conn, "show.html", workout: workout, excercises: excercises)
+    changeset = Accounts.change_user(%Accounts.User{})
+    render(conn, "show.html", workout: workout, excercises: excercises, changeset: changeset)
   end
 
   def edit(conn, %{"id" => id}) do
