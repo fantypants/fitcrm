@@ -14,7 +14,16 @@
 			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 			  crossorigin="anonymous"></script>
         <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <style>
+        .navbar-full, .navbar {
+          margin-left: 200px;
+          box-shadow: 5px 5px 5px #888888;
+        }
+        .sidenav {
+          box-shadow: 10px 10px 18px #888888;
+        }
 
+        </style>
   </head>
 
 
