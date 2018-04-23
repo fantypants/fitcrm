@@ -16,18 +16,22 @@ defmodule FitcrmWeb.ApiController do
   plug :user_check when action in [:authenticate]
   plug :id_check when action in [:edit, :update, :delete]
 
-  def index(conn, _params) do
+  def index(conn, params) do
      users = Fitcrm.Repo.all(User)
-     render(conn, "index.json", users: users)
+     render(conn, "authenticated.json", params: params)
    end
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
     user_params = %{"email" => email, "password" => password}
     session_params = %{"session" => user_params}
-    SessionController.create(conn, session_params) |> IO.inspect
-
-
-    render(conn, "authenticate.json", user_params: user_params)
+    scrubbed_params = %{"email" => email, "password" => ""}
+    authenticated? = SessionController.create_api(conn, session_params) |> IO.inspect
+    case authenticated? do
+      {:success, user} ->
+        render(conn, "authenticated.json", %{"params" => %{"email" => user.email, "name" => user.name}})
+      _->
+        render(conn, "authenticate.json", user_params: scrubbed_params)
   end
+end
 
 end

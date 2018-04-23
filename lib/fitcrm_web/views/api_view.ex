@@ -1,8 +1,13 @@
 defmodule FitcrmWeb.ApiView do
   use FitcrmWeb, :view
 
-  def render("index.json", %{users: users}) do
-    %{data: render_many(users, FitcrmWeb.ApiView, "user.json")}
+  def render("authenticated.json", %{"params" => params}) do
+    #params = %{email: "this", password: "that"}
+    #%{data: render_many(users, FitcrmWeb.ApiView, "user.json")}
+    %{
+      email: params["email"],
+      name: params["name"]
+    }
   end
 
 
@@ -13,7 +18,8 @@ defmodule FitcrmWeb.ApiView do
 
   def render("user.json", %{user: user}) do
     %{
-      uuid: user.uuid
+      email: user.email,
+      name: user.name
     }
   end
 
@@ -22,10 +28,7 @@ defmodule FitcrmWeb.ApiView do
   def render("authenticate.json", %{user_params: user_params}) do
     IO.puts "Rendering Login"
     IO.inspect user_params
-    %{
-      email: user_params.email,
-      password: user_params.password
-    }
+    #%{email: user_params.email,password: user_params.password}
   end
 
   def render("show.json", %{user_params: user_params}) do

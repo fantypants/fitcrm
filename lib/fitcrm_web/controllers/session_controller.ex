@@ -29,6 +29,18 @@ defmodule FitcrmWeb.SessionController do
     end
   end
 
+  def create_api(conn, %{"session" => params}) do
+    case Login.verify(params, Accounts, crypto: Comeonin.Argon2) do
+      {:ok, user} ->
+        IO.inspect user
+        params = %{email: user.email, name: user.name}
+        {:success, user}
+
+      {:error, message} ->
+        {:error, "Error"}
+    end
+  end
+
   def delete(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
     <<session_id::binary-size(17), _::binary>> = get_session(conn, :phauxth_session_id)
     Accounts.delete_session(user, session_id)
