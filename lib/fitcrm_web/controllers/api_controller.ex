@@ -12,8 +12,8 @@ defmodule FitcrmWeb.ApiController do
   alias Fitcrm.Tools
   alias Fitcrm.Accounts.User
   alias Fitcrm.Tools.ClientTool
-
-  plug :user_check when action in []
+  alias FitcrmWeb.SessionController
+  plug :user_check when action in [:authenticate]
   plug :id_check when action in [:edit, :update, :delete]
 
   def index(conn, _params) do
@@ -21,8 +21,12 @@ defmodule FitcrmWeb.ApiController do
      render(conn, "index.json", users: users)
    end
 
-  def authenticate(conn, _params) do
-    user_params = %{email: "admin@gmail.com", password: "password"}
+  def authenticate(conn, %{"email" => email, "password" => password}) do
+    user_params = %{"email" => email, "password" => password}
+    session_params = %{"session" => user_params}
+    SessionController.create(conn, session_params) |> IO.inspect
+
+
     render(conn, "authenticate.json", user_params: user_params)
   end
 

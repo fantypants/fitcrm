@@ -50,6 +50,7 @@ defmodule FitcrmWeb.Router do
     pipe_through :api
     get "/", ApiController, :index
     get "/authenticate", ApiController, :authenticate
+    post "/authenticate", ApiController, :authenticate
 end
 
 end
