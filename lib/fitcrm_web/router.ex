@@ -10,6 +10,10 @@ defmodule FitcrmWeb.Router do
     plug Phauxth.Authenticate
   end
 
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
   scope "/", FitcrmWeb do
     pipe_through :browser
 
@@ -39,5 +43,13 @@ defmodule FitcrmWeb.Router do
 
 
   end
+
+
+
+  scope "/api", FitcrmWeb do
+    pipe_through :api
+    get "/", ApiController, :index
+    get "/authenticate", ApiController, :authenticate
+end
 
 end
