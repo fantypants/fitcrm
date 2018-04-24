@@ -259,11 +259,10 @@ function tooltip(){
 <div data-tooltip="your tooltip message"></div>
 
 
-  <div class="form-group" id="cys">
+  <div class="form-group" id="cys" data-toggle="tooltip" data-placement="left" title="PCOS IS NOT A GOOD THING TO HAVE.. DREW PLEASE GIVE ME A SUMMARY">
     <%= label f, :"Do you have PCOS", class: "control-label" %>
     <%= select f, :cystic, [ "Select", "Yes", "No"] %>
     <%= error_tag f, :csytic %>
-
   </div>
 
   <div class="form-group">
