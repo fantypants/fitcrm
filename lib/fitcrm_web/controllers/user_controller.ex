@@ -150,7 +150,13 @@ defmodule FitcrmWeb.UserController do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
 
     changeset = Food.changeset(%Food{}, %{name: "test"})
-    referrals = Fitcrm.Repo.get!(User, id).ref_id |> IO.inspect
+    referrals_1 = Fitcrm.Repo.get!(User, id).ref_id |> IO.inspect
+    case referrals_1 do
+      nil ->
+        referrals = ["None"]
+      _->
+      referrals = referrals_1
+    end
     #tdee = user.tdee
     option = Fitcrm.Repo.all(Week) |> Enum.empty? |> IO.inspect
     case option do
