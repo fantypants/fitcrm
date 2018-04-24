@@ -19,7 +19,7 @@ defmodule Fitcrm.Accounts.User do
     field :plantype, :string
     field :planlevel, :string
     field :sessions, {:map, :integer}, default: %{}
-
+    field :ref_id, {:array, :integer}
     has_many :weeks, Fitcrm.Plan.Week
 
     timestamps()
@@ -27,7 +27,7 @@ defmodule Fitcrm.Accounts.User do
 
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex, :password, :plantype, :planlevel])
+    |> cast(attrs, [:email, :ref_id, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex, :password, :plantype, :planlevel])
     |> validate_required([:email])
     |> unique_email
     |> cast_assoc(:weeks)
@@ -37,7 +37,7 @@ defmodule Fitcrm.Accounts.User do
 
   def create_changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex, :plantype, :planlevel])
+    |> cast(attrs, [:email, :ref_id, :password, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex, :plantype, :planlevel])
     |> validate_required([:email, :password])
     |> unique_email
     |> cast_assoc(:weeks)

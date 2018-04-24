@@ -5,6 +5,7 @@
       <th>Subscription Level</th>
       <th>Subscription Active?</th>
       <th>Plan Generated?</th>
+      <th>Customer Referral ID's</th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +23,11 @@
                 <span class="sr-only">ACTIVE</span>
             </div>
         </div> </td>
+        <td>
+          <%= for id <- @referrals do %>
+          <%= id %>
+          <% end %>
+        </td>
     </tr>
   </tbody>
 </table>

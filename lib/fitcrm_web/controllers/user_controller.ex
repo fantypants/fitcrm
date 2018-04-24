@@ -13,6 +13,7 @@ defmodule FitcrmWeb.UserController do
   alias Fitcrm.Plan.Week
   alias Fitcrm.Plan.Workout
   alias FitcrmWeb.WeekdayController
+  alias Fitcrm.Tools.UserTool
 
   # the following plugs are defined in the controllers/authorize.ex file
   plug :user_check when action in [:index, :show]
@@ -140,8 +141,9 @@ defmodule FitcrmWeb.UserController do
 
   def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
-
+    #UserTool.ref_controller(conn, 2, "admin@dbfitness.com")
     changeset = Food.changeset(%Food{}, %{name: "test"})
+    referrals = Fitcrm.Repo.get!(User, id).ref_id |> IO.inspect
     #tdee = user.tdee
     option = Fitcrm.Repo.all(Week) |> Enum.empty? |> IO.inspect
     case option do
@@ -151,7 +153,7 @@ defmodule FitcrmWeb.UserController do
         plan = "Not Generated"
     end
     subscription = %{type: "Test", status: "Active", plan: plan}
-    render(conn, "show.html", user: user, changeset: changeset, subscription: subscription)
+    render(conn, "show.html", user: user, changeset: changeset, subscription: subscription, referrals: referrals)
   end
 
   def edit(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
@@ -272,6 +274,22 @@ defmodule FitcrmWeb.UserController do
       changeset = Accounts.change_user(%Accounts.User{})
     conn |> render("setup.html", user: user, week: week, status: status, user_setup: user_setup, changeset: changeset)
   end
+
+
+  def update_list(conn, user_id, new_list) do
+    user = Fitcrm.Repo.get!(User, user_id)
+    user_params = %{"ref_id" => new_list}
+    changeset = User.changeset(user, user_params)
+
+    case Fitcrm.Repo.update(changeset) do
+      {:ok, user} ->
+        IO.puts "Updated Succesfully"
+      {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect changeset
+        render(conn, "edit.html", user: user, changeset: changeset)
+    end
+  end
+
 
   def deletefood(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     food = Fitcrm.Repo.get!(Food, id)
