@@ -2055,12 +2055,12 @@ input.ct-red + span + label + span.switch-right {
         z-index: 1000;
         top: 0;
         left: 0;
-        background: #6d0000;
+        background: #d9534f;
         background-size: auto;
 
         overflow-x: hidden;
         padding-top: 20px;
-        opacity: 0.9;
+        opacity: 1;
     }
 
     .sidenav a {

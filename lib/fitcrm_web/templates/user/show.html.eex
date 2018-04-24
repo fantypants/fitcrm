@@ -1,4 +1,28 @@
-<h2>Welcome back <%= @user.name %></h2>
+<style>
+.panel-red {
+  border-color: #d9534f;
+  box-shadow: 2px 2px 5px #888888;
+}
+.panel-red > .panel-heading {
+  border-color: #d9534f;
+  color: white;
+  background-color: #d9534f;
+  box-shadow: 2px 2px 5px #888888;
+}
+.panel-red > a {
+  color: #d9534f;
+}
+.panel-red > a:hover {
+  color: #b52b27;
+}
+</style>
+<div class="panel panel-red">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+    Welcome back <%= @user.name %>
+  </h4>
+</div>
+<div class="panel-body">
 <table class="table">
   <thead>
     <tr>
@@ -94,3 +118,5 @@
 </tr>
 </thead>
 </table>
+</div>
+</div>

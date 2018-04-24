@@ -121,8 +121,37 @@
     visibility: visible;
     opacity: 1;
 }
+
+.panel-red {
+  border-color: #d9534f;
+  box-shadow: 2px 2px 5px #888888;
+}
+.panel-red > .panel-heading {
+  border-color: #d9534f;
+  color: white;
+  background-color: #d9534f;
+  box-shadow: 2px 2px 5px #888888;
+}
+.panel-red > a {
+  color: #d9534f;
+}
+.panel-red > a:hover {
+  color: #b52b27;
+}
+
+.table {
+  box-shadow: 2px 2px 5px #888888;
+}
 </style>
 
+
+<div class="panel panel-red">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+    Personal Questionaire
+  </h4>
+</div>
+<div class="panel-body">
 <%= form_for @changeset, user_path(@conn, :question, @user), fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -138,12 +167,12 @@
 </div>
 
 <div class="form-group" id="gender">
-  <%= label f, :plantype, class: "control-label" %>
+  <%= label f, :"Workout Plan Type", class: "control-label" %>
   <%= select f, :plantype, @types %>
 </div>
 
 <div class="form-group" id="gender">
-  <%= label f, :planlevel, class: "control-label" %>
+  <%= label f, :"Workout Plan level", class: "control-label" %>
   <%= select f, :planlevel, @levels %>
 </div>
 
@@ -266,7 +295,7 @@ function tooltip(){
   </div>
 
   <div class="form-group">
-    <%= label f, :"Do you have IR", class: "control-label" %>
+    <%= label f, :"Do you have Insulin Resistance", class: "control-label" %>
     <%= select f, :ir, ["Select", "Yes", "No"] %>
     <%= error_tag f, :ir %>
   </div>
@@ -308,4 +337,6 @@ function tooltip(){
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
+</div>
+</div>
 <% end %>
