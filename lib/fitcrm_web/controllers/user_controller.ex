@@ -129,10 +129,17 @@ defmodule FitcrmWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
+
     case Accounts.create_user(user_params) do
       {:ok, user} ->
         Log.info(%Log{user: user.id, message: "user created"})
-        success(conn, "User created successfully", session_path(conn, :new))
+        case user_params["refemail"] do
+          nil ->
+            success(conn, "User created successfully", session_path(conn, :new))
+          _->
+            UserTool.ref_controller(conn, user.id, user_params["refemail"])
+            success(conn, "User created successfully", session_path(conn, :new))
+        end
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -141,7 +148,7 @@ defmodule FitcrmWeb.UserController do
 
   def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
-    #UserTool.ref_controller(conn, 2, "admin@dbfitness.com")
+
     changeset = Food.changeset(%Food{}, %{name: "test"})
     referrals = Fitcrm.Repo.get!(User, id).ref_id |> IO.inspect
     #tdee = user.tdee
