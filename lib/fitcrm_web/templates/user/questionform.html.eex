@@ -134,7 +134,7 @@
 
 <div class="form-group" id="gender">
   <%= label f, :Gender, class: "control-label" %>
-  <%= select f, :sex, ["Male", "Female"] %>
+  <%= select f, :sex, ["Select", "Male", "Female"] %>
 </div>
 
 <div class="form-group" id="gender">
@@ -151,7 +151,7 @@
 
 <div class="form-group" id="test">
   <%= label f, :"Daily Average Activity Level", class: "control-label" %>
-  <%= select f, :activity, ["Sedentary", "Light", "Moderate", "Heavy", "Athelete"] %>
+  <%= select f, :activity, ["Select", "Sedentary", "Light", "Moderate", "Heavy", "Athelete"] %>
   <%= error_tag f, :activity %>
   <div id="helper">
     <p id="choice"></p>
@@ -162,6 +162,8 @@
 document.getElementById("test").addEventListener("click", level);
 var activity = document.getElementById("user_activity");
 document.getElementById("choice").innerHTML = "Select From the drop down";
+
+
 function level(){
   switch(activity.value){
     case "Sedentary":
@@ -259,16 +261,49 @@ function tooltip(){
 
   <div class="form-group" id="cys">
     <%= label f, :"Do you have PCOS", class: "control-label" %>
-    <%= select f, :cystic, ["Yes", "No"] %>
+    <%= select f, :cystic, [ "Select", "Yes", "No"] %>
     <%= error_tag f, :csytic %>
 
   </div>
 
   <div class="form-group">
     <%= label f, :"Do you have IR", class: "control-label" %>
-    <%= select f, :ir, ["Yes", "No"] %>
+    <%= select f, :ir, ["Select", "Yes", "No"] %>
     <%= error_tag f, :ir %>
   </div>
+
+  <script>
+  var temp = "Select";
+  var actSelect = document.getElementById('user_activity');
+  var gendSelect = document.getElementById('user_sex');
+  var pcosSelect = document.getElementById('user_cystic');
+  var irSelect = document.getElementById('user_ir');
+  for(var i, j = 0; i = actSelect.options[j]; j++) {
+      if(i.value == temp) {
+          actSelect.selectedIndex = j;
+          break;
+      }
+  }
+  for(var i, j = 0; i = gendSelect.options[j]; j++) {
+      if(i.value == temp) {
+          gendSelect.selectedIndex = j;
+          break;
+      }
+  }
+  for(var i, j = 0; i = irSelect.options[j]; j++) {
+      if(i.value == temp) {
+          irSelect.selectedIndex = j;
+          break;
+      }
+  }
+  for(var i, j = 0; i = pcosSelect.options[j]; j++) {
+      if(i.value == temp) {
+          pcosSelect.selectedIndex = j;
+          break;
+      }
+  }
+
+  </script>
 
 
   <div class="form-group">
