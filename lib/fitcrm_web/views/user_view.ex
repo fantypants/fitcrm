@@ -11,7 +11,8 @@ defmodule FitcrmWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
+    IO.puts "Rendering User Profile"
     %{id: user.id,
-      email: user.email}
+      email: user.email, name: user.name}
   end
 end

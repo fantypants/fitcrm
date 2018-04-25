@@ -56,7 +56,7 @@ end
 scope "/api/v1" do
   pipe_through :api
   resources "/sessions", FitcrmWeb.SessionController, only: [:new, :create, :delete]
-  resources "/users", FitcrmWeb.UserController, except: [:new, :edit]
+  get "/users", FitcrmWeb.UserController, :api_profile
   #post "/sessions/create_api", FitcrmWeb.SessionController, :create_api
   #get "/sessions/create_api", FitcrmWeb.SessionController, :create_api
 end

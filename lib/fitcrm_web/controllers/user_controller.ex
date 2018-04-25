@@ -169,6 +169,13 @@ defmodule FitcrmWeb.UserController do
     render(conn, "show.html", user: user, changeset: changeset, subscription: subscription, referrals: referrals)
   end
 
+  def api_profile(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
+    user = Fitcrm.Repo.get!(User, user.id)
+
+    conn |> render("user.json", %{user: user})
+
+  end
+
   def edit(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
     changeset = Accounts.change_user(user)
     render(conn, "edit.html", user: user, changeset: changeset)
