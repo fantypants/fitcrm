@@ -41,6 +41,8 @@ defmodule Fitcrm.Accounts do
   end
 
   def add_session(%User{sessions: sessions} = user, session_id, timestamp) do
+    IO.puts "Adding Session #{user.email}; Session ID: #{session_id}; Timestamp: #{timestamp}"
+
     change(user, sessions: put_in(sessions, [session_id], timestamp))
     |> Repo.update
   end

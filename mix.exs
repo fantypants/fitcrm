@@ -46,6 +46,8 @@ defmodule Fitcrm.Mixfile do
       {:argon2_elixir, "~> 1.2"},
       {:bamboo, "~> 0.8"},
       {:timex, "~> 3.1"},
+      {:joken, "~> 1.1"},
+      {:guardian, "~> 1.0"},
       {:edeliver, "~> 1.4.2"},
       {:distillery, "~> 1.4"}
     ]
