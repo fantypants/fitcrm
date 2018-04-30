@@ -98,6 +98,36 @@ defmodule FitcrmWeb.WeekdayController do
     render(conn, "show.html", weekday: weekday, excercises: excercises, mealsfull: mealsfull, users: users, s: s, user: user, changeset: changeset)
   end
 
+  def returnMeals(id) do
+    weekday = Fitcrm.Repo.get!(Weekday, id)
+    bid= Map.fetch!(weekday, :breakfast)
+    lid= Map.fetch!(weekday, :lunch)
+    did= Map.fetch!(weekday, :dinner)
+    [bid, lid, did]
+  end
+
+  def returnDay(id) do
+    weekday = Fitcrm.Repo.get!(Weekday, id)
+    bid= Map.fetch!(weekday, :breakfast)
+    lid= Map.fetch!(weekday, :lunch)
+    did= Map.fetch!(weekday, :dinner)
+    mealids = [bid, lid, did]
+    meals = mealids |> Enum.map(fn(a) -> %{
+      name: Fitcrm.Repo.get!(Meal, a).name,
+      type: Fitcrm.Repo.get!(Meal, a).type,
+      id: a,
+      recipe: "Just chuck the ingredients in the microwave mate",
+      foodids: Fitcrm.Repo.get!(Meal,a).foodid
+      } end)
+    mealsfull = meals |> Enum.map(fn(a) -> %{id: a.id, name: a.name, type: a.type, recipe: a.recipe, foodids: getfullmeal(a.foodids)} end) |> IO.inspect
+    excercises = weekday.excercises |> Enum.map(fn(a) -> %{
+      name: Fitcrm.Repo.get!(Excercise, a).name,
+      reps: Fitcrm.Repo.get!(Excercise, a).reps}
+    end)
+
+    %{weekday: weekday.day, excercises: excercises, mealsfull: mealsfull}
+  end
+
   def getfullmeal(foodids) do
     foods = foodids |> Enum.map(fn(a) -> %{
       name: Fitcrm.Repo.get!(Food, a).name,
@@ -255,6 +285,36 @@ defmodule FitcrmWeb.WeekdayController do
         IO.puts "Error Occured While Updating the Week changeset"
         IO.inspect changeset
     end
+
+  end
+
+  def jsonweek(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
+    user = Fitcrm.Repo.get!(User, user.id)
+    query = from w in Week, where: w.user_id == ^ user.id, select: w.id
+    week_id = Fitcrm.Repo.all(query)
+    weekday_query = from w in Weekday, where: w.week_id == ^List.first(week_id)
+    days_full = Fitcrm.Repo.all(weekday_query)
+    days = days_full |> Enum.map(fn(a) -> %{
+      day: returnDay(a.id)
+      } end)
+
+
+    case week_id do
+      [] ->
+        week_resp = {:error, "No Weeks Generated"}
+      _->
+        week_resp = {:ok, List.first(week_id)}
+    end
+    IO.inspect week_resp
+
+    case week_resp do
+      {:error, message} ->
+        week = %{id: "Error", days: "None"}
+      {:ok, week_id} ->
+        week = %{id: week_id, days: days}
+    end
+
+    conn |> render("week.json", %{week: week})
 
   end
 
