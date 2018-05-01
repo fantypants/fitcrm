@@ -55,7 +55,7 @@ end
 
 scope "/api/v1" do
   pipe_through :api
-  resources "/sessions", FitcrmWeb.SessionController, only: [:new, :create, :delete]
+  get "/sessions", FitcrmWeb.SessionController, :create_api_v1
   get "/users", FitcrmWeb.UserController, :api_profile
   get "/weeks/:week_id", FitcrmWeb.WeekdayController, :jsonweek
   #post "/sessions/create_api", FitcrmWeb.SessionController, :create_api

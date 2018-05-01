@@ -22,22 +22,22 @@ defmodule FitcrmWeb.SessionController do
 
   # If you are using Argon2 or Pbkdf2, add crypto: Comeonin.Argon2
   # or crypto: Comeonin.Pbkdf2 to Login.verify (after Accounts)
-  #def create(conn, %{"session" => params}) do
-  #  IO.inspect params
-  #  case Login.verify(params, Accounts, crypto: Comeonin.Argon2) do
-  #    {:ok, user} ->
-  #      session_id = Login.gen_session_id("F")
-  #      Accounts.add_session(user, session_id, System.system_time(:second))
-  #      IO.puts "Login from weird function is"
-  #      Login.add_session(conn, session_id, user.id) |> IO.inspect
-#
-#
-  #      |> login_success(user_path(conn, :show, user.id), user.id)
-#
-  #    {:error, message} ->
-  #      error(conn, message, session_path(conn, :new))
-  #  end
-  #end
+  def create(conn, %{"session" => params}) do
+    IO.inspect params
+    case Login.verify(params, Accounts, crypto: Comeonin.Argon2) do
+      {:ok, user} ->
+        session_id = Login.gen_session_id("F")
+        Accounts.add_session(user, session_id, System.system_time(:second))
+        IO.puts "Login from weird function is"
+        Login.add_session(conn, session_id, user.id) |> IO.inspect
+
+
+       |> login_success(user_path(conn, :show, user.id), user.id)
+
+      {:error, message} ->
+        error(conn, message, session_path(conn, :new))
+    end
+  end
 
   def create_api(conn, %{"session" => params}) do
     case Login.verify(params, Accounts, crypto: Comeonin.Argon2) do
@@ -64,7 +64,7 @@ defmodule FitcrmWeb.SessionController do
 
   # If you are using Argon2 or Pbkdf2, add crypto: Comeonin.Argon2
   # or crypto: Comeonin.Pbkdf2 to Login.verify (after Accounts)
-  def create(conn, %{"session" => params}) do
+  def create_api_v1(conn, %{"session" => params}) do
     IO.puts "Password is #{params["password"]}"
     case Login.verify(params, Accounts, crypto: Comeonin.Argon2) do
       {:ok, user} ->
