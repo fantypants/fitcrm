@@ -69,14 +69,39 @@ defmodule FitcrmWeb.SessionController do
     case Login.verify(params, Accounts, crypto: Comeonin.Argon2) do
       {:ok, user} ->
         token = Phauxth.Token.sign(conn, user.id)
+        session_id = Login.gen_session_id("F")
+        IO.puts "Session ID is #{session_id}"
+        Plug.Conn.assign(conn, :session_id, session_id)
+        Accounts.add_session(user, session_id, System.system_time(:second))
+        IO.puts "Login from API Endpoint"
+        Login.add_session(conn, session_id, user.id) |> IO.inspect
         render(conn, "info.json", %{info: token})
       {:error, _message} ->
         error(conn, :unauthorized, 401)
     end
 end
 
+def delete_api(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
+  IO.puts "Trying to log out"
+  session = Plug.Conn.fetch_session(conn, :phaux_session_id) |> IO.inspect
+  sessions = Accounts.list_sessions(user.id) |> IO.inspect
+  session_list = sessions |> Enum.map(fn(a) -> a end)
+  session_id = elem(List.first(session_list), 0)
+  message = "Logged out Succesfully"
+  #
+  #<<session_id::binary-size(17), _::binary>> = get_session(conn, :sessions)
+  IO.inspect session_id
+  Accounts.delete_session(user, session_id)
+
+  delete_session(conn, :phauxth_session_id)
+  render(conn, "logout.json", %{message: message})
+end
+
   def delete(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
+    IO.puts "Trying to log out"
+
     <<session_id::binary-size(17), _::binary>> = get_session(conn, :phauxth_session_id)
+    IO.inspect session_id
     Accounts.delete_session(user, session_id)
 
     delete_session(conn, :phauxth_session_id)

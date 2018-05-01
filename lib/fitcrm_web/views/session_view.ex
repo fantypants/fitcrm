@@ -5,6 +5,9 @@ defmodule FitcrmWeb.SessionView do
     %{jwt: jwt}
   end
 
+  def render("logout.json", %{message: message}) do
+    %{message: message}
+  end
 
 
   def render("info.json", %{info: token}) do

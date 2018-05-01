@@ -12,6 +12,7 @@ defmodule FitcrmWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
     plug(Phauxth.Authenticate, method: :token)
   end
 
@@ -55,9 +56,10 @@ end
 
 scope "/api/v1" do
   pipe_through :api
-  get "/sessions", FitcrmWeb.SessionController, :create_api_v1
+  post "/login", FitcrmWeb.SessionController, :create_api_v1
   get "/users", FitcrmWeb.UserController, :api_profile
   get "/weeks/:week_id", FitcrmWeb.WeekdayController, :jsonweek
+  post "/logout", FitcrmWeb.SessionController, :delete_api
   #post "/sessions/create_api", FitcrmWeb.SessionController, :create_api
   #get "/sessions/create_api", FitcrmWeb.SessionController, :create_api
 end
