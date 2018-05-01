@@ -44,7 +44,7 @@ defmodule Fitcrm.Tools.PhysicsTool do
             nact = 2
           "Heavy" ->
             nact = 3
-          "Athlete" ->
+          "Atheletic" ->
             nact = 4
         end
         weight = w |> convert |> elem(0)

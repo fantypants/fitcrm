@@ -180,7 +180,7 @@
 
 <div class="form-group" id="test">
   <%= label f, :"Daily Average Activity Level", class: "control-label" %>
-  <%= select f, :activity, ["Select", "Sedentary", "Light", "Moderate", "Heavy", "Athelete"] %>
+  <%= select f, :activity, ["Select", "Sedentary", "Light", "Moderate", "Heavy", "Atheletic"] %>
   <%= error_tag f, :activity %>
   <div id="helper">
     <p id="choice"></p>
@@ -211,7 +211,7 @@ function level(){
     var selected = "Heavy Exercise/ sports 6 – 7 days/ week";
     altertext(selected);
     break;
-    case "Athelete":
+    case "Atheletic":
     var selected = "Very heavy exercise/ physical job/ training 2 x/ day";
     altertext(selected);
     break;
