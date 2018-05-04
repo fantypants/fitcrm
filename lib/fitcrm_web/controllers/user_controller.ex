@@ -61,8 +61,9 @@ defmodule FitcrmWeb.UserController do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
     types = Fitcrm.Repo.all(Workout) |> Enum.map(&(&1.type)) |> IO.inspect
     levels = Fitcrm.Repo.all(Workout) |> Enum.map(&(&1.level)) |> IO.inspect
+    workouts = Fitcrm.Repo.all(Workout) |> Enum.map(fn(a) -> %{type: a.type, level: a.level} end)
     #params = %{"weight" => "0", "age" => "0", "height" => "0", "sex" => "Male", "activity" => "Sedentary", "cystic" => "No"}
-    render(conn, "questionform.html", changeset: changeset, user: user, types: types, levels: levels)
+    render(conn, "questionform.html", changeset: changeset, user: user, types: types, levels: levels, workouts: workouts)
   end
 
   def question(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id, "user" => params}) do
