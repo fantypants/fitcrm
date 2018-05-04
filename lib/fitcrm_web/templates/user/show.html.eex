@@ -87,6 +87,8 @@
       <th> Sex </th>
       <th> BMR </th>
       <th> TDEE </th>
+      <th> PCOS </th>
+      <th> Insulin Resistance </th>
     </tr>
   </thead>
   <tbody>
@@ -97,6 +99,8 @@
       <td><%= @user.sex %> </td>
       <td><%= @user.bmr %> </td>
       <td><%= @user.tdee %> </td>
+      <td> Need to Add </td>
+      <td> Need to Add </td>
 
     </tr>
   </tbody>
