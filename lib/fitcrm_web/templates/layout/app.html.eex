@@ -30,6 +30,24 @@
 
         }
 
+        .error{
+    			color: red;
+    			margin-left: 10px;
+    		}
+
+        .valid{
+    			color: red;
+    			margin-left: 10px;
+    		}
+
+    		input.invalid, textarea.invalid{
+    			border: 2px solid red;
+    		}
+
+    		input.valid, textarea.valid{
+    			border: 2px solid green;
+    		}
+
         </style>
   </head>
 
@@ -178,26 +196,56 @@
                           </div>
                         <% end %>
 
-                        <script>
-                        window.onload = function(){
-                          var email_label = document.getElementById("user_email");
-                          email_label.addEventListener('keypress', isValid());
-                          console.log(email_label);
-                        }
 
 
 
-                        function isValid(){
-                          console.log("Typing 2");
-                        };
-                        </script>
-
-
-                        <div class="form-group" id="sub">
+                        <div class="form-group">
                           <%= label f, :email, class: "control-label" %>
                           <%= text_input f, :email, class: "form-control" %>
                           <%= error_tag f, :email %>
-                        </div>
+                          <span class="error" id="error">This field is required</span>
+                          </div>
+                          <script>
+
+
+
+                            $(document).ready(function() {
+                              $('#user_email').on('input', function() {
+                                console.log("checking email");
+                      					var input=$(this);
+                                var message = document.getElementById("user_email")
+                      					//var re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                                var re = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
+                      					var is_email=re.test(input.val());
+                      					if(is_email){
+                                  message.style.backgroundColor = 'green';
+                                  enableSubmit();
+                                }
+                      					else{
+                                  //input.removeClass("valid").addClass("invalid");
+                                  message.style.backgroundColor = 'red';
+                                  disableSubmit();
+                                }
+                      				});
+                            });
+
+                          function isValid(){
+                            console.log("Typing 2");
+                          };
+
+                          function enableSubmit(){
+                            var submit_button = document.getElementById("submit").style.display = "block";
+                            var error = document.getElementById("error").style.display = "none";
+                            console.log(document.getElementById("submit"));
+                          }
+
+                          function disableSubmit(){
+                            var submit_button = document.getElementById("submit").style.display = "none";
+                            var error = document.getElementById("error").style.display = "block";
+                            console.log(document.getElementById("submit"));
+                          }
+                          </script>
+
                         <div class="form-group">
                           <%= label f, :name, class: "control-label" %>
                           <%= text_input f, :name, class: "form-control" %>
@@ -221,7 +269,7 @@
                           <%= error_tag f, :refemail %>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="submit">
                           <%= submit "Submit", class: "btn btn-primary" %>
                         </div>
                       <% end %>
