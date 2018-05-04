@@ -269,7 +269,8 @@ function tooltip(){
 
 <div class="form-group" id="ageform">
   <%= label f, :age, class: "control-label" %>
-  <%= text_input f, :age, class: "form-control" %>
+
+  <%= select f, :age, @ages %>
   <%= error_tag f, :age %>
 </div>
 
