@@ -82,15 +82,22 @@ defmodule FitcrmWeb.UserController do
     changeset = User.changeset(%User{}, %{name: "name"})
     users = Accounts.list_users()
     user = (id == to_string(user.id) and user) || Accounts.get(id)
-        changesetmap = ClientTool.onboardclient(%{"user" => user, "params" => params})
-        case Accounts.update_user(user, changesetmap) do
-          {:ok, user} ->
-            WeekdayController.create_week(conn)
-            success(conn, "User updated successfully", user_path(conn, :show, id))
-          {:error, %Ecto.Changeset{} = changeset} ->
-            IO.inspect changeset
-            render(conn, "edit.html", user: user, changeset: changeset)
-        end
+    formchangeset = User.formchangeset(%User{}, params) |> IO.inspect
+
+
+       changesetmap = ClientTool.onboardclient(%{"user" => user, "params" => params})
+       case Accounts.update_user(user, changesetmap) do
+         {:ok, user} ->
+           #ADD OR HERE
+           WeekdayController.create_week(conn)
+           success(conn, "User updated successfully", user_path(conn, :show, id))
+         {:error, %Ecto.Changeset{} = changeset} ->
+           IO.inspect changeset
+           render(conn, "edit.html", user: user, changeset: changeset)
+       end
+
+
+
   end
 
 

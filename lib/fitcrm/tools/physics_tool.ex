@@ -47,7 +47,7 @@ defmodule Fitcrm.Tools.PhysicsTool do
           "Atheletic" ->
             nact = 4
         end
-        weight = w |> convert |> elem(0)
+        weight = w |> IO.inspect |> convert |> elem(0)
         height = h |> convert |> elem(0)
         age = a |> String.to_integer
         nact

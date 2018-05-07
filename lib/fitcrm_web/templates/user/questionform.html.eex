@@ -4,6 +4,10 @@
     width: 100%; /* Width of the outside container */
 }
 
+.sliderGroup, .sliderhead, .headtext{
+  font-weight: normal;
+  font-size: 14px;
+}
 /* The slider itself */
 .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
@@ -144,6 +148,10 @@
 }
 </style>
 
+<script src="<%= static_path(@conn, "/js/rangeslider.min.js") %>"></script>
+<script src="<%= static_path(@conn, "/js/rangeslider.js") %>"></script>
+<link rel="stylesheet" href="<%= static_path(@conn, "/css/rangeslider.css") %>">
+
 
 <div class="panel panel-red">
   <div class="panel-heading">
@@ -151,6 +159,8 @@
     Personal Questionaire
   </h4>
 </div>
+
+
 <div class="panel-body">
 <%= form_for @changeset, user_path(@conn, :question, @user), fn f -> %>
   <%= if @changeset.action do %>
@@ -228,6 +238,10 @@ function altertext(text){
 
 document.getElementById("user_sex").addEventListener("click", checkGender);
 document.getElementById("user_plantype").addEventListener("click", filterLevel);
+document.getElementById("user_planlevel").addEventListener("click", checkLevel);
+function checkLevel(){
+  console.log("level check");
+}
 function filterLevel(){
   var type = document.getElementById("user_plantype").value;
   console.log(type);
@@ -267,23 +281,44 @@ function tooltip(){
 
 </script>
 
-<div class="form-group" id="ageform">
-  <%= label f, :age, class: "control-label" %>
 
-  <%= select f, :age, @ages %>
-  <%= error_tag f, :age %>
+
+
+<div class="sliderGroup">
+  <div class="sliderhead">
+    <h3 class="headtext"> Weight (kg)</h3>
+  </div>
+<input min="30" max="160" step="1" value="60" data-rangeslider="" style="position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 1;" type="range">
+<div id="weight_slider">
+</div>
+<div class="sliderhead">
+  <h3 class="headtext"> Age (years)</h3>
+</div>
+<input min="8" max="99" step="1" value="23" data-rangeslider="" style="position: absolute; padding-top: 50px; width: 0.5px; height: 0.5px; overflow: hidden; opacity: 0;" type="agerange">
+<div id="age_slider">
+</div>
+<div class="sliderhead">
+  <h3 class="headtext"> Height (cm)</h3>
+</div>
+<input min="50" max="250" step="1" value="150" data-rangeslider="" style="position: absolute; padding-top: 50px; width: 0.5px; height: 0.5px; overflow: hidden; opacity: 0;" type="heightrange">
+<div id="height_slider">
+</div>
 </div>
 
 
 
-<div class="form-group">
+
+<div class="form-group" id="ageform">
+  <%= label f, :age, class: "control-label" %>
+  <%= text_input f, :age, class: "form-control" %>
+  <%= error_tag f, :age %>
+</div>
+<div class="form-group" id="heightform">
   <%= label f, :"Height (cm)", class: "control-label" %>
   <%= text_input f, :height, class: "form-control" %>
   <%= error_tag f, :height %>
 </div>
-
-
-  <div class="form-group">
+  <div class="form-group" id="weight">
     <%= label f, :"Weight (kg)", class: "control-label" %>
     <%= text_input f, :weight, class: "form-control" %>
     <%= error_tag f, :weight %>
@@ -305,7 +340,15 @@ function tooltip(){
     <%= error_tag f, :ir %>
   </div>
 
+  <div class="form-group">
+    <%= submit "submit", class: "btn btn-primary" %>
+  </div>
+
   <script>
+document.getElementById('weight').style.display= "none";
+
+document.getElementById('ageform').style.diplay= "none";
+document.getElementById('submit').style.display="none";
   var temp = "Select";
   var actSelect = document.getElementById('user_activity');
   var gendSelect = document.getElementById('user_sex');
@@ -335,13 +378,145 @@ function tooltip(){
           break;
       }
   }
+$(document).ready(function() {
+    disableSubmit();
+    var genderbool= false;
+    var typebool= false;
+    var pcosbool= false;
+    var irbool= false;
+    var activitybool= false;
+    var levelbool= false;
 
+    $('#user_sex').on('change', function(){
+      if($('#user_sex').val() !== "Select"){
+        genderbool = true;
+        alert(genderbool);
+        console.log("Gender", genderbool);
+      };
+      if($('#user_sex').val() == "Select"){
+        genderbool = false;
+        console.log("Gender", genderbool);
+        alert(genderbool);
+      };
+
+    });
+    $('#user_cystic').on('change', function(){
+      pcosbool = true;
+      console.log("Pcos");
+    });
+    $('#user_ir').on('change', function(){
+      irbool = true;
+      console.log("IR");
+    });
+    $('#user_plantype').on('change', function(){
+      typebool = true;
+      console.log("Type");
+    });
+    $('#user_planlevel').on('change', function(){
+      levelbool = true;
+      console.log("Level");
+    });
+    $('#user_activity').on('change', function(){
+      activitybool = true;
+      console.log("Activity");
+    });
+
+
+
+    $("input[type=submit]").attr("disabled", "disabled");
+    $('input[type="range"]').val(60).change();
+    $('input[type="heightrange"]').val(150).change();
+    $('input[type="agerange"]').val(23).change();
+    $('#ageform').hide();
+    $('#heightform').hide();
+    $('#user_height').val=150;
+    $('#user_age').val=23;
+    $('#user_weight').val=60;
+    document.getElementById('weight_slider').innerHTML='60';
+    document.getElementById('age_slider').innerHTML='23';
+    document.getElementById('height_slider').innerHTML='150';
+    console.log("js")
+    $('sli').append(
+      $('input[type="range"]').rangeslider({
+        polyfill: false,
+        rangeClass: 'rangeslider',
+        disabledClass: 'rangeslider--disabled',
+        horizontalClass: 'rangeslider--horizontal',
+        verticalClass: 'rangeslider--vertical',
+        fillClass: 'rangeslider__fill',
+        handleClass: 'rangeslider__handle',
+        onInit: function() {
+          console.log("Rangeslider on");
+
+        },
+        onSlide: function(position, value) {
+          console.log("RangeSLider Value", value);
+          document.getElementById('weight_slider').innerHTML= value;
+
+          document.getElementById('user_weight').value = value;
+          console.log(document.getElementById('weight'));
+        },
+        onSlideEnd: function(position, value) {}
+    }));
+
+    $('sli').append(
+      $('input[type="agerange"]').rangeslider({
+        polyfill: false,
+        rangeClass: 'rangeslider',
+        disabledClass: 'rangeslider--disabled',
+        horizontalClass: 'rangeslider--horizontal',
+        verticalClass: 'rangeslider--vertical',
+        fillClass: 'rangeslider__fill',
+        handleClass: 'rangeslider__handle',
+        onInit: function() {
+          console.log("Rangeslider on");
+        },
+        onSlide: function(position, value) {
+          console.log("RangeSLider Value", value);
+          document.getElementById('age_slider').innerHTML= value;
+
+          document.getElementById('user_age').value = value;
+          console.log(document.getElementById('user_age').value);
+        },
+        onSlideEnd: function(position, value) {}
+    }));
+
+    $('sli').append(
+      $('input[type="heightrange"]').rangeslider({
+        polyfill: false,
+        rangeClass: 'rangeslider',
+        disabledClass: 'rangeslider--disabled',
+        horizontalClass: 'rangeslider--horizontal',
+        verticalClass: 'rangeslider--vertical',
+        fillClass: 'rangeslider__fill',
+        handleClass: 'rangeslider__handle',
+        onInit: function() {
+          console.log("Rangeslider on");
+        },
+        onSlide: function(position, value) {
+          console.log("RangeSLider Value", value);
+          document.getElementById('height_slider').innerHTML= value;
+
+          document.getElementById('user_height').value = value;
+          console.log(document.getElementById('user_height').value);
+        },
+        onSlideEnd: function(position, value) {}
+    }));
+
+    function disableSubmit() {
+      console.log("disabling button");
+      $(":submit").attr('disabled', 'disabled');
+    }
+
+    function enablesubmit() {
+      console.log("Enabling Submit");
+    };
+
+  });
   </script>
 
 
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
-  </div>
+
 </div>
 </div>
 <% end %>
