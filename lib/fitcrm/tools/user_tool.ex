@@ -9,7 +9,6 @@ defmodule Fitcrm.Tools.UserTool do
     #If not nil then patch the email through to here
     #Find user from email
 
-
     def get_existing_ref(new_user, user_id) do
       IO.puts "Getting existing referrals"
       user_ref = Fitcrm.Repo.get!(User, user_id).ref_id |> IO.inspect
@@ -25,7 +24,7 @@ defmodule Fitcrm.Tools.UserTool do
 
     defp build_ref(new_user) do
       IO.puts "Building Referral"
-      List.first(new_user)
+      [new_user]
     end
 
     defp add_ref(new_user, existing_list) do

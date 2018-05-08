@@ -23,6 +23,7 @@ defmodule FitcrmWeb.WeekdayController do
 
   def index(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
     user = user.id
+    IO.puts "Weekindex"
     weekdays = Fitcrm.Repo.all(Weekday)
     changeset = Accounts.change_user(%Accounts.User{})
     render(conn, "index.html", weekdays: weekdays, user: user, changeset: changeset)
@@ -67,7 +68,7 @@ defmodule FitcrmWeb.WeekdayController do
   end
 
   def weekindex(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user_id" => user_id}) do
-    weeks = Fitcrm.Repo.all(Week)
+    weeks = Fitcrm.Repo.all(from w in Week, where: w.user_id == ^user_id)
     changeset = Accounts.change_user(%Accounts.User{})
     conn |> render("weekindex.html", weeks: weeks, user: user, changeset: changeset)
   end

@@ -98,9 +98,9 @@
       <td><%= @user.height %></td>
       <td><%= @user.sex %> </td>
       <td><%= @user.bmr %> </td>
-      <td><%= @user.tdee %> </td>
-      <td> Need to Add </td>
-      <td> Need to Add </td>
+      <td><%= Float.round(@user.tdee, 0) %> </td>
+      <td> <%= @user.pcos %></td>
+      <td> <%= @user.ir %> </td>
 
     </tr>
   </tbody>

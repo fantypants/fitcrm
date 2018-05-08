@@ -1,0 +1,35 @@
+<style>
+.panel {
+
+    box-shadow: 8px 8px 10px #888888;
+
+}
+
+.panel-red {
+  border-color: #d9534f;
+  box-shadow: 2px 2px 5px #888888;
+}
+.panel-red > .panel-heading {
+  border-color: #d9534f;
+  color: white;
+  background-color: #d9534f;
+  box-shadow: 2px 2px 5px #888888;
+}
+.panel-red > a {
+  color: #d9534f;
+}
+.panel-red > a:hover {
+  color: #b52b27;
+}
+
+</style>
+<div class="panel panel-red">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+    <%= @user.name %> here's your weekly ingredients
+  </h4>
+  <div class="panel-body">
+
+
+  </div>
+</div>

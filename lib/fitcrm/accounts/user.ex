@@ -16,8 +16,8 @@ defmodule Fitcrm.Accounts.User do
     field :activity, :integer
     field :bmr, :float
     field :tdee, :float
-    field :pcos, :boolean
-    field :ir, :boolean
+    field :pcos, :string
+    field :ir, :string
     field :plantype, :string
     field :planlevel, :string
     field :sessions, {:map, :integer}, default: %{}

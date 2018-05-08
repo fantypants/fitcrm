@@ -23,9 +23,9 @@ defmodule Fitcrm.Tools.ClientTool do
       activity = params["activity"]
       age = params["age"]
       sex = params["sex"]
-      cystic = params["cystic"]
-      ir = params["ir"]
-      params_new = PhysicsTool.modifyQuestionResults(%{"plantype" => plantype, "planlevel" => planlevel, "sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
+      cystic = params["cystic"] |> IO.inspect
+      ir = params["ir"] |> IO.inspect
+      params_new = PhysicsTool.modifyQuestionResults(%{"ir" => ir, "pcos" => cystic, "plantype" => plantype, "planlevel" => planlevel, "sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
       bmr = PhysicsTool.calculate_tdee(params_new)
       IO.inspect params_new
       tdee_original = PhysicsTool.scaleActivity(bmr, params_new["activity"])

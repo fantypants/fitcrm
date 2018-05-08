@@ -379,7 +379,7 @@ document.getElementById('submit').style.display="none";
       }
   }
 $(document).ready(function() {
-    disableSubmit();
+    checkSubmit();
     var genderbool= false;
     var typebool= false;
     var pcosbool= false;
@@ -390,40 +390,70 @@ $(document).ready(function() {
     $('#user_sex').on('change', function(){
       if($('#user_sex').val() !== "Select"){
         genderbool = true;
-        alert(genderbool);
-        console.log("Gender", genderbool);
+        $('#user_sex').css('color','green');
       };
       if($('#user_sex').val() == "Select"){
         genderbool = false;
-        console.log("Gender", genderbool);
-        alert(genderbool);
+        $('#user_sex').css('color','red');
       };
-
+      checkSubmit();
     });
     $('#user_cystic').on('change', function(){
-      pcosbool = true;
-      console.log("Pcos");
+      if($('#user_cystic').val() !== "Select"){
+        pcosbool = true;
+        $('#user_cystic').css('color','green');
+      };
+      if($('#user_cystic').val() == "Select"){
+        pcosbool = false;
+        $('#user_cystic').css('color','red');
+      };
+      checkSubmit();
     });
     $('#user_ir').on('change', function(){
+      if($('#user_ir').val() !== "Select"){
       irbool = true;
-      console.log("IR");
+      $('#user_ir').css('color','green');
+      };
+      if($('#user_ir').val() == "Select"){
+        irbool = false;
+        $('#user_ir').css('color','red');
+      };
+      checkSubmit();
     });
     $('#user_plantype').on('change', function(){
-      typebool = true;
-      console.log("Type");
+      if($('#user_plantype').val() !== "Select"){
+        typebool = true;
+
+      };
+      if($('#user_plantype').val() == "Select"){
+        typebool = false;
+      };
+      checkSubmit();
     });
     $('#user_planlevel').on('change', function(){
-      levelbool = true;
-      console.log("Level");
+      if($('#user_planlevel').val() !== "Select"){
+        levelbool = true;
+      };
+      if($('#user_planlevel').val() == "Select"){
+        levelbool = false;
+      };
+      checkSubmit();
     });
     $('#user_activity').on('change', function(){
-      activitybool = true;
-      console.log("Activity");
+      if($('#user_activity').val() !== "Select"){
+        activitybool = true;
+        $('#user_activity').css('color','green');
+      };
+      if($('#user_activity').val() == "Select"){
+        activitybool = false;
+        $('#user_activity').css('color','red');
+      };
+      checkSubmit();
     });
 
 
 
-    $("input[type=submit]").attr("disabled", "disabled");
+  //  $("input[type=submit]").attr("disabled", "disabled");
     $('input[type="range"]').val(60).change();
     $('input[type="heightrange"]').val(150).change();
     $('input[type="agerange"]').val(23).change();
@@ -432,6 +462,10 @@ $(document).ready(function() {
     $('#user_height').val=150;
     $('#user_age').val=23;
     $('#user_weight').val=60;
+    $('#user_sex').css('color','red');
+    $('#user_ir').css('color','red');
+    $('#user_activity').css('color','red');
+    $('#user_cystic').css('color','red');
     document.getElementById('weight_slider').innerHTML='60';
     document.getElementById('age_slider').innerHTML='23';
     document.getElementById('height_slider').innerHTML='150';
@@ -505,11 +539,50 @@ $(document).ready(function() {
 
     function disableSubmit() {
       console.log("disabling button");
-      $(":submit").attr('disabled', 'disabled');
+      //$(":submit").attr('disabled', 'disabled');
+      $(":input[type=submit]").prop('disabled', true);
+      $(':input[type=submit]').css('background-color','red');
     }
 
-    function enablesubmit() {
+    function enableSubmit() {
       console.log("Enabling Submit");
+        //$(":submit").attr('enable', 'enable');
+        //$("input[type=submit]").attr("enable", "enable");
+        $(":input[type=submit]").removeAttr("disabled");
+          $(':input[type=submit]').css('background-color','green');
+         //$(":submit").removeAttr("disabled", "disabled");
+    };
+
+    function checkSubmit() {
+      if($('#user_plantype').val() !== "Select"){
+        typebool = true;
+        $('#user_plantype').css('color','green');
+      } else {
+        typebool = false;
+        $('#user_plantype').css('color','red');
+      };
+      if($('#user_planlevel').val() !== "Select"){
+        levelbool = true;
+        $('#user_planlevel').css('color','green');
+      } else {
+        levelbool = false;
+        $('#user_planlevel').css('color','red');
+      };
+      if($('#user_pcos').val() !== "Select"){
+        pcosbool = true;
+        $('#user_pcos').css('color','green');
+      } else {
+        pcosbool = false;
+        $('#user_pcos').css('color','red');
+      };
+      console.log(genderbool, typebool, levelbool, pcosbool, irbool, activitybool);
+      if(genderbool == true && irbool == true && pcosbool == true && levelbool == true && activitybool == true && typebool == true){
+        console.log("Submit Enabled");
+        enableSubmit();
+      } else {
+        console.log("Submit Disabled");
+        disableSubmit();
+      };
     };
 
   });

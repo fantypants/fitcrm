@@ -14,6 +14,8 @@ defmodule FitcrmWeb.UserController do
   alias Fitcrm.Plan.Workout
   alias FitcrmWeb.WeekdayController
   alias Fitcrm.Tools.UserTool
+  alias Fitcrm.Plan.Weekday
+  alias Fitcrm.Foods.Meal
 
   # the following plugs are defined in the controllers/authorize.ex file
   plug :user_check when action in [:index, :show]
@@ -139,6 +141,55 @@ defmodule FitcrmWeb.UserController do
         IO.puts "Error"
     end
   end
+  def ingredients(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
+    foods = [%{}]
+    week = Fitcrm.Repo.all(from w in Week, where: w.user_id == ^id, select: w.id)
+    IO.puts "WEek ids are: "
+
+    days = week |> Enum.map(fn(a)-> getday(a) end)
+    IO.puts "Breakfast"
+    bfoods = days |> List.flatten |> Enum.map(fn(a) -> getmeal(a.b) end) |> Enum.map(fn(a) -> getfood(a) end)
+    countIngredients(bfoods) |> IO.inspect
+    uniqB = bfoods |> Enum.uniq
+    lfoods = days |> List.flatten |> Enum.map(fn(a) -> getmeal(a.l) end) |> Enum.map(fn(a) -> getfood(a) end)
+    dfoods = days |> List.flatten |> Enum.map(fn(a) -> getmeal(a.d) end) |> Enum.map(fn(a) -> getfood(a) end)
+    #breakfast = days |> Enum.map(fn(a.weekday) -> a.breakfast end) |> IO.inspect
+    changeset = Accounts.change_user(user)
+    render(conn, "ingredients.html", foods: foods, changeset: changeset, user: user)
+  end
+
+  def getday(weekid) do
+    IO.inspect weekid
+    query = from w in Weekday, where: w.week_id ==^weekid
+    day = Fitcrm.Repo.all(query) |> Enum.map(fn(a) -> %{day: a.day, b: a.breakfast, l: a.lunch, d: a.dinner} end)
+    day
+  end
+
+  def getmeal(id) do
+    query = from m in Meal, where: m.id ==^id
+    food = Fitcrm.Repo.all(query) |> Enum.map(fn(a) -> a.foodid end) |> List.flatten
+  end
+
+  def getfood(id) do
+    id |> Enum.map(fn(a) -> %{name: Fitcrm.Repo.get!(Food, a).name, quantity: Fitcrm.Repo.get!(Food, a).quantity} end)
+  end
+
+  def countIngredients(map) do
+    map
+    |> List.flatten
+    |> Enum.map(fn(ingred) ->
+      {key, n} = case Regex.run(~r/^(?<qty>[.0-9]+)\s*(?<unit>\w+)?$/, ingred.quantity, capture: :all_but_first) do
+        [n, unit] -> {{ingred.name, unit}, n}
+        [n] -> {ingred.name, n}
+      end
+      {f, ""} = Float.parse(n)
+      {key, f}
+    end)|> Enum.group_by(&elem(&1, 0), &elem(&1, 1))|> Map.new(fn({k,vs}) -> {k, Enum.sum(vs)} end) |> IO.inspect
+  end
+  def randomfunction(data) do
+    IO.inspect data
+  end
+
 
 
   def new(conn, _) do
