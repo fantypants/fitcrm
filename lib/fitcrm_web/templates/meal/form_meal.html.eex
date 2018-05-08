@@ -10,23 +10,51 @@
     <%= text_input f, :name, class: "form-control" %>
     <%= error_tag f, :name %>
   </div>
+  <div class="form-group">
+    <%= label f, :type, class: "control-label" %>
+    <%= select f, :type, ["Breakfast", "Lunch", "Dinner"] %>
+    <%= error_tag f, :type %>
+  </div>
 
 
 <div class="hidden" id="hiddeninput">
   <%= select f, :food, Enum.map(@foods, &{&1.name, &1.id}) %>
   <%= select f, :cal, Enum.map(@foods, &{&1.cal, &1.id}) %>
+  <%= select f, :prot, Enum.map(@foods, &{&1.p, &1.id}) %>
+  <%= select f, :fat, Enum.map(@foods, &{&1.f, &1.id}) %>
+  <%= select f, :carbs, Enum.map(@foods, &{&1.c, &1.id}) %>
+  <%= select f, :quant, Enum.map(@foods, &{&1.q, &1.id}) %>
 </div>
 
 
 
 
   <div class="form-group" id="foods">
-    <%= for food <- @currentfoods do %>
+
+
+    <table class="table">
+      <thead>
+      <th> Calories</th>
+      <th> Protien</th>
+      <th> Fat</th>
+      <th> Carbs</th>
+      <th> Quantity</th>
+    </thead>
+    <tbody id=food_table>
+      <%= for food <- @currentfoods do %>
+    <tr>
     <%= label f, :food, class: "control-label" %>
-    <h4>Calories</h4>
-    <p id='<%= "cal"<>"meal"<>"["<>"food"<>"#{food.id}"<>"]" %>' class="cal"></p>
-    <%= select f, :'food#{food.id}', Enum.map(@currentfoods, &{&1.name, &1.id}) %>
-    <% end %>
+    <td><p id='<%= "cal"<>"meal"<>"["<>"food"<>"#{food.id}"<>"]" %>' class="cal">0</p></td>
+    <td><p id='<%= "prot"<>"meal"<>"["<>"food"<>"#{food.id}"<>"]" %>' class="prot">0</p></td>
+    <td><p id='<%= "fat"<>"meal"<>"["<>"food"<>"#{food.id}"<>"]" %>' class="fat">0</p></td>
+    <td><p id='<%= "carbs"<>"meal"<>"["<>"food"<>"#{food.id}"<>"]" %>' class="carbs">0</p></td>
+    <td><p id='<%= "quant"<>"meal"<>"["<>"food"<>"#{food.id}"<>"]" %>' class="quant">0</p></td>
+    <td><%= select f, :'food#{food.id}', Enum.map(@currentfoods, &{&1.name, &1.id}) %>
+  </tr>
+  <% end %>
+</tbody>
+</table>
+
     <%= error_tag f, :food %>
   </div>
 
@@ -37,10 +65,21 @@
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
-
 <div id="foodblock">
-  <p> Total Calories</p>
-  <p id="total"> Total Calories Displayed Here</p>
+<table class="table">
+  <thead>
+  <th> Total Calories</th>
+  <th> Total Protien</th>
+  <th> Total Fat</th>
+  <th> Total Carbs</th>
+</thead>
+<tbody>
+  <tr>
+  <td><p id="total"></p></td>
+  <td><p id="totalprot"></p></td>
+  <td><p id="totalfat"></p></td>
+  <td><p id="totalcarbs"></p></td>
+</table>
 <button id="add">ADD FOOODS</button>
 </div>
 
@@ -60,19 +99,39 @@ function addRow(){
 
   var count = document.getElementsByTagName('select').length;
   console.log("Length is: ", count)
-  var iDiv = document.createElement('div');
-  iDiv.className = 'form-group';
+  var iDiv = document.createElement('tr');
+  //iDiv.className = 'form-group';
   var iCal = document.createElement('h4');
   iCal.innerHTML = "Calories";
+  var iProt = document.createElement('h4');
+  iProt.innerHTML = "Protien";
+  var iFat = document.createElement('h4');
+  iFat.innerHTML = "Fat";
+  var iCarbs = document.createElement('h4');
+  iCarbs.innerHTML = "Carbs";
+  var iQuant = document.createElement('h4');
+  iQuant.innerHTML = "Quant";
 
 // Create the inner div before appending to the body
   var innerDiv = document.createElement('select');
   var optionslength = document.getElementById('meal_food').options.length;
   var options = document.getElementById('meal_food').options;
 
-  var iCount = document.createElement('p');
+  var iCount = document.createElement('td');
+  var iCProt = document.createElement('td');
+  var iCFat = document.createElement('td');
+  var iCCarbs = document.createElement('td');
+  var iCQuant = document.createElement('td');
   iCount.className = "cal";
+  iCProt.className = "prot";
+  iCFat.className = "fat";
+  iCCarbs.className = "carbs";
+  iCQuant.className = "quant";
   iCount.id = "calmeal[food" + count+1 + "]";
+  iCProt.id = "protmeal[food" + count+1 + "]";
+  iCFat.id = "fatmeal[food" + count+1 + "]";
+  iCCarbs.id = "carbsmeal[food" + count+1 + "]";
+  iCQuant.id = "quantmeal[food" + count+1 + "]";
   console.log(options);
   innerDiv.id = "meal_food"
   innerDiv.name = "meal[food" + count+1 +"]";
@@ -83,36 +142,78 @@ function addRow(){
   innerDiv.addEventListener('change', listProp);
 
 // The variable iDiv is still good... Just append to it.
-  iDiv.appendChild(iCal);
+
+
+
+
+  //iDiv.appendChild(iCal);
   iDiv.appendChild(iCount);
+  //iDiv.appendChild(iProt);
+  iDiv.appendChild(iCProt);
+  //iDiv.appendChild(iFat);
+  iDiv.appendChild(iCFat);
+  //iDiv.appendChild(iCarbs);
+  iDiv.appendChild(iCCarbs);
+  //iDiv.appendChild(iQuant);
+  iDiv.appendChild(iCQuant);
   iDiv.appendChild(innerDiv);
 
 // Then append the whole thing onto the body
-  document.getElementById('foods').appendChild(iDiv);
+  document.getElementById('food_table').appendChild(iDiv);
 }
 
 function addTotal(){
   var total = 0;
+  var totalp = 0;
+  var totalf = 0;
+  var totalc = 0;
   var cals = document.getElementsByClassName('cal');
+  var prot = document.getElementsByClassName('prot');
+  var fat = document.getElementsByClassName('fat');
+  var carbs = document.getElementsByClassName('carbs');
   var totalcal = document.getElementById('total');
+  var totalprot = document.getElementById('totalprot');
+  var totalfat = document.getElementById('totalfat');
+  var totalcarbs = document.getElementById('totalcarbs');
   var callength = cals.length;
   console.log("Total Cal", callength);
   for(i=0; i<callength; i++){
     total += parseFloat(cals[i].innerHTML);
-    console.log(total);
+    totalp += parseFloat(prot[i].innerHTML);
+    totalf += parseFloat(fat[i].innerHTML);
+    totalc += parseFloat(carbs[i].innerHTML);
   }
   totalcal.innerHTML= total;
+  totalprot.innerHTML= totalp;
+  totalfat.innerHTML= totalf;
+  totalcarbs.innerHTML= totalc;
 }
 
 function listProp(){
   var options = document.getElementById('meal_cal').options;
+  var poptions = document.getElementById('meal_prot').options;
+  var foptions = document.getElementById('meal_fat').options;
+  var coptions = document.getElementById('meal_carbs').options;
+  var qoptions = document.getElementById('meal_quant').options;
   var selected = this.value;
   var id = "cal"+this.name;
+  var pid = "prot"+this.name;
+  var fid = "fat"+this.name;
+  var cid = "carbs"+this.name;
+  var qid = "quant"+this.name;
   console.log(this);
   console.log("listeners on", ltrim(this.name));
   console.log("Food Cals", options[selected].text, id)
   var element = document.getElementById(id);
+  var pelement = document.getElementById(pid);
+  var felement = document.getElementById(fid);
+  var celement = document.getElementById(cid);
+  var qelement = document.getElementById(qid);
   element.innerHTML = options[selected].text;
+  pelement.innerHTML = poptions[selected].text;
+  felement.innerHTML = foptions[selected].text;
+  celement.innerHTML = coptions[selected].text;
+  qelement.innerHTML = qoptions[selected].text;
   addTotal();
 }
 
