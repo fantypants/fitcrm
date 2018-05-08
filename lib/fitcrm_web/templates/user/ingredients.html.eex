@@ -26,9 +26,28 @@
 <div class="panel panel-red">
   <div class="panel-heading">
     <h4 class="panel-title">
-    <%= @user.name %> here's your weekly ingredients
+    Weekly Shopping List
   </h4>
+</div>
   <div class="panel-body">
+    <table class="table">
+    <thead>
+      <tr>
+        <th> Food </th>
+        <th> Quantity </th>
+        <th> Units </th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for food <- @foods do %>
+      <tr>
+        <td><strong><%= food.name %> </strong></td>
+        <td><strong> <%= food.quantity %> </strong> </td>
+        <td><strong> <%= food.unit %> </strong> </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
 
 
   </div>

@@ -66,7 +66,7 @@
 <a href="<%= page_path @conn, :index %>">Home</a>
 <a href="<%= user_path(@conn, :show, @current_user.id) %>"> User Panel </a>
 <% end %>
- <a href="<%= user_path(@conn, :foodindex, @current_user.id) %>">Foods</a>
+ <a href="<%= user_path(@conn, :ingredients, @current_user.id) %>">Shopping List</a>
  <a href="<%= workout_path(@conn, :index) %>">Workouts</a>
  <a href="<%= meal_path @conn, :index %>">Meals</a>
   <a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>">Weeks</a>

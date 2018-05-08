@@ -3,9 +3,37 @@
   box-shadow: 2px 2px 5px #888888;
 }
 
+
+.panel-red {
+  border-color: #d9534f;
+  box-shadow: 2px 2px 5px #888888;
+  opacity: 0.9;
+}
+.panel-red > .panel-heading {
+  border-color: #d9534f;
+  color: white;
+  background-color: #d9534f;
+  box-shadow: 2px 2px 5px #888888;
+}
+.panel-red > a {
+  color: #d9534f;
+}
+.panel-red > a:hover {
+  color: #b52b27;
+}
+
 </style>
 
+<div class="panel panel-red">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+    Your Week!
+  </h4>
+  <span><%= link "Edit", to: user_weekday_path(@conn, :edit, @s, @weekday), class: "btn btn-primary" %></span>
+</div>
 
+
+<div class="panel-body">
 <table class="table">
   <thead>
     <tr>
@@ -81,10 +109,12 @@
       <% end %>
     </tbody>
   </table>
+</div>
+</div>
 
 
 
 
 
-<span><%= link "Edit", to: user_weekday_path(@conn, :edit, @s, @weekday) %></span>
+
 <span><%= link "Back", to: user_weekday_path(@conn, :index, @user) %></span>

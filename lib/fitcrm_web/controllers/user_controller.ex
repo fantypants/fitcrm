@@ -73,7 +73,7 @@ defmodule FitcrmWeb.UserController do
     "90", "91", "92","93", "94", "95", "96", "97", "98", "99"]
     types = Fitcrm.Repo.all(Workout) |> Enum.map(&(&1.type)) |> IO.inspect
     levels = Fitcrm.Repo.all(Workout) |> Enum.map(&(&1.level)) |> IO.inspect
-    workouts = Fitcrm.Repo.all(Workout) |> Enum.map(fn(a) -> %{type: a.type, level: a.level} end)
+    workouts = Fitcrm.Repo.all(Workout) |> Enum.map(fn(a) -> %{full: a.type <> "/" <> a.level, type: a.type, level: a.level, id: a.id} end) |> IO.inspect
     #params = %{"weight" => "0", "age" => "0", "height" => "0", "sex" => "Male", "activity" => "Sedentary", "cystic" => "No"}
     render(conn, "questionform.html", changeset: changeset, user: user, types: types, levels: levels, workouts: workouts, ages: ages)
   end
@@ -81,6 +81,7 @@ defmodule FitcrmWeb.UserController do
   def question(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id, "user" => params}) do
     IO.puts "Question Form Submission"
     IO.inspect params
+    #SET THE PARAMS FOR THE WORKOUT
     changeset = User.changeset(%User{}, %{name: "name"})
     users = Accounts.list_users()
     user = (id == to_string(user.id) and user) || Accounts.get(id)
@@ -142,18 +143,15 @@ defmodule FitcrmWeb.UserController do
     end
   end
   def ingredients(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
-    foods = [%{}]
     week = Fitcrm.Repo.all(from w in Week, where: w.user_id == ^id, select: w.id)
-    IO.puts "WEek ids are: "
-
     days = week |> Enum.map(fn(a)-> getday(a) end)
-    IO.puts "Breakfast"
     bfoods = days |> List.flatten |> Enum.map(fn(a) -> getmeal(a.b) end) |> Enum.map(fn(a) -> getfood(a) end)
-    countIngredients(bfoods) |> IO.inspect
-    uniqB = bfoods |> Enum.uniq
+    bfoods_whole = countIngredients(bfoods) |> Enum.map(fn(a) -> sortFood(a) end)
     lfoods = days |> List.flatten |> Enum.map(fn(a) -> getmeal(a.l) end) |> Enum.map(fn(a) -> getfood(a) end)
+    lfoods_whole = countIngredients(lfoods) |> Enum.map(fn(a) -> sortFood(a) end)
     dfoods = days |> List.flatten |> Enum.map(fn(a) -> getmeal(a.d) end) |> Enum.map(fn(a) -> getfood(a) end)
-    #breakfast = days |> Enum.map(fn(a.weekday) -> a.breakfast end) |> IO.inspect
+    dfoods_whole = countIngredients(dfoods) |> Enum.map(fn(a) -> sortFood(a) end)
+    foods = bfoods_whole ++ lfoods_whole ++ dfoods_whole
     changeset = Accounts.change_user(user)
     render(conn, "ingredients.html", foods: foods, changeset: changeset, user: user)
   end
@@ -184,10 +182,25 @@ defmodule FitcrmWeb.UserController do
       end
       {f, ""} = Float.parse(n)
       {key, f}
-    end)|> Enum.group_by(&elem(&1, 0), &elem(&1, 1))|> Map.new(fn({k,vs}) -> {k, Enum.sum(vs)} end) |> IO.inspect
+    end)|> Enum.group_by(&elem(&1, 0), &elem(&1, 1))|> Map.new(fn({k,vs}) -> {k, Enum.sum(vs)} end)
   end
   def randomfunction(data) do
     IO.inspect data
+  end
+  def sortFood(map) do
+    IO.inspect map
+    case map do
+      {{food, unit}, quantity} ->
+        inner = elem(map,0)
+        quantity = elem(map, 1)
+        name = elem(inner, 0)
+        unit = elem(inner, 1)
+      {food, quantity} ->
+        name = food
+        quantity = elem(map, 1)
+        unit = "Whole"
+    end
+    %{name: name, unit: unit, quantity: quantity}
   end
 
 
