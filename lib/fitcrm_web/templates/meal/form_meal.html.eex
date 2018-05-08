@@ -1,0 +1,75 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :name, class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+
+
+<div class="hidden" id="hiddeninput">
+<%= select f, :food, Enum.map(@foods, &{&1.name, &1.id}) %>
+</div>
+
+
+
+
+  <div class="form-group" id="foods">
+    <%= label f, :food, class: "control-label" %>
+    <%= for food <- @currentfoods do %>
+    <%= select f, :'food#{food.id}', Enum.map(@currentfoods, &{&1.name, &1.id}) %>
+    <% end %>
+    <%= error_tag f, :food %>
+  </div>
+
+
+
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<div id="foodblock">
+<button id="add">ADD FOOODS</button>
+</div>
+
+<script>
+var elem = '<div><p>this</p></div>'
+document.getElementById('add').addEventListener('click', addRow);
+function addRow(){
+  console.log("adding row");
+
+  console.log($('foods'))
+
+  var count = document.getElementsByTagName('select').length;
+  console.log("Length is: ", count)
+  var iDiv = document.createElement('div');
+  iDiv.className = 'form-group';
+
+// Create the inner div before appending to the body
+  var innerDiv = document.createElement('select');
+  var optionslength = document.getElementById('meal_food').options.length;
+  var options = document.getElementById('meal_food').options;
+  console.log(options);
+  innerDiv.id = "meal_food"
+  innerDiv.name = "meal[food" + count +"]";
+  for(i=0; i<optionslength; i++){
+    console.log(i);
+    innerDiv.options[innerDiv.options.length] = new Option(options[i].text, options[i].value);
+  };
+
+
+// The variable iDiv is still good... Just append to it.
+  iDiv.appendChild(innerDiv);
+
+// Then append the whole thing onto the body
+  document.getElementById('foods').appendChild(iDiv);
+}
+
+</script>

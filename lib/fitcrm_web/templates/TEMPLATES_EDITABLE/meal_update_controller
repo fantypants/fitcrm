@@ -1,0 +1,14 @@
+def update(conn, %{"id" => id, "meal" => meal_params}) do
+  IO.inspect meal_params
+  meal = Fitcrm.Repo.get!(Meal, id)
+  changeset = Meal.changeset(meal, meal_params)
+
+  case Fitcrm.Repo.update(changeset) do
+    {:ok, meal} ->
+      conn
+      |> put_flash(:info, "Meal updated successfully.")
+      |> redirect(to: meal_path(conn, :show, meal))
+    {:error, changeset} ->
+      render(conn, "edit.html", meal: meal, changeset: changeset)
+  end
+end

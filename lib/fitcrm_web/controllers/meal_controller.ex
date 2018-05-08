@@ -108,13 +108,20 @@ defmodule FitcrmWeb.MealController do
 
   def edit(conn, %{"id" => id}) do
     meal = Fitcrm.Repo.get!(Meal, id)
-
+    foods = Fitcrm.Repo.all(Food)
+    foodids = meal.foodid
+    currentfoods = foodids |> Enum.map(fn(a) -> %{name: Fitcrm.Repo.get!(Food, a).name, id: a} end)
     changeset = Meal.changeset(meal)
-    render(conn, "edit.html", meal: meal, changeset: changeset)
+    render(conn, "edit.html", meal: meal, changeset: changeset, foods: foods, currentfoods: currentfoods)
   end
 
   def update(conn, %{"id" => id, "meal" => meal_params}) do
+    IO.inspect meal_params
+    name = %{"name" => Map.fetch!(meal_params, "name")} |> IO.inspect
+    foods = meal_params |> Map.delete("name") |> Enum.map(fn(a) -> String.to_integer(elem(a, 1)) end) |> IO.inspect
+    foodids = %{"foodid" => foods} |> IO.inspect
     meal = Fitcrm.Repo.get!(Meal, id)
+
     changeset = Meal.changeset(meal, meal_params)
 
     case Fitcrm.Repo.update(changeset) do

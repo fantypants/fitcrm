@@ -206,9 +206,12 @@ defp gatherExcerciseFields(row) do
   excercise = List.pop_at(row, 1) |> elem(0)
   reps = List.pop_at(row, 2) |> elem(0)
   %{name: excercise, reps: reps, day: day}
-
 end
 
+
+def getFoodDetails(list) do
+  
+end
 
 
 
