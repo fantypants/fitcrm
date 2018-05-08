@@ -390,6 +390,7 @@ document.getElementById('submit').style.display="none";
       }
   }
 $(document).ready(function() {
+    init();
     checkSubmit();
     var genderbool= false;
     var typebool= false;
@@ -463,24 +464,25 @@ $(document).ready(function() {
     });
 
 
-
+    function init() {
+      $('#user_height').val=150;
+      $('#user_age').val=23;
+      $('#user_weight').val=60;
+      $('input[type="range"]').val(60).change();
+      $('input[type="heightrange"]').val(150).change();
+      $('input[type="agerange"]').val(23).change();
+      $('#ageform').hide();
+      $('#heightform').hide();
+      $('#user_sex').css('color','red');
+      $('#user_ir').css('color','red');
+      $('#user_activity').css('color','red');
+      $('#user_cystic').css('color','red');
+      document.getElementById('weight_slider').innerHTML='60';
+      document.getElementById('age_slider').innerHTML='23';
+      document.getElementById('height_slider').innerHTML='150';
+    };
   //  $("input[type=submit]").attr("disabled", "disabled");
-    $('input[type="range"]').val(60).change();
-    $('input[type="heightrange"]').val(150).change();
-    $('input[type="agerange"]').val(23).change();
-    $('#ageform').hide();
-    $('#heightform').hide();
-    $('#user_height').val=150;
-    $('#user_age').val=23;
-    $('#user_weight').val=60;
-    $('#user_sex').css('color','red');
-    $('#user_ir').css('color','red');
-    $('#user_activity').css('color','red');
-    $('#user_cystic').css('color','red');
-    document.getElementById('weight_slider').innerHTML='60';
-    document.getElementById('age_slider').innerHTML='23';
-    document.getElementById('height_slider').innerHTML='150';
-    console.log("js")
+
     $('sli').append(
       $('input[type="range"]').rangeslider({
         polyfill: false,

@@ -92,7 +92,7 @@ defmodule FitcrmWeb.UserController do
        case Accounts.update_user(user, changesetmap) do
          {:ok, user} ->
            #ADD OR HERE
-           WeekdayController.create_week(conn)
+           WeekdayController.check_exists(conn)
            success(conn, "User updated successfully", user_path(conn, :show, id))
          {:error, %Ecto.Changeset{} = changeset} ->
            IO.inspect changeset

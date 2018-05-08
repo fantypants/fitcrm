@@ -216,6 +216,19 @@ defmodule FitcrmWeb.WeekdayController do
     day_params |> Enum.map(fn(a) -> create_day(user_id, elem(a, 1)) end)
   end
 
+  def check_exists(%Plug.Conn{assigns: %{current_user: user}} = conn) do
+    query = from w in Week, where: w.user_id ==^user.id
+    weeks = Fitcrm.Repo.all(query)
+    case weeks do
+      nil ->
+        IO.puts "No Week Exists"
+        create_week(conn)
+      _->
+      IO.puts "Week Exists"
+        ClientTool.getUserDates(user.id)
+    end
+  end
+
   def create_week(%Plug.Conn{assigns: %{current_user: user}} = conn) do
     user_id = user.id
     day_params = createWeekMap(user_id)
