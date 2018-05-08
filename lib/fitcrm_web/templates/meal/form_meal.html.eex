@@ -13,15 +13,18 @@
 
 
 <div class="hidden" id="hiddeninput">
-<%= select f, :food, Enum.map(@foods, &{&1.name, &1.id}) %>
+  <%= select f, :food, Enum.map(@foods, &{&1.name, &1.id}) %>
+  <%= select f, :cal, Enum.map(@foods, &{&1.cal, &1.id}) %>
 </div>
 
 
 
 
   <div class="form-group" id="foods">
-    <%= label f, :food, class: "control-label" %>
     <%= for food <- @currentfoods do %>
+    <%= label f, :food, class: "control-label" %>
+    <h4>Calories</h4>
+    <p id='<%= "cal"<>"meal"<>"["<>"food"<>"#{food.id}"<>"]" %>' class="cal"></p>
     <%= select f, :'food#{food.id}', Enum.map(@currentfoods, &{&1.name, &1.id}) %>
     <% end %>
     <%= error_tag f, :food %>
@@ -36,12 +39,20 @@
 <% end %>
 
 <div id="foodblock">
+  <p> Total Calories</p>
+  <p id="total"> Total Calories Displayed Here</p>
 <button id="add">ADD FOOODS</button>
 </div>
 
 <script>
 var elem = '<div><p>this</p></div>'
 document.getElementById('add').addEventListener('click', addRow);
+var selects = document.getElementsByTagName('select')
+var sellength = document.getElementsByTagName('select').length;
+for(i=0; i<sellength; i++){
+  var n = i;
+  selects[i].addEventListener('change', listProp, false);
+};
 function addRow(){
   console.log("adding row");
 
@@ -51,25 +62,69 @@ function addRow(){
   console.log("Length is: ", count)
   var iDiv = document.createElement('div');
   iDiv.className = 'form-group';
+  var iCal = document.createElement('h4');
+  iCal.innerHTML = "Calories";
 
 // Create the inner div before appending to the body
   var innerDiv = document.createElement('select');
   var optionslength = document.getElementById('meal_food').options.length;
   var options = document.getElementById('meal_food').options;
+
+  var iCount = document.createElement('p');
+  iCount.className = "cal";
+  iCount.id = "calmeal[food" + count+1 + "]";
   console.log(options);
   innerDiv.id = "meal_food"
-  innerDiv.name = "meal[food" + count +"]";
+  innerDiv.name = "meal[food" + count+1 +"]";
   for(i=0; i<optionslength; i++){
     console.log(i);
     innerDiv.options[innerDiv.options.length] = new Option(options[i].text, options[i].value);
   };
-
+  innerDiv.addEventListener('change', listProp);
 
 // The variable iDiv is still good... Just append to it.
+  iDiv.appendChild(iCal);
+  iDiv.appendChild(iCount);
   iDiv.appendChild(innerDiv);
 
 // Then append the whole thing onto the body
   document.getElementById('foods').appendChild(iDiv);
+}
+
+function addTotal(){
+  var total = 0;
+  var cals = document.getElementsByClassName('cal');
+  var totalcal = document.getElementById('total');
+  var callength = cals.length;
+  console.log("Total Cal", callength);
+  for(i=0; i<callength; i++){
+    total += parseFloat(cals[i].innerHTML);
+    console.log(total);
+  }
+  totalcal.innerHTML= total;
+}
+
+function listProp(){
+  var options = document.getElementById('meal_cal').options;
+  var selected = this.value;
+  var id = "cal"+this.name;
+  console.log(this);
+  console.log("listeners on", ltrim(this.name));
+  console.log("Food Cals", options[selected].text, id)
+  var element = document.getElementById(id);
+  element.innerHTML = options[selected].text;
+  addTotal();
+}
+
+
+function trim(stringToTrim) {
+	return stringToTrim.replace(/^\s+|\s+$/g,"");
+}
+function ltrim(stringToTrim) {
+	return stringToTrim.replace(/^\s+/,"[]");
+}
+function rtrim(stringToTrim) {
+	return stringToTrim.replace(/\s+$/,"]");
 }
 
 </script>
