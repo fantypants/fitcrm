@@ -25,6 +25,7 @@ defmodule FitcrmWeb.Router do
       get "/weeks/:week_id", WeekdayController, :showweek
       get "/weekindex", WeekdayController, :weekindex
       get "/admindash", PageController, :admindash
+
     end
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     resources "/meals", MealController
@@ -43,8 +44,10 @@ defmodule FitcrmWeb.Router do
     get "users/:id/setup", UserController, :setup
     put "users/:id/setup", UserController, :setup
     get "users/:id/ingredients", UserController, :ingredients
-
-
+    get "users/:id/createmeal", MealController, :createmeal
+    post "users/:id/createmeal", MealController, :createmeal
+    get "users/:id/insertnewmeal", MealController, :insertnewmeal
+    post "users/:id/insertnewmeal", MealController, :insertnewmeal
   end
 
   scope "/api", FitcrmWeb do

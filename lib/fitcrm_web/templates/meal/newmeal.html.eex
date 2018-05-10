@@ -1,0 +1,6 @@
+<h2>New meal</h2>
+
+<%= render "form_mealnew.html", changeset: @changeset, foods: @foods,
+                        action: meal_path(@conn, :insertnewmeal, @current_user) %>
+
+<span><%= link "Back", to: meal_path(@conn, :index) %></span>

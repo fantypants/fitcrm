@@ -106,6 +106,20 @@ defmodule FitcrmWeb.MealController do
     render(conn, "show.html", meal: meal, foods: foods, changeset: changeset)
   end
 
+  def createmeal(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
+    foods = Fitcrm.Repo.all(Food) |> Enum.map(fn(a) -> %{name: a.name,
+    id: a.id,
+    p: a.protein,
+    c: a.carbs,
+    f: a.fat,
+    cal: a.calories,
+    q: a.quantity}
+  end)
+
+    changeset = Meal.changeset(%Meal{}, _params)
+    render(conn, "newmeal.html", changeset: changeset, foods: foods)
+  end
+
   def edit(conn, %{"id" => id}) do
     meal = Fitcrm.Repo.get!(Meal, id)
     foods = Fitcrm.Repo.all(Food) |> Enum.map(fn(a) -> %{name: a.name,
@@ -147,6 +161,71 @@ defmodule FitcrmWeb.MealController do
         render(conn, "edit.html", meal: meal, changeset: changeset)
     end
   end
+
+  def insertnewmeal(conn, %{"meal" => meal_params}) do
+    IO.inspect meal_params
+
+    name = %{"name" => Map.fetch!(meal_params, "name")} |> IO.inspect
+    type = %{"type" => Map.fetch!(meal_params, "type")} |> IO.inspect
+    rawfoods = meal_params |> Map.delete("name") |> Map.delete("type")
+    elemmap = rawfoods |> Enum.map(fn(a) -> a end) |> IO.inspect
+    IO.puts "Food ID"
+    foodid = elemmap |> Enum.map(fn({k, v}) -> stripFood("id", k) end) |> Enum.reject(fn(a) -> keepID(a) !== true end) |> IO.inspect
+    #foods = meal_params |> Map.delete("name") |> Map.delete("type") |> gatherfooddetails(foodid)
+    foodmaps = foodid |> Enum.map(fn(a) ->
+      Enum.chunk_by(rawfoods, fn(b) -> elem(b, 0) end)
+    end)
+    foodmapraw = for {k, v} <- Enum.group_by(rawfoods, fn {k, _} -> hd(Regex.run(~r/\d+$/, k)) end),do: {k, Map.new(v)}
+    IO.puts "final"
+    foodmapsfinal = foodmapraw |> Enum.map(fn({k, v}) -> gatherfooddetails(v) end)
+    IO.inspect foodmapsfinal
+
+
+
+
+
+
+  conn  |> redirect(to: meal_path(conn, :show, 1))
+  end
+
+  def gatherfooddetails(map) do
+    elemmap = map |> Enum.map(fn(a) -> a end)
+    IO.puts "NAME"
+    name = elemmap |> Enum.filter(fn({k, v}) -> k == "name"<>stripFood("name",k) end)
+    IO.inspect name
+    IO.puts "Carbs"
+    carbs = elemmap |> Enum.filter(fn({k, v}) -> k == "carbs"<>stripFood("carbs", k) end)
+    IO.puts "fat"
+    fat = elemmap |> Enum.filter(fn({k, v}) -> k == "fat"<>stripFood("fat",k) end)
+    IO.puts "prot"
+    protien = elemmap |> Enum.filter(fn({k, v}) -> k == "prot"<>stripFood("prot", k) end)
+    IO.inspect protien
+    foods = %{"protien" => elem(List.first(protien), 1), "carbs" => elem(List.first(carbs), 1), "fat" => elem(List.first(fat), 1), "name" => elem(List.first(name), 1)}
+    IO.inspect foods
+
+  end
+
+  def stripFood(type, value) do
+    case type do
+      "name" ->
+        String.split(value, "name") |> List.last
+      "cals" ->
+        String.split(value, "cals") |> List.last
+      "prot" ->
+        String.split(value, "prot") |> List.last
+      "fat" ->
+        String.split(value, "fat") |> List.last
+      "carbs" ->
+        String.split(value, "carbs") |> List.last
+      "id" ->
+        String.replace_prefix(value, "name", "")
+    end
+  end
+
+  def keepID(value) do
+    Regex.match?(~r/^[0-9]/, value) |> IO.inspect
+  end
+
 
   def delete(conn, %{"id" => id}) do
     meal = Fitcrm.Repo.get!(Meal, id)

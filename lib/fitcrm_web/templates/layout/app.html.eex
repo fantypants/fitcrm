@@ -48,6 +48,62 @@
     			border: 2px solid green;
     		}
 
+        .side{
+          width: 30%;
+          height: 30%;
+          position: relative;
+        }
+
+        .side:hover{
+          width: 35%;
+          height: 35%;
+          opacity: 0.6;
+          transform: rotate(20deg);
+          transition: .3s ease;
+        }
+
+        .side:hover .overlay{
+          width: 100%;
+          left: 0;
+
+        }
+
+        #overlay {
+          position: fixed;
+          display: none;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0,0,0,0.5);
+          z-index: 2;
+          cursor: pointer;
+      }
+
+      #text{
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          font-size: 50px;
+          color: white;
+          transform: translate(-50%,-50%);
+          -ms-transform: translate(-50%,-50%);
+      }
+
+      #wrapper .text {
+        position:relative;
+        bottom:0px;
+        padding-top: 0px;
+        left:22px;
+        visibility:hidden;
+      }
+
+        #wrapper:hover .text {
+        visibility:visible;
+        transition: .3s ease;
+        }
         </style>
   </head>
 
@@ -59,31 +115,40 @@
 <div id="mySidenav" class="sidenav">
 <%= if @current_user do %>
 <%= if @current_user.type == "Admin" do %>
-<a href="<%= user_page_path(@conn, :admindash, @current_user.id) %>">Dashboard</a>
- <a href="<%= user_path(@conn, :index) %>">Admin User Panel Index</a>
- <a href="<%= user_path(@conn, :show, @current_user.id) %>">User Panel </a>
+<div id="wrapper">
+<a href="<%= user_page_path(@conn, :admindash, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/dash.png") %>">
+</a>
+<p class="text">Dashboard</p>
+ <a href="<%= user_path(@conn, :index) %>"><img class="side" src="<%= static_path(@conn, "/images/userindex.png") %>"></a><p class="text">User List</p>
+ <a href="<%= user_path(@conn, :show, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/home.png") %>"></a><p class="text">Home</p>
 <% else %>
-<a href="<%= page_path @conn, :index %>">Home</a>
-<a href="<%= user_path(@conn, :show, @current_user.id) %>"> User Panel </a>
+<a href="<%= page_path @conn, :index %>"><img class="side" src="<%= static_path(@conn, "/images/home.png") %>"></a><p class="text">Home</p>
+<a href="<%= user_path(@conn, :show, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/profile.png") %>"></a><p class="text">Profile</p>
 <% end %>
- <a href="<%= user_path(@conn, :ingredients, @current_user.id) %>">Shopping List</a>
- <a href="<%= workout_path(@conn, :index) %>">Workouts</a>
- <a href="<%= meal_path @conn, :index %>">Meals</a>
-  <a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>">Weeks</a>
- <a href="<%= user_weekday_path(@conn, :index, @current_user.id) %>">Days</a>
-<a href="<%= user_path(@conn, :show, @current_user.id) %>"><%= @current_user.email %></a>
- <%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %>
+ <a href="<%= user_path(@conn, :ingredients, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/ingredients.png") %>"></a><p class="text">Ingredients</p>
+ <a href="<%= meal_path(@conn, :createmeal, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/mealcreator.png") %>"></a><p class="text">Meal Creator ALPHA</p>
+ <a href="<%= workout_path(@conn, :index) %>"><img class="side" src="<%= static_path(@conn, "/images/workout.png") %>"></a><p class="text">Workouts</p>
+ <a href="<%= meal_path @conn, :index %>"><img class="side" src="<%= static_path(@conn, "/images/food.png") %>"></a><p class="text">Meals</p>
+  <a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/weeks.png") %>"></a><p class="text">Weeks</p>
+ <a href="<%= user_weekday_path(@conn, :index, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/days.png") %>"></a><p class="text">Days</p>
+<a href="<%= user_path(@conn, :show, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/profile.png") %>"></a><p class="text">User Show</p>
 
-
+<%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %>
+</div>
 <% else %>
-<a href="<%= page_path @conn, :index %>">Home</a>
+<div id="wrapper">
+<a href="<%= page_path @conn, :index %>"><img class="side" src="<%= static_path(@conn, "/images/home.png") %>"></a>
+<p class="text">Home</p>
  <a href="" data-toggle="modal" data-target="#myModal">
-   Login
+   <img class="side" src="<%= static_path(@conn, "/images/login.png") %>">
  </a>
+ <p class="text">Login</p>
  <a href="" data-toggle="modal" data-target="#register">
-   Register
+   <img class="side" src="<%= static_path(@conn, "/images/register.png") %>">
  </a>
+ <p class="text">Register</p>
 <% end %>
+</div>
 </div>
 
 <div id="navbar-full">

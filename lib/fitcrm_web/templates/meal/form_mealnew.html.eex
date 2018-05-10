@@ -1,0 +1,279 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :name, class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+  <div class="form-group">
+    <%= label f, :type, class: "control-label" %>
+    <%= select f, :type, ["Breakfast", "Lunch", "Dinner"] %>
+    <%= error_tag f, :type %>
+  </div>
+
+
+  <div class="form-group" id="foods">
+    <table class="table">
+      <thead>
+      <th> Calories</th>
+      <th> Protien</th>
+      <th> Fat</th>
+      <th> Carbs</th>
+      <th> Quantity</th>
+      <th> Name</th>
+    </thead>
+    <tbody id=food_table>
+    <tr>
+    <%= label f, :food, class: "control-label" %>
+    <td><p id="meal_cal1" class="cal" name=meal[cal1]> CALS </p></td>
+    <td><%= text_input f, :'prot1', class: "prot" %></td>
+    <td><%= text_input f, :'fat1', class: "fat" %></td>
+    <td><%= text_input f, :'carbs1', class: "carbs" %></td>
+    <td><%= text_input f, :'quant1', class: "quant" %></td>
+    <td><%= text_input f, :'name1', class: "name" %></td>
+  </tr>
+</tbody>
+</table>
+
+    <%= error_tag f, :food %>
+  </div>
+
+
+
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+<div id="foodblock">
+<table class="table">
+  <thead>
+  <th> Total Calories</th>
+  <th> Total Protien</th>
+  <th> Total Fat</th>
+  <th> Total Carbs</th>
+</thead>
+<tbody>
+  <tr>
+  <td><p id="total"></p></td>
+  <td><p id="totalprot"></p></td>
+  <td><p id="totalfat"></p></td>
+  <td><p id="totalcarbs"></p></td>
+</table>
+<button id="add">ADD FOOODS</button>
+</div>
+
+<script>
+var elem = '<div><p>this</p></div>'
+document.getElementById('add').addEventListener('click', addRow);
+var selects = document.getElementsByTagName('input')
+var sellength = document.getElementsByTagName('input').length;
+for(i=0; i<sellength; i++){
+  var n = i;
+  console.log("change occured");
+  selects[i].addEventListener('input', listProp, false);
+};
+function addRow(){
+  console.log("adding row");
+
+  console.log($('foods'))
+
+  var count = document.getElementsByTagName('input').length;
+  console.log("Length is: ", count)
+  var iDiv = document.createElement('tr');
+  //iDiv.className = 'form-group';
+  var iCal = document.createElement('h4');
+  iCal.innerHTML = "Calories";
+  var iProt = document.createElement('h4');
+  iProt.innerHTML = "Protien";
+  var iFat = document.createElement('h4');
+  iFat.innerHTML = "Fat";
+  var iCarbs = document.createElement('h4');
+  iCarbs.innerHTML = "Carbs";
+  var iQuant = document.createElement('h4');
+  iQuant.innerHTML = "Quant";
+
+// Create the inner div before appending to the body
+  var innerDiv = document.createElement('p');
+
+  var innerDivName = document.createElement('input');
+  var innerDivCal = document.createElement('input');
+  var innerDivProt = document.createElement('input');
+  var innerDivFat = document.createElement('input');
+  var innerDivCarbs = document.createElement('input');
+  var innerDivQuant = document.createElement('input');
+
+
+  var iCount = document.createElement('td');
+  var iCName = document.createElement('td');
+  var iCProt = document.createElement('td');
+  var iCFat = document.createElement('td');
+  var iCCarbs = document.createElement('td');
+  var iCQuant = document.createElement('td');
+
+  innerDivFat.addEventListener('input', listProp, false);
+  innerDivProt.addEventListener('input', listProp, false);
+  innerDivCarbs.addEventListener('input', listProp, false);
+  innerDiv.className = "cal";
+  innerDivProt.className = "prot";
+  innerDivFat.className = "fat";
+  innerDivName.className = "name";
+  innerDivCarbs.className = "carbs";
+  innerDivQuant.className = "quant";
+  innerDiv.name = "meal[cals" + (count+1)+"]"
+  innerDivName.name = "meal[name" + (count+1)+"]"
+  innerDivProt.name = "meal[prot" + (count+1)+"]"
+  innerDivFat.name = "meal[fat" + (count+1)+"]"
+  innerDivCarbs.name = "meal[carbs" + (count+1)+"]"
+  innerDivQuant.name = "meal[quant" + (count+1)+"]"
+  innerDiv.id = "meal_cal" + (count+1);
+  innerDivName.id = "meal_name" + (count +1);
+  innerDivProt.id = "meal_prot" + (count+1);
+  innerDivFat.id = "meal_fat" + (count+1);
+  innerDivCarbs.id = "meal_carbs" + (count+1);
+  innerDivQuant.id = "meal_quant" + (count+1);
+
+  //innerDiv.id = "meal_food"
+  innerDiv.innerHTML="Test"
+  //innerDiv.name = "meal[food" + count+1 +"]";
+  //for(i=0; i<optionslength; i++){
+//  //  console.log(i);
+//    innerDiv.options[innerDiv.options.length] = new Option(options[i].text, options[i].value);
+//  };
+//  innerDiv.addEventListener('change', listProp);
+
+// The variable iDiv is still good... Just append to it.
+
+iCount.appendChild(innerDiv);
+ iCProt.appendChild(innerDivProt);
+ iCFat.appendChild(innerDivFat);
+ iCCarbs.appendChild(innerDivCarbs);
+ iCQuant.appendChild(innerDivQuant);
+ iCName.appendChild(innerDivName);
+
+iDiv.appendChild(iCount);
+iDiv.appendChild(iCProt);
+iDiv.appendChild(iCFat);
+iDiv.appendChild(iCCarbs);
+iDiv.appendChild(iCQuant);
+iDiv.appendChild(iCName);
+
+
+  //iDiv.appendChild(iCal);
+
+  //iDiv.appendChild(iProt);
+  //iDiv.appendChild(iCProt);
+  //iDiv.appendChild(iFat);
+  //iDiv.appendChild(iCFat);
+  //iDiv.appendChild(iCarbs);
+  //iDiv.appendChild(iCCarbs);
+  //iDiv.appendChild(iQuant);
+  //iDiv.appendChild(iCQuant);
+  //iDiv.appendChild(iCount);
+
+
+
+
+// Then append the whole thing onto the body
+  document.getElementById('food_table').appendChild(iDiv);
+}
+
+function addTotal(){
+  var total="";
+  var totalp = 0;
+  var totalf = 0;
+  var totalc = 0;
+  var cals = document.getElementsByClassName('cal');
+  var prot = document.getElementsByClassName('prot');
+  var fat = document.getElementsByClassName('fat');
+  var carbs = document.getElementsByClassName('carbs');
+  console.log(cals, prot, fat, carbs);
+
+  var totalcal = document.getElementById('total');
+  var totalprot = document.getElementById('totalprot');
+  var totalfat = document.getElementById('totalfat');
+  var totalcarbs = document.getElementById('totalcarbs');
+  var callength = cals.length;
+  console.log("Total Cal", callength);
+  for(i=0; i<callength; i++){
+
+    totalp += parseFloat(prot[i].value);
+    totalf += parseFloat(fat[i].value);
+    totalc += parseFloat(carbs[i].value);
+    total  = (totalp*4) +(totalc*4) + (totalf*9);
+    console.log("totals", totalp, totalf, totalc, total);
+  }
+  totalcal.innerHTML= total;
+  totalprot.innerHTML= totalp;
+  totalfat.innerHTML= totalf;
+  totalcarbs.innerHTML= totalc;
+}
+
+function listProp(){
+  //var options = document.getElementById('meal_cal').options;
+  //var poptions = document.getElementById('meal_prot').options;
+  //var foptions = document.getElementById('meal_fat').options;
+  //var coptions = document.getElementById('meal_carbs').options;
+  //var qoptions = document.getElementById('meal_quant').options;
+  var inputvalue = this.value;
+  var calid = "meal_cal" + mtrim(this.id);
+  var pid = "meal_prot"+mtrim(this.id);
+  var fid = "meal_fat"+mtrim(this.id);
+  var cid = "meal_carbs"+mtrim(this.id);
+  var qid = "meal_quant"+mtrim(this.id);
+
+  //console.log("listeners on", ltrim(this.name));
+  //console.log("Food Cals", options[selected].text, id)
+  var calelement = document.getElementById(calid);
+  var pelement = document.getElementById(pid);
+  var felement = document.getElementById(fid);
+  var celement = document.getElementById(cid);
+  var protien = pelement.value;
+  var fat = felement.value;
+  var carbs = celement.value;
+  console.log("id to get", pelement.value);
+  //var pelement = document.getElementById(pid);
+  //
+  //
+  //var qelement = document.getElementById(qid);
+  calelement.innerHTML = (protien*4)+(fat*9)+(carbs*4);
+//  pelement.innerHTML = poptions[selected].text;
+  //felement.innerHTML = foptions[selected].text;
+  //celement.innerHTML = coptions[selected].text;
+  //qelement.innerHTML = qoptions[selected].text;
+  addTotal();
+}
+
+
+function trim(stringToTrim) {
+	return stringToTrim.replace(/^\s+|\s+$/g,"meal[");
+}
+function ltrim(stringToTrim) {
+	return stringToTrim.replace(/^\s+/,"[]");
+}
+function mtrim(stringToTrim) {
+  console.log(stringToTrim);
+	return stringToTrim.replace(/meal_prot|meal_fat|meal_carbs/g,"");
+}
+function ftrim(stringToTrim) {
+  console.log(stringToTrim);
+	return stringToTrim.replace(/meal_fat/g,"");
+}
+function ctrim(stringToTrim) {
+  console.log(stringToTrim);
+	return stringToTrim.replace(/meal_carbs/g,"");
+}
+function qtrim(stringToTrim) {
+  console.log(stringToTrim);
+	return stringToTrim.replace(/meal_quant/g,"");
+}
+function rtrim(stringToTrim) {
+	return stringToTrim.replace(/\s+$/,"]");
+}
+
+</script>
