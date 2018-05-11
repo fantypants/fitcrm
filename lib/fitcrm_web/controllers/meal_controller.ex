@@ -67,10 +67,6 @@ defmodule FitcrmWeb.MealController do
     end
   end
 
-
-
-
-
   def new(conn, _params) do
     changeset = Meal.changeset(%Meal{})
     render(conn, "new.html", changeset: changeset)
@@ -163,29 +159,30 @@ defmodule FitcrmWeb.MealController do
   end
 
   def insertnewmeal(conn, %{"meal" => meal_params}) do
-    IO.inspect meal_params
-
-    name = %{"name" => Map.fetch!(meal_params, "name")} |> IO.inspect
-    type = %{"type" => Map.fetch!(meal_params, "type")} |> IO.inspect
+    name = %{"name" => Map.fetch!(meal_params, "name")}
+    type = %{"type" => Map.fetch!(meal_params, "type")}
     rawfoods = meal_params |> Map.delete("name") |> Map.delete("type")
-    elemmap = rawfoods |> Enum.map(fn(a) -> a end) |> IO.inspect
-    IO.puts "Food ID"
-    foodid = elemmap |> Enum.map(fn({k, v}) -> stripFood("id", k) end) |> Enum.reject(fn(a) -> keepID(a) !== true end) |> IO.inspect
-    #foods = meal_params |> Map.delete("name") |> Map.delete("type") |> gatherfooddetails(foodid)
+    elemmap = rawfoods |> Enum.map(fn(a) -> a end)
+    foodid = elemmap |> Enum.map(fn({k, v}) -> stripFood("id", k) end) |> Enum.reject(fn(a) -> keepID(a) !== true end)
     foodmaps = foodid |> Enum.map(fn(a) ->
       Enum.chunk_by(rawfoods, fn(b) -> elem(b, 0) end)
     end)
     foodmapraw = for {k, v} <- Enum.group_by(rawfoods, fn {k, _} -> hd(Regex.run(~r/\d+$/, k)) end),do: {k, Map.new(v)}
-    IO.puts "final"
     foodmapsfinal = foodmapraw |> Enum.map(fn({k, v}) -> gatherfooddetails(v) end)
-    IO.inspect foodmapsfinal
-
-
-
-
-
 
   conn  |> redirect(to: meal_path(conn, :show, 1))
+  end
+
+  def insert_and_return_meal(conn, %{"meal" => meal_params}) do
+    changeset = Meal.changeset(%Meal{}, meal_params)
+    case Fitcrm.Repo.insert(changeset) do
+      {:ok, meal} ->
+        conn
+        |> put_flash(:info, "Meal created successfully.")
+        |> redirect(to: meal_path(conn, :show, 1))
+      {:error, changeset} ->
+        render(conn, "new.html", changeset: changeset)
+    end
   end
 
   def gatherfooddetails(map) do
