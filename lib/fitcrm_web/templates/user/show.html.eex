@@ -17,24 +17,24 @@
 }
 
 
-.side{
-  height: 45%;
+.profileicon{
+  height: 35%;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 45%;
+  width: 35%;
   position: relative;
 }
 
-.side:hover{
-  width: 45%;
-  height: 45%;
+.profileicon:hover{
+  width: 35%;
+  height: 35%;
   opacity: 0.6;
   transform: rotate(20deg);
   transition: .3s ease;
 }
 
-.side:hover .overlay{
+.profileicon:hover .overlay{
   width: 100%;
   left: 0;
 
@@ -513,42 +513,40 @@ table.dataTable thead .sorting:after {
 
 
 </style>
-
-
-<div class="row">
-    <div class="col-lg-3 col-md-6">
+<div class="row no-gutters">
+    <div class="col-6 col-sm-3 col-md-4">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="row">
                     <div id="wrapper">
                           <a href="<%= user_path(@conn, :setup, @user) %>">
-                            <img class="side" src="<%= static_path(@conn, "/images/setup.png") %>"></a>
+                            <img class="profileicon" src="<%= static_path(@conn, "/images/setup.png") %>"></a>
                             <p class="text">Full Setup</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-6">
+    <div class="col-6 col-sm-3 col-md-4">
         <div class="panel panel-green">
             <div class="panel-heading">
                 <div class="row">
                     <div id="wrapper">
                           <a href="<%= user_path(@conn, :newquestion, @user) %>">
-                            <img class="side" src="<%= static_path(@conn, "/images/editbodyprofile.png") %>"></a>
+                            <img class="profileicon" src="<%= static_path(@conn, "/images/editbodyprofile.png") %>"></a>
                             <p class="text">Edit Body</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-6">
+    <div class="col-6 col-sm-3 col-md-4">
         <div class="panel panel-red">
             <div class="panel-heading">
                 <div class="row">
                     <div id="wrapper">
                           <a href="<%= user_path(@conn, :edit, @user) %>">
-                            <img class="side" src="<%= static_path(@conn, "/images/passwordreset.png") %>"></a>
+                            <img class="profileicon" src="<%= static_path(@conn, "/images/passwordreset.png") %>"></a>
                             <p class="text">Change P/Word</p>
                     </div>
                 </div>
@@ -557,47 +555,75 @@ table.dataTable thead .sorting:after {
     </div>
 
 </div>
-<div class="panel panel-red">
-  <div class="panel-heading">
-    <h4 class="panel-title">
-    Welcome back <%= @user.name %>
-  </h4>
-</div>
+<div class="row no-gutters">
+  <div class="col-6 col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+        Subscription & Plan
+      </h4>
+    </div>
 <div class="panel-body">
 <table class="table">
-  <thead>
-    <tr>
-      <th>Subscription Level</th>
-      <th>Subscription Active?</th>
-      <th>Plan Generated?</th>
-      <th>Customer Referral ID's</th>
-    </tr>
-  </thead>
   <tbody>
     <tr>
-      <td><strong> <%= @subscription.type %> </strong> </td>
-      <td><strong> <%= @subscription.status %> </strong>
+      <td> Subscription Status<strong> <%= @subscription.status %> </strong>
         <div class="progress progress-striped active">
             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                 <span class="sr-only">ACTIVE</span>
             </div>
         </div></td>
-      <td><strong> <%= @subscription.plan %> </strong>
+      </tr>
+      <tr>
+      <td>Meal Plan Active?<strong> <%= @subscription.plan %> </strong>
         <div class="progress progress-striped active">
             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                 <span class="sr-only">ACTIVE</span>
             </div>
         </div> </td>
-        <td>
-          <%= for id <- @referrals do %>
-          <%= id %>
-          <% end %>
-        </td>
-    </tr>
+      </tr>
   </tbody>
 </table>
+</div>
+</div>
+</div>
+<div class="col-12 col-sm-6 col-md-8">
+<div class="panel panel-green">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+    Your Current Referrals
+  </h4>
+</div>
+<div class="panel-body">
+<table class="table">
+  <tbody>
+    <%= for id <- @referrals do %>
+      <tr>
+        <td>
+          <%= id.name %>
+        </td>
+        <td>
+          <%= id.email %>
+        </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 
 
+<div class="panel panel-red">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+    Profile Information
+  </h4>
+</div>
+
+
+<div class="panel-body">
 <table class="table">
   <thead>
     <tr>
@@ -618,7 +644,18 @@ table.dataTable thead .sorting:after {
     </tr>
   </tbody>
 </table>
+</div>
+</div>
 
+<div class="panel panel-yellow">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+    Body Metrics
+  </h4>
+</div>
+
+
+<div class="panel-body">
 <table class="table">
   <thead>
     <tr>
@@ -642,26 +679,9 @@ table.dataTable thead .sorting:after {
       <td><%= Float.round(@user.tdee, 0) %> </td>
       <td> <%= @user.pcos %></td>
       <td> <%= @user.ir %> </td>
-
     </tr>
   </tbody>
 </table>
 
-
-
-<table class="table">
-  <thead>
-
-    <tr>
-<th><span><%= link "Change Password", to: user_path(@conn, :edit, @user) %></span></th>
-</tr>
-<tr>
-<th><span><%= link "Back", to: user_path(@conn, :index) %></span></th>
-</tr>
-<tr>
-<th><span><%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %></span></th>
-</tr>
-</thead>
-</table>
 </div>
 </div>
