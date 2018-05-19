@@ -74,10 +74,16 @@ defmodule Fitcrm.Tools.UserTool do
       _->
       {:ok, exists?}
     end
-
   end
 
+ def retrieve_password do
+   password_new = random_string(8) |> IO.inspect
+   {:ok, password_new}
+ end
 
+ def random_string(length) do
+  :crypto.strong_rand_bytes(length) |> Base.url_encode64 |> binary_part(0, length)
+end
 
 
 

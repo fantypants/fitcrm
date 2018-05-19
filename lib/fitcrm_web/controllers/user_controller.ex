@@ -116,8 +116,8 @@ defmodule FitcrmWeb.UserController do
 
 def view_emails(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
 changeset = User.changeset(%User{}, %{name: "name"})
-from = Bamboo.SentEmail.all |> Enum.map(fn(a) -> %{from: elem(a.from, 1)} end)
-render(conn, "viewemails.html", changeset: changeset, from: from)
+emails = Bamboo.SentEmail.all |> IO.inspect |> Enum.map(fn(a) -> %{from: elem(a.from, 1), to: elem(List.first(a.to), 1), subject: a.subject} end) |> IO.inspect
+render(conn, "viewemails.html", changeset: changeset, emails: emails)
 end
 
 def passwordreset(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user" => %{"email" => email}}) do
@@ -127,8 +127,21 @@ case Tools.UserTool.check_user(email) do
   {:ok, user} ->
     #Accounts.update_password(user, params)
     #|> handle_password_reset(conn, params)
-    IO.inspect user
-    render(conn, "resetpassword.html", changeset: changeset)
+    case Tools.UserTool.retrieve_password do
+      {:ok, password} ->
+        IO.puts "updating password"
+        case Accounts.update_user(List.first(user), %{"email" => email, "password" => password}) do
+          {:ok, user} ->
+            Tools.Email.password_recovery(email, password) |> Tools.Mailer.deliver_now
+            render(conn, "resetpassword.html", changeset: changeset)
+          {:error, %Ecto.Changeset{} = changeset} ->
+            render(conn, "resetpassword.html", changeset: changeset)
+        end
+        IO.puts "Send Email"
+      {:error, message} ->
+        IO.puts "Password Change Failed"
+        render(conn, "resetpassword.html", changeset: changeset)
+      end
   {:error, message} ->
       IO.puts "Error"
       IO.inspect message
