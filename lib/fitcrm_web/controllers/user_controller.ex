@@ -103,7 +103,7 @@ defmodule FitcrmWeb.UserController do
 
   def reset_password(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
     changeset = User.changeset(%User{}, %{name: "name"})
-    Tools.Email.welcome_email |> Tools.Mailer.deliver_now |> IO.inspect
+
       #case Phauxth.Confirm.verify(params, Accounts, mode: :pass_reset) do
       #  {:ok, user} ->
       #    Accounts.update_password(user, params)
@@ -122,31 +122,25 @@ end
 
 def passwordreset(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user" => %{"email" => email}}) do
 changeset = User.changeset(%User{}, %{name: "name"})
-
-case Tools.UserTool.check_user(email) do
-  {:ok, user} ->
-    #Accounts.update_password(user, params)
-    #|> handle_password_reset(conn, params)
-    case Tools.UserTool.retrieve_password do
-      {:ok, password} ->
-        IO.puts "updating password"
-        case Accounts.update_user(List.first(user), %{"email" => email, "password" => password}) do
-          {:ok, user} ->
-            Tools.Email.password_recovery(email, password) |> Tools.Mailer.deliver_now
-            render(conn, "resetpassword.html", changeset: changeset)
-          {:error, %Ecto.Changeset{} = changeset} ->
-            render(conn, "resetpassword.html", changeset: changeset)
+  case Tools.UserTool.check_user(email) do
+    {:ok, user} ->
+      case Tools.UserTool.retrieve_password do
+        {:ok, password} ->
+          IO.puts "updating password"
+          case Accounts.update_user(List.first(user), %{"email" => email, "password" => password}) do
+            {:ok, user} ->
+              Tools.Email.password_recovery(email, password) |> Tools.Mailer.deliver_now
+              render(conn, "resetpassword.html", changeset: changeset)
+            {:error, %Ecto.Changeset{} = changeset} ->
+              render(conn, "resetpassword.html", changeset: changeset)
+          end
+        {:error, message} ->
+          IO.puts "Password Change Failed"
+          render(conn, "resetpassword.html", changeset: changeset)
         end
-        IO.puts "Send Email"
-      {:error, message} ->
-        IO.puts "Password Change Failed"
+    {:error, message} ->
         render(conn, "resetpassword.html", changeset: changeset)
-      end
-  {:error, message} ->
-      IO.puts "Error"
-      IO.inspect message
-      render(conn, "resetpassword.html", changeset: changeset)
-  end
+    end
 end
 
 
@@ -263,6 +257,7 @@ end
         Log.info(%Log{user: user.id, message: "user created"})
         case user_params["refemail"] do
           nil ->
+            Tools.Email.welcome_email(user_params["email"]) |> Tools.Email.deliver_now
             success(conn, "User created successfully", session_path(conn, :new))
           _->
             UserTool.ref_controller(conn, user.id, user_params["refemail"])
