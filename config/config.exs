@@ -22,6 +22,10 @@ config :phauxth,
   token_salt: "P7hD4M65",
   endpoint: FitcrmWeb.Endpoint
 
+  config :fitcrm, Fitcrm.Tools.Mailer,
+  adapter: Bamboo.LocalAdapter,
+  open_email_in_browser_url: "http://localhost:4000/sent_emails"
+
 # Configures Elixir's Logger
 config :logger, :console, level: :info,
   format: "$time $metadata[$level] $message\n",

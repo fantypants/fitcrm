@@ -1,0 +1,13 @@
+<table class="table">
+  <thead>
+    <th> <strong> From </strong> </th>
+  </thead>
+  <tbody>
+      <%= for email <- @from do %>
+    <tr>
+      <td><%= email.from %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

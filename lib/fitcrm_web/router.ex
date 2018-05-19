@@ -3,6 +3,7 @@ defmodule FitcrmWeb.Router do
 
   pipeline :browser do
     plug :accepts, ["html"]
+
     plug :fetch_session
     plug :fetch_flash
     plug :protect_from_forgery
@@ -26,6 +27,7 @@ defmodule FitcrmWeb.Router do
       get "/weekindex", WeekdayController, :weekindex
       get "/admindash", PageController, :admindash
 
+
     end
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     resources "/meals", MealController
@@ -48,6 +50,12 @@ defmodule FitcrmWeb.Router do
     post "users/:id/createmeal", MealController, :createmeal
     get "users/:id/insertnewmeal", MealController, :insertnewmeal
     post "users/:id/insertnewmeal", MealController, :insertnewmeal
+    get "/resetpassword", UserController, :reset_password
+    post "/resetpassword", UserController, :reset_password
+    get "/passwordreset", UserController, :passwordreset
+    post "/passwordreset", UserController, :passwordreset
+    get "/viewemails", UserController, :view_emails
+    post "/viewemails", UserController, :view_emails
   end
 
   scope "/api", FitcrmWeb do

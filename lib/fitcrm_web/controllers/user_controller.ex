@@ -1,5 +1,6 @@
 defmodule FitcrmWeb.UserController do
   use FitcrmWeb, :controller
+  alias Bamboo.SentEmailViewerPlug
   alias Fitcrm.Foods.Food
   alias FitcrmWeb.UserController
   import Plug.Conn
@@ -98,10 +99,42 @@ defmodule FitcrmWeb.UserController do
            IO.inspect changeset
            render(conn, "edit.html", user: user, changeset: changeset)
        end
-
-
-
   end
+
+  def reset_password(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
+    changeset = User.changeset(%User{}, %{name: "name"})
+    Tools.Email.welcome_email |> Tools.Mailer.deliver_now |> IO.inspect
+      #case Phauxth.Confirm.verify(params, Accounts, mode: :pass_reset) do
+      #  {:ok, user} ->
+      #    Accounts.update_password(user, params)
+      #    |> handle_password_reset(conn, params)
+      #  {:error, message} ->
+    #      handle_error()
+    #  end
+    render(conn, "resetpassword.html", changeset: changeset)
+  end
+
+def view_emails(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
+changeset = User.changeset(%User{}, %{name: "name"})
+from = Bamboo.SentEmail.all |> Enum.map(fn(a) -> %{from: elem(a.from, 1)} end)
+render(conn, "viewemails.html", changeset: changeset, from: from)
+end
+
+def passwordreset(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user" => %{"email" => email}}) do
+changeset = User.changeset(%User{}, %{name: "name"})
+
+case Tools.UserTool.check_user(email) do
+  {:ok, user} ->
+    #Accounts.update_password(user, params)
+    #|> handle_password_reset(conn, params)
+    IO.inspect user
+    render(conn, "resetpassword.html", changeset: changeset)
+  {:error, message} ->
+      IO.puts "Error"
+      IO.inspect message
+      render(conn, "resetpassword.html", changeset: changeset)
+  end
+end
 
 
 

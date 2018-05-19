@@ -521,6 +521,7 @@ table.dataTable thead .sorting:after {
                 </div>
             </div>
             <a href="<%= meal_path @conn, :index %>" class="list-group-item"><i class="fa fa-comment fa-fw"></i>Upload Meals</a>
+            <a href="<%= user_path(@conn, :reset_password) %>">Email Tool</a>
             <a href="<%= user_path(@conn, :foodindex, @current_user.id) %>" class="list-group-item"><i class="fa fa-comment fa-fw"></i>upload Foods</a>
             <a href="<%= workout_path(@conn, :index) %>" class="list-group-item"><i class="fa fa-comment fa-fw"></i>Upload Workouts</a>
         </div>

@@ -66,6 +66,17 @@ defmodule Fitcrm.Tools.UserTool do
     end
   end
 
+  def check_user(email) do
+    exists? = Fitcrm.Repo.all(from u in User, where: u.email == ^email)
+    case exists? do
+      nil ->
+        {:error, "User Doesn't Exist"}
+      _->
+      {:ok, exists?}
+    end
+
+  end
+
 
 
 
