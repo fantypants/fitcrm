@@ -1,5 +1,3 @@
-<head>
-<style>
 html,
 body {
   width: 100%;
@@ -153,13 +151,12 @@ section h2 {
 header.masthead {
   position: relative;
   width: 100%;
-  padding-top: 150px!important;
-  padding-left: 200px!important;
+  padding-top: 150px;
   padding-bottom: 100px;
   color: white;
   background: url(/images/bg-pattern.png), #7b4397;
-  background: url(/images/bg-pattern.png), -webkit-linear-gradient(to left, #7b4397, #dc2430);
-  background: url(/images/bg-pattern.png), linear-gradient(to left, #7b4397, #dc2430);
+  background: url('<%= static_path(@conn, "/images/bg-pattern.png") %>'), -webkit-linear-gradient(to left, #7b4397, #dc2430);
+  background: url('<%= static_path(@conn, "/images/bg-pattern.png") %>'), linear-gradient(to left, #7b4397, #dc2430);
 }
 
 header.masthead .header-content {
@@ -438,42 +435,3 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
   font-size: 11px;
   padding: 15px 45px;
 }
-</style>
-</head>
-
-<body id="page-top">
-  <header class="masthead">
-    <div class="container h-100">
-      <div class="col-lg-7 my-auto">
-        <div class="header-content mx-auto">
-          <h1 class="mb-5">Login</h1>
-        </div>
-      </div>
-<%= form_for @conn, session_path(@conn, :create), [as: :session], fn f -> %>
-  <%= if f.errors != [] do %>
-    <div class="alert alert-danger">
-      <p>Please check the errors below:</p>
-    </div>
-  <% end %>
-
-  <div class="form-group">
-    <%= label f, :email, class: "control-label" %>
-    <%= text_input f, :email, class: "form-control" %>
-    <%= error_tag f, :email %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :password, class: "control-label" %>
-    <%= password_input f, :password, class: "form-control" %>
-    <%= error_tag f, :password %>
-  </div>
-
-  <div class="form-group">
-    <%= submit "Login", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<span><%= link "Back", to: page_path(@conn, :index) %></span>
-</div>
-</div>
-</body>

@@ -103,20 +103,12 @@ defmodule FitcrmWeb.UserController do
 
   def reset_password(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
     changeset = User.changeset(%User{}, %{name: "name"})
-
-      #case Phauxth.Confirm.verify(params, Accounts, mode: :pass_reset) do
-      #  {:ok, user} ->
-      #    Accounts.update_password(user, params)
-      #    |> handle_password_reset(conn, params)
-      #  {:error, message} ->
-    #      handle_error()
-    #  end
     render(conn, "resetpassword.html", changeset: changeset)
   end
 
 def view_emails(%Plug.Conn{assigns: %{current_user: user}} = conn, _params) do
 changeset = User.changeset(%User{}, %{name: "name"})
-emails = Bamboo.SentEmail.all |> IO.inspect |> Enum.map(fn(a) -> %{from: elem(a.from, 1), to: elem(List.first(a.to), 1), subject: a.subject} end) |> IO.inspect
+emails = Bamboo.SentEmail.all |> IO.inspect |> Enum.map(fn(a) -> %{from: elem(a.from, 1), to: elem(List.first(a.to), 1), subject: a.subject, message: a.html_body} end) |> IO.inspect
 render(conn, "viewemails.html", changeset: changeset, emails: emails)
 end
 
@@ -243,26 +235,25 @@ end
     %{name: name, unit: unit, quantity: quantity}
   end
 
-
-
   def new(conn, _) do
     changeset = Accounts.change_user(%Accounts.User{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"user" => user_params}) do
-
+    email = user_params["email"] |> IO.inspect
     case Accounts.create_user(user_params) do
       {:ok, user} ->
         Log.info(%Log{user: user.id, message: "user created"})
         case user_params["refemail"] do
           nil ->
-            Tools.Email.welcome_email(user_params["email"]) |> Tools.Email.deliver_now
+
             success(conn, "User created successfully", session_path(conn, :new))
           _->
             UserTool.ref_controller(conn, user.id, user_params["refemail"])
             success(conn, "User created successfully", session_path(conn, :new))
         end
+        Tools.Email.welcome_email(email) |> Tools.Mailer.deliver_now
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

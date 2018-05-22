@@ -111,7 +111,7 @@
 
 
 
-
+<%= if @current_user do %>
 <div id="mySidenav" class="sidenav">
 <%= if @current_user do %>
 <%= if @current_user.type == "Admin" do %>
@@ -128,7 +128,7 @@
  <a href="<%= user_path(@conn, :ingredients, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/ingredients.png") %>"></a><p class="text">Ingredients</p>
  <a href="<%= meal_path(@conn, :createmeal, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/mealcreator.png") %>"></a><p class="text">Meal Creator ALPHA</p>
  <a href="<%= workout_path(@conn, :index) %>"><img class="side" src="<%= static_path(@conn, "/images/workout.png") %>"></a><p class="text">Workouts</p>
- 
+
  <a href="<%= meal_path @conn, :index %>"><img class="side" src="<%= static_path(@conn, "/images/food.png") %>"></a><p class="text">Meals</p>
   <a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/weeks.png") %>"></a><p class="text">Weeks</p>
  <a href="<%= user_weekday_path(@conn, :index, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/days.png") %>"></a><p class="text">Days</p>
@@ -184,12 +184,6 @@
    </div><!--  end navbar -->
 
 </div> <!-- end menu-dropdown -->
-
-
-
-
-
-
 <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
   <body class="overwritten">
 
@@ -350,6 +344,10 @@
             </div>
             <!-- END MODAL DISPLAY -->
       </div>
+      <% else %>
+    
+
+      <% end %>
 
 
 
