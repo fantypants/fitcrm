@@ -31,6 +31,7 @@ defmodule FitcrmWeb.UserController do
 
   def foodindex(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     foods = Fitcrm.Repo.all(Food) |> IO.inspect
+
     users = Accounts.list_users()
     user = (id == to_string(user.id) and user) || Accounts.get(id)
     changeset = Food.changeset(%Food{}, %{name: "test"})
@@ -156,10 +157,63 @@ end
   end
 
   def insertfoods(%{"food" => food}) do
-    IO.puts "In food insert"
+    check_food_exists(food)
+  end
+
+  defp insert_new_food(food) do
     changeset_params = food |> IO.inspect
     changeset = Food.changeset(%Food{}, changeset_params)
     Fitcrm.Repo.insert!(changeset)
+  end
+
+  defp update_existing_food(food_old, food_new) do
+    IO.puts "Updating Existing Food"
+    IO.puts "Meal ID"
+    meal_idents = Enum.count(food_new.meal_ident)
+    case meal_idents do
+      1 ->
+        IO.puts "Single Entry"
+        ids = check_format(List.first(food_new.meal_ident)) |> IO.inspect
+      _->
+      IO.puts "multiple Entries"
+       ids = food_new.meal_ident |> Enum.map(fn(a) -> check_format(a) end)
+    end
+    IO.puts "Food IDS"
+    IO.inspect ids
+    new_params = Map.merge(food_new, %{meal_ident: ids})
+    food = Fitcrm.Repo.get!(Food, food_old.id)
+    changeset = Food.changeset(food, new_params)
+    case Fitcrm.Repo.update changeset do
+      {:ok, struct}       ->
+        IO.puts "updated"
+        IO.inspect struct
+      {:error, changeset} ->
+        IO.puts "Error"
+    end
+  end
+
+  defp check_format(id) do
+    correct? = is_integer(id)
+    case correct? do
+      false ->
+        IO.puts "Not Correct"
+        String.to_integer(id) |> IO.inspect
+      true ->
+        IO.puts "Correct"
+        id |> IO.inspect
+    end
+  end
+
+  def check_food_exists(food) do
+    query = from f in Food, where: f.name == ^food.name and f.quantity == ^food.quantity
+    IO.puts "Does food exist?"
+    exists? = Fitcrm.Repo.all(query) |> IO.inspect
+    case exists? do
+      [] ->
+        insert_new_food(food)
+      _->
+        exists? |> Enum.map(fn(a) -> update_existing_food(a, food) end)
+    end
   end
 
   def updatefood(id, meal) do
