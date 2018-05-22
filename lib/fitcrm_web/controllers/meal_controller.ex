@@ -1,6 +1,7 @@
 defmodule FitcrmWeb.MealController do
   use FitcrmWeb, :controller
   import Plug.Conn
+    import Ecto.Query
   import Phoenix.Controller
   import FitcrmWeb.Router.Helpers
   import FitcrmWeb.Authorize
@@ -49,6 +50,10 @@ defmodule FitcrmWeb.MealController do
   end
 
   def insertMeal(conn, %{"meal" => meal}) do
+    does_meal_exist(conn, meal)
+  end
+
+  def insert_new_Meal(conn, meal) do
     changeset_params = meal |> IO.inspect
     changeset = Meal.changeset(%Meal{}, changeset_params)
     case Fitcrm.Repo.insert(changeset) do
@@ -64,6 +69,38 @@ defmodule FitcrmWeb.MealController do
              |> put_flash(:info, "Meal created successfully.")
             |> redirect(to: meal_path(conn, :index))
 
+    end
+  end
+
+  def updateMeal(conn, meal_old, meal_new) do
+    meal = Fitcrm.Repo.get!(Meal, meal_old.id)
+    changeset = Meal.changeset(meal, meal_new)
+    case Fitcrm.Repo.update changeset do
+      {:ok, changeset} ->
+        IO.puts "Meals inserted"
+        conn
+           |> put_flash(:info, "Meal created successfully.")
+          |> redirect(to: meal_path(conn, :index))
+        {:error, changeset} ->
+          IO.puts "Error inserting meal"
+          IO.inspect changeset
+          conn
+             |> put_flash(:info, "Meal created successfully.")
+            |> redirect(to: meal_path(conn, :index))
+
+    end
+  end
+
+  defp does_meal_exist(conn, meal) do
+    query = from m in Meal, where: m.name == ^meal.name
+    exists? = Fitcrm.Repo.all(query)
+    case exists? do
+      [] ->
+        IO.puts "New"
+        insert_new_Meal(conn, meal)
+      _->
+      IO.puts "Old"
+      exists? |> Enum.map(fn(a) -> updateMeal(conn, a, meal) end)
     end
   end
 
