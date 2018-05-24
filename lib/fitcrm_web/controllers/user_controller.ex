@@ -22,11 +22,18 @@ defmodule FitcrmWeb.UserController do
   plug :user_check when action in [:index, :show]
   plug :id_check when action in [:edit, :update, :delete]
 
-  def index(conn, _) do
+  def index(%Plug.Conn{assigns: %{current_user: user}} = conn, _) do
     users = Accounts.list_users()
     foods = Fitcrm.Repo.all(Food)
     changeset = Accounts.change_user(%Accounts.User{})
-    render(conn, "index.html", users: users, foods: foods, changeset: changeset)
+    authorized? = Fitcrm.Repo.get!(User, user.id).type
+    case authorized? do
+      "Client" ->
+        render conn, "noaccess.html", changeset: changeset, user: user
+      "Admin" ->
+        render(conn, "index.html", users: users, foods: foods, changeset: changeset)
+    end
+
   end
 
   def foodindex(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
