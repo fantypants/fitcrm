@@ -1,0 +1,181 @@
+<head>
+<link rel="stylesheet" href="<%= static_path(@conn, "/css/settings.css") %>">
+</head>
+<body>
+<div class="row no-gutters">
+  <div class="col-12">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                    <div id="wrapper">
+                          <a href="<%= user_path(@conn, :setup, @user) %>">
+                            <img class="profileicon" src="<%= static_path(@conn, "/images/globaluser.png") %>"></a>
+                            <p class="text">Global User Index</p>
+                    </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                    <div id="wrapper">
+                          <a href="<%= user_path(@conn, :setup, @user) %>">
+                            <img class="profileicon" src="<%= static_path(@conn, "/images/subscription.png") %>"></a>
+                            <p class="text">Show User Subscriptions</p>
+                    </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  </div>
+  <div class="row no-gutters">
+    <div class="col-12">
+      <div class="col-md-6">
+          <div class="panel panel-yellow">
+              <div class="panel-heading">
+                      <div id="wrapper">
+                            <a href="<%= user_path(@conn, :reset_password) %>">
+                              <img class="profileicon" src="<%= static_path(@conn, "/images/reset.png") %>"></a>
+                              <p class="text">Reset Account Passwords</p>
+                      </div>
+              </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="panel panel-yellow">
+              <div class="panel-heading">
+                      <div id="wrapper">
+                            <a href="<%= user_path(@conn, :view_emails) %>">
+                              <img class="profileicon" src="<%= static_path(@conn, "/images/emails.png") %>"></a>
+                              <p class="text">View Emails</p>
+                      </div>
+              </div>
+          </div>
+      </div>
+    </div>
+    </div>
+
+  <div class="row no-gutters">
+    <div class="col-12">
+      <div class="col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div id="wrapper">
+                          <a href="<%= user_path(@conn, :foodindex, @current_user.id) %>">
+                            <img class="profileicon" src="<%= static_path(@conn, "/images/food.png") %>"></a>
+                            <p class="text">Upload Foods</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div id="wrapper">
+                          <a href="<%= user_path(@conn, :foodindex, @current_user.id) %>">
+                            <img class="profileicon" src="<%= static_path(@conn, "/images/view.png") %>"></a>
+                            <p class="text">View Foods</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="row no-gutters">
+  <div class="col-12">
+    <div class="col-md-6">
+      <div class="panel panel-red">
+          <div class="panel-heading">
+              <div class="row">
+                  <div id="wrapper">
+                        <a href="<%= meal_path @conn, :new %>">
+                          <img class="profileicon" src="<%= static_path(@conn, "/images/ingredients.png") %>"></a>
+                          <p class="text">Upload Meals</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6">
+      <div class="panel panel-green">
+          <div class="panel-heading">
+              <div class="row">
+                  <div id="wrapper">
+                        <a href="<%= meal_path @conn, :index %>">
+                          <img class="profileicon" src="<%= static_path(@conn, "/images/view.png") %>"></a>
+                          <p class="text">View Meals</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+<div class="row no-gutters">
+  <div class="col-12">
+    <div class="col-md-6">
+      <div class="panel panel-red">
+          <div class="panel-heading">
+              <div class="row">
+                  <div id="wrapper">
+
+                          <a href="<%= workout_path(@conn, :new) %>">
+                          <img class="profileicon" src="<%= static_path(@conn, "/images/workout.png") %>"></a>
+                          <p class="text">Upload Workouts</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6">
+      <div class="panel panel-green">
+          <div class="panel-heading">
+              <div class="row">
+                  <div id="wrapper">
+                          <a href="<%= workout_path(@conn, :index) %>">
+                          <img class="profileicon" src="<%= static_path(@conn, "/images/view.png") %>"></a>
+                          <p class="text">View Workouts</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+<div class="row no-gutters">
+  <div class="col-12">
+    <div class="col-md-6">
+      <div class="panel panel-red">
+          <div class="panel-heading">
+              <div class="row">
+                  <div id="wrapper">
+
+                          <a href="<%= meal_path(@conn, :createmeal, @current_user.id) %>">
+                          <img class="profileicon" src="<%= static_path(@conn, "/images/mealcreator.png") %>"></a>
+                          <p class="text">Meal Creator Alpha (do not use)</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6">
+      <div class="panel panel-red">
+          <div class="panel-heading">
+              <div class="row">
+                  <div id="wrapper">
+                          <a href="<%= workout_path(@conn, :index) %>">
+                          <img class="profileicon" src="<%= static_path(@conn, "/images/view.png") %>"></a>
+                          <p class="text">SPARE SLOT</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+</body>

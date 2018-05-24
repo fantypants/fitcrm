@@ -316,13 +316,15 @@ end
 
   def show(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"id" => id}) do
     user = (id == to_string(user.id) and user) || Accounts.get(id)
-
+    IO.puts "User ius"
+    IO.inspect user
+    IO.inspect id
     changeset = Food.changeset(%Food{}, %{name: "test"})
     referrals_1 = Fitcrm.Repo.get!(User, id).ref_id |> IO.inspect
     ref = Fitcrm.Repo.get!(User, id) |> IO.inspect
     case referrals_1 do
       nil ->
-        referrals = ["None"]
+        referrals = [%{name: "None", email: "None"}]
       _->
       referrals = Enum.map(referrals_1, fn(a) -> %{name: Fitcrm.Repo.get!(User, a).name, email: Fitcrm.Repo.get!(User, a).email} end)
     end

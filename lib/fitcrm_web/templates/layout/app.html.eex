@@ -116,23 +116,51 @@
 <%= if @current_user do %>
 <%= if @current_user.type == "Admin" do %>
 <div id="wrapper">
-<a href="<%= user_page_path(@conn, :admindash, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/dash.png") %>">
+  <a href="<%= page_path(@conn, :index) %>">
+    <img class="side" src="<%= static_path(@conn, "/images/home.png") %>">
+  </a>
+  <p class="text">Home</p>
+<a href="<%= user_page_path(@conn, :admindash, @current_user.id) %>">
+  <img class="side" src="<%= static_path(@conn, "/images/dash.png") %>">
 </a>
-<p class="text">Dashboard</p>
- <a href="<%= user_path(@conn, :index) %>"><img class="side" src="<%= static_path(@conn, "/images/userindex.png") %>"></a><p class="text">User List</p>
- <a href="<%= user_path(@conn, :show, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/home.png") %>"></a><p class="text">Home</p>
+<p class="text">Admin Dashboard</p>
+<a href="<%= user_path(@conn, :show, @current_user.id) %>">
+  <img class="side" src="<%= static_path(@conn, "/images/profile.png") %>">
+</a>
+<p class="text">Admin Profile</p>
+<a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>">
+  <img class="side" src="<%= static_path(@conn, "/images/weeks.png") %>">
+</a>
+<p class="text">Show Week</p>
+<a href="<%= user_path(@conn, :ingredients, @current_user.id) %>">
+  <img class="side" src="<%= static_path(@conn, "/images/ingredients.png") %>">
+</a>
+<p class="text">Ingredients</p>
+<a href="<%= user_page_path(@conn, :settings, @current_user.id) %>">
+  <img class="side" src="<%= static_path(@conn, "/images/settings.png") %>">
+</a>
+<p class="text">Settings</p>
 <% else %>
-<a href="<%= page_path @conn, :index %>"><img class="side" src="<%= static_path(@conn, "/images/home.png") %>"></a><p class="text">Home</p>
-<a href="<%= user_path(@conn, :show, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/profile.png") %>"></a><p class="text">Profile</p>
+<a href="<%= page_path @conn, :index %>">
+  <img class="side" src="<%= static_path(@conn, "/images/home.png") %>">
+</a>
+<p class="text">Home</p>
+<a href="<%= user_path(@conn, :show, @current_user.id) %>">
+  <img class="side" src="<%= static_path(@conn, "/images/profile.png") %>">
+</a>
+<p class="text">Profile</p>
+<a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>">
+  <img class="side" src="<%= static_path(@conn, "/images/weeks.png") %>">
+</a>
+<p class="text">Show Week</p>
+<a href="<%= user_path(@conn, :ingredients, @current_user.id) %>">
+  <img class="side" src="<%= static_path(@conn, "/images/ingredients.png") %>">
+</a>
+<p class="text">Ingredients</p>
 <% end %>
- <a href="<%= user_path(@conn, :ingredients, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/ingredients.png") %>"></a><p class="text">Ingredients</p>
- <a href="<%= meal_path(@conn, :createmeal, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/mealcreator.png") %>"></a><p class="text">Meal Creator ALPHA</p>
- <a href="<%= workout_path(@conn, :index) %>"><img class="side" src="<%= static_path(@conn, "/images/workout.png") %>"></a><p class="text">Workouts</p>
 
- <a href="<%= meal_path @conn, :index %>"><img class="side" src="<%= static_path(@conn, "/images/food.png") %>"></a><p class="text">Meals</p>
-  <a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/weeks.png") %>"></a><p class="text">Weeks</p>
- <a href="<%= user_weekday_path(@conn, :index, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/days.png") %>"></a><p class="text">Days</p>
-<a href="<%= user_path(@conn, :show, @current_user.id) %>"><img class="side" src="<%= static_path(@conn, "/images/profile.png") %>"></a><p class="text">User Show</p>
+
+
 
 <%= link "Logout", to: session_path(@conn, :delete, @current_user), method: :delete %>
 </div>
@@ -345,7 +373,7 @@
             <!-- END MODAL DISPLAY -->
       </div>
       <% else %>
-    
+
 
       <% end %>
 

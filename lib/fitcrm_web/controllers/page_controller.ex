@@ -29,7 +29,7 @@ defmodule FitcrmWeb.PageController do
     users = Fitcrm.Repo.all(from u in User, where: u.type == ^"Client") |> Enum.count
     meals = Fitcrm.Repo.all(Meal) |> Enum.count
     plans = Fitcrm.Repo.all(Week) |> Enum.count
-    
+
 
 
 
@@ -39,5 +39,16 @@ defmodule FitcrmWeb.PageController do
 
     changeset = Accounts.change_user(%Accounts.User{})
     render conn, "admin_dash.html", changeset: changeset, user_stats: user_stats, system: system
+  end
+
+  def settings(%Plug.Conn{assigns: %{current_user: user}} = conn, %{"user_id" => id}) do
+    changeset = Accounts.change_user(%Accounts.User{})
+    authorized? = Fitcrm.Repo.get!(User, id).type
+    case authorized? do
+      "Client" ->
+        render conn, "noaccess.html", changeset: changeset, user: user
+      "Admin" ->
+        render conn, "settings.html", changeset: changeset, user: user
+    end
   end
 end
