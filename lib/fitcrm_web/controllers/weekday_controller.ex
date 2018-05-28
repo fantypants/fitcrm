@@ -221,10 +221,11 @@ defmodule FitcrmWeb.WeekdayController do
   end
 
   def check_exists(%Plug.Conn{assigns: %{current_user: user}} = conn) do
+    IO.puts "Week exists?"
     query = from w in Week, where: w.user_id ==^user.id
-    weeks = Fitcrm.Repo.all(query)
+    weeks = Fitcrm.Repo.all(query) |> IO.inspect
     case weeks do
-      nil ->
+      [] ->
         IO.puts "No Week Exists"
         create_week(conn)
       _->
