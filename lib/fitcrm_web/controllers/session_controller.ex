@@ -16,8 +16,9 @@ defmodule FitcrmWeb.SessionController do
   plug :id_check when action in [:delete]
 
   def new(conn, _) do
+    message = "Valid"
     changeset = Accounts.change_user(%Accounts.User{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, message: message)
   end
 
   # If you are using Argon2 or Pbkdf2, add crypto: Comeonin.Argon2
@@ -35,7 +36,10 @@ defmodule FitcrmWeb.SessionController do
        |> login_success(user_path(conn, :show, user.id), user.id)
 
       {:error, message} ->
-        error(conn, message, session_path(conn, :new))
+        IO.puts "incorrect Password"
+        conn |> put_flash(:error, "wrong")
+        changeset = Accounts.change_user(%Accounts.User{})
+        render(conn, "new.html", changeset: changeset, message: message)
     end
   end
 

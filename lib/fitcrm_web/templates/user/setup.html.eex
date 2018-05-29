@@ -62,7 +62,7 @@
 
 
 <div id="initial">
-  <h3> To get started Setting you up please complete the online questionaire </h3>
+  <h3> To get started Setting you up please complete the online questionnaire </h3>
 <%= if @user_setup == "question" do %>
 <h3><span> Step 1: <strong><%= link "Complete Questionaire", to: user_path(@conn, :newquestion, @user) %></strong></span> Status: <%= @status.question %></h3>
 <script>
@@ -71,7 +71,7 @@ document.getElementById("fifty").style.display = "block";
 document.getElementById("onehundred").style.display = "none";
 </script>
 <% else %>
-<h3><span> Step 1: <strong><%= link "Edit Questionaire", to: user_path(@conn, :newquestion, @user) %></strong></span> Status: <%= @status.question %></h3>
+<h3><span> Step 1: <strong><%= link "Edit Questionnaire", to: user_path(@conn, :newquestion, @user) %></strong></span> Status: <%= @status.question %></h3>
 <h3><span> Step 2: <strong><%= link "Customize my meals", to: user_weekday_path(@conn, :showweek, @user, @week.id)%></strong></span> Status: <%= @status.plan %></h3>
 <script>
 document.getElementById("onehundred").style.display = "block";

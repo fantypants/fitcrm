@@ -266,12 +266,14 @@ end
   end
 
   def countIngredients(map) do
+    IO.inspect map
     map
-    |> List.flatten
+    |> List.flatten |> IO.inspect
     |> Enum.map(fn(ingred) ->
       {key, n} = case Regex.run(~r/^(?<qty>[.0-9]+)\s*(?<unit>\w+)?$/, ingred.quantity, capture: :all_but_first) do
         [n, unit] -> {{ingred.name, unit}, n}
         [n] -> {ingred.name, n}
+         _-> {ingred.name, "2"} #FIX
       end
       {f, ""} = Float.parse(n)
       {key, f}
@@ -279,6 +281,9 @@ end
   end
   def randomfunction(data) do
     IO.inspect data
+  end
+  def catch_nil(data) do
+
   end
   def sortFood(map) do
     IO.inspect map

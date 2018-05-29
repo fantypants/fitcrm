@@ -554,12 +554,8 @@ transition: .3s ease;
               <table class="table">
                 <thead>
                   <tr>
-              <th><strong><%= meal.name %></strong></th>
-              <th><strong><%= meal.type %></strong></th>
-            </tr>
-            <tr>
-
-
+              <th style="text-align: left;"><strong><%= meal.name %></strong></th>
+              <th style="text-align: right;"><strong><%= meal.type %></strong></th>
             </tr>
           </thead>
           </table
@@ -652,8 +648,9 @@ transition: .3s ease;
   <table class="table">
     <thead>
       <tr>
-        <th>Excercise Name</th>
-        <th>Excercise Reps</th>
+        <th>Excercise</th>
+        <th>Reps</th>
+        <th>Sets</th>
       </tr>
     </thead>
     <tbody>
@@ -661,6 +658,7 @@ transition: .3s ease;
       <tr>
         <td>   <%= ex.name %> </td>
         <td>   <%= ex.reps %> </td>
+        <td>  XX SETS </td>
       </tr>
       <% end %>
     </tbody>

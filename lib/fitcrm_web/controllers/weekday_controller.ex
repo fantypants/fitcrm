@@ -148,9 +148,9 @@ defmodule FitcrmWeb.WeekdayController do
     #user = (user_id == to_string(user.id) and user) || Accounts.get(user_id)
     meals = get_meallist(conn)
     IO.puts "Breakfast choices"
-    breakfast = meals.breakfast |> Enum.map(fn(a) -> Fitcrm.Repo.get!(Meal, a) end)
-    lunch = meals.lunch |> Enum.map(fn(a) -> Fitcrm.Repo.get!(Meal, a) end)
-    dinner = meals.dinner |> Enum.map(fn(a) -> Fitcrm.Repo.get!(Meal, a) end)
+    breakfast = meals.breakfast |> Enum.map(fn(a) -> Fitcrm.Repo.get!(Meal, a) end) |> Enum.take_random(3)
+    lunch = meals.lunch |> Enum.map(fn(a) -> Fitcrm.Repo.get!(Meal, a) end) |> Enum.take_random(3)
+    dinner = meals.dinner |> Enum.map(fn(a) -> Fitcrm.Repo.get!(Meal, a) end) |> Enum.take_random(3)
     weekday = Fitcrm.Repo.get!(Weekday, id)
     changeset = Weekday.changeset(weekday)
     render(conn, "edit.html", weekday: weekday, changeset: changeset, user: user, meals: meals, breakfast: breakfast, lunch: lunch, dinner: dinner)

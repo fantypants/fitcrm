@@ -534,7 +534,7 @@ table.dataTable thead .sorting:after {
                     <div id="wrapper">
                           <a href="<%= user_path(@conn, :newquestion, @user) %>">
                             <img class="profileicon" src="<%= static_path(@conn, "/images/editbodyprofile.png") %>"></a>
-                            <p class="text">Edit Body</p>
+                            <p class="text">Edit Questionnaire</p>
                     </div>
                 </div>
             </div>

@@ -288,7 +288,7 @@ section.features .feature-item i {
 section.cta {
   position: relative;
   padding: 250px 0;
-  background-image: url("../img/bg-cta.jpg");
+  background-image: url("/img/bg-cta.jpg");
   background-position: center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -446,15 +446,25 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
     <div class="container h-100">
       <div class="col-lg-7 my-auto">
         <div class="header-content mx-auto">
-          <h1 class="mb-5">Login</h1>
+
         </div>
       </div>
+    </div>
+
+<div class="header-content mx-auto">
+    <h1 class="mb-5">Login</h1>
 <%= form_for @conn, session_path(@conn, :create), [as: :session], fn f -> %>
   <%= if f.errors != [] do %>
     <div class="alert alert-danger">
       <p>Please check the errors below:</p>
     </div>
   <% end %>
+
+  <%= if @message !== "Valid"  do %>
+    <div class="form-group">
+  <p> <%= @message %> </p>
+</div>
+<% end %>
 
   <div class="form-group">
     <%= label f, :email, class: "control-label" %>
@@ -472,8 +482,8 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
     <%= submit "Login", class: "btn btn-primary" %>
   </div>
 <% end %>
+</div>
 
 <span><%= link "Back", to: page_path(@conn, :index) %></span>
-</div>
-</div>
+</header>
 </body>

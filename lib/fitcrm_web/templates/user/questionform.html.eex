@@ -157,7 +157,7 @@
 <div class="panel panel-red">
   <div class="panel-heading">
     <h4 class="panel-title">
-    Personal Questionaire
+    Personal Questionnaire
   </h4>
 </div>
 
@@ -299,7 +299,7 @@ function tooltip(){
   <div class="sliderhead">
     <h3 class="headtext"> Weight (kg)</h3>
   </div>
-<input min="30" max="160" step="1" value="60" data-rangeslider="" style="position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 1;" type="range">
+<input min="30" max="220" step="1" value="60" data-rangeslider="" style="position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 1;" type="range">
 <div id="weight_slider">
 </div>
 <div class="sliderhead">
