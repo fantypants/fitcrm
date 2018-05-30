@@ -483,6 +483,12 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
     <%= error_tag f, :password %>
   </div>
 
+  <div class="form-group">
+    <%= label f, :"Referral Email", class: "control-label" %>
+    <%= text_input f, :refemail, class: "form-control" %>
+    <%= error_tag f, :refemail %>
+  </div>
+
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
