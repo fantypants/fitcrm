@@ -482,6 +482,8 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
     <%= submit "Login", class: "btn btn-primary" %>
   </div>
 <% end %>
+
+<a href="<%= user_path(@conn, :reset_password) %>" class="btn btn-outline btn-xl js-scroll-trigger">Forgot Your Password?</a>
 </div>
 
 <span><%= link "Back", to: page_path(@conn, :index) %></span>

@@ -671,4 +671,4 @@ transition: .3s ease;
 
 
 
-<span><%= link "Back", to: user_weekday_path(@conn, :index, @user) %></span>
+<span><%= link "Back", to: user_weekday_path(@conn, :weekindex, @user) %></span>
