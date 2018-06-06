@@ -148,7 +148,10 @@ defmodule Fitcrm.Tools.ClientTool do
     end
 
     def getPlanDates() do
-      finish_date = Timex.local |> Date.add(1) |>  Timex.to_naive_datetime |> IO.inspect
+      #Propper Planner Date
+      #finish_date = Timex.local |> Date.add(1) |>  Timex.to_naive_datetime |> IO.inspect
+      #Quick Planner Date
+      finish_date = Timex.local |>  Timex.to_naive_datetime |> IO.inspect
       query = Week
       finishes = Fitcrm.Repo.all(query) |> Enum.map(fn(a) -> %{id: a.id, finish: stripDate(a.end, "#{finish_date}")} end)
       updateSelector(finishes)
