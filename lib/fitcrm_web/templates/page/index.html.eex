@@ -495,7 +495,6 @@
             <h1 class="mb-5">Welcome to SSMPA! </h1>
             <a href="<%= session_path @conn, :new %>" class="btn btn-outline btn-xl js-scroll-trigger">Login</a>
             <a href="<%= user_path @conn, :new %>" class="btn btn-outline btn-xl js-scroll-trigger">Register</a>
-            <a href="<%= user_path(@conn, :reset_password) %>" class="btn btn-outline btn-xl js-scroll-trigger">Forgot Your Password?</a>
             <a href="<%= user_path(@conn, :view_emails) %>" class="btn btn-outline btn-xl js-scroll-trigger">View Emails</a>
           </div>
         </div>

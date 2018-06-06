@@ -621,7 +621,7 @@ transition: .3s ease;
                 </div>
                 </tr>
                 <tr>
-                  <th> Recipe: <strong><%= meal.recipe %></strong> </th>
+                  
             <table class="table">
               <thead>
                 <tr>

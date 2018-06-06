@@ -493,11 +493,10 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
-</div>
-</div>
-
 
 <span><%= link "Back", to: user_path(@conn, :index) %></span>
+</div>
+</div>
 </div>
 </div>
 <script>
