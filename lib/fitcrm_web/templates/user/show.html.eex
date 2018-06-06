@@ -654,17 +654,20 @@ table.dataTable thead .sorting:after {
   </h4>
 </div>
 
+<div data-tooltip="your tooltip message"></div>
+
+
 
 <div class="panel-body">
 <table class="table">
   <thead>
     <tr>
-      <th> Age </th>
+      <th > Age </th>
       <th> Weight </th>
       <th> Height </th>
       <th> Sex </th>
-      <th> BMR </th>
-      <th> TDEE </th>
+      <th data-toggle="tooltip" data-placement="left" title="Your BMR is your bodies calories required to maintain mass at idle"> BMR </th>
+      <th data-toggle="tooltip" data-placement="left" title="Your TDEE is your bodies calories to sustain mass with activity"> TDEE </th>
       <th> PCOS </th>
       <th> Insulin Resistance </th>
     </tr>
