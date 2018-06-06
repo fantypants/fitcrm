@@ -529,7 +529,7 @@ transition: .3s ease;
             <div id="wrapper">
                   <a href="<%= user_weekday_path(@conn, :edit, @s, @weekday) %>">
                     <img class="food" src="<%= static_path(@conn, "/images/editfood.png") %>"></a>
-                    <p class="text">Edit Day</p>
+                    <p class="text">Change <%= @weekday.day %> Meals</p>
             </div>
         </div>
     </div>

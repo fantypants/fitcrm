@@ -120,22 +120,22 @@
     <img class="side" src="<%= static_path(@conn, "/images/home.png") %>">
   </a>
   <p class="text">Home</p>
+  <a href="<%= user_path(@conn, :show, @current_user.id) %>">
+    <img class="side" src="<%= static_path(@conn, "/images/profile.png") %>">
+  </a>
+  <p class="text">Admin Profile</p>
+  <a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>">
+    <img class="side" src="<%= static_path(@conn, "/images/weeks.png") %>">
+  </a>
+  <p class="text">My Plan</p>
+  <a href="<%= user_path(@conn, :ingredients, @current_user.id) %>">
+    <img class="side" src="<%= static_path(@conn, "/images/ingredients.png") %>">
+  </a>
+  <p class="text">Shopping List</p>
 <a href="<%= user_page_path(@conn, :admindash, @current_user.id) %>">
   <img class="side" src="<%= static_path(@conn, "/images/dash.png") %>">
 </a>
 <p class="text">Admin Dashboard</p>
-<a href="<%= user_path(@conn, :show, @current_user.id) %>">
-  <img class="side" src="<%= static_path(@conn, "/images/profile.png") %>">
-</a>
-<p class="text">Admin Profile</p>
-<a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>">
-  <img class="side" src="<%= static_path(@conn, "/images/weeks.png") %>">
-</a>
-<p class="text">Show Week</p>
-<a href="<%= user_path(@conn, :ingredients, @current_user.id) %>">
-  <img class="side" src="<%= static_path(@conn, "/images/ingredients.png") %>">
-</a>
-<p class="text">Ingredients</p>
 <a href="<%= user_page_path(@conn, :settings, @current_user.id) %>">
   <img class="side" src="<%= static_path(@conn, "/images/settings.png") %>">
 </a>
@@ -152,11 +152,11 @@
 <a href="<%= user_weekday_path(@conn, :weekindex, @current_user.id) %>">
   <img class="side" src="<%= static_path(@conn, "/images/weeks.png") %>">
 </a>
-<p class="text">Show Week</p>
+<p class="text">My Plan</p>
 <a href="<%= user_path(@conn, :ingredients, @current_user.id) %>">
   <img class="side" src="<%= static_path(@conn, "/images/ingredients.png") %>">
 </a>
-<p class="text">Ingredients</p>
+<p class="text">Shopping List</p>
 <% end %>
 
 

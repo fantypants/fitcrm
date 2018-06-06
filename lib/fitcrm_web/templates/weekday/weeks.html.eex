@@ -25,8 +25,8 @@
     <%= for day <- @weekdays do %>
     <tr>
       <td> <%= day.day %> </td>
-      <td><span><%= link "Show", to: user_weekday_path(@conn, :show, @current_user, day), class: "btn btn-danger btn-xs" %></span></td>
-      <td><span><%= link "Edit", to: user_weekday_path(@conn, :edit, @current_user, day), class: "btn btn-default btn-xs" %></span></td>
+      <td><span><%= link "Show Meals", to: user_weekday_path(@conn, :show, @current_user, day), class: "btn btn-danger btn-xs" %></span></td>
+      <td><span><%= link "Change Meals", to: user_weekday_path(@conn, :edit, @current_user, day), class: "btn btn-default btn-xs" %></span></td>
     </tr>
     <% end %>
   </tbody>
