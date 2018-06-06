@@ -451,10 +451,9 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
       <div class="col-lg-7 my-auto">
         <div class="header-content mx-auto">
           <h1 class="mb-5">Register</h1>
-        </div>
-      </div>
 
-<div class="new-user-form">
+
+
 <%= form_for @changeset, user_path(@conn, :create), fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -463,7 +462,7 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
   <% end %>
 
   <div class="form-group">
-    <%= label f, :email, class: "control-label" %>
+    <%= label f, :"Your email", class: "control-label" %>
     <%= text_input f, :email, class: "form-control" %>
     <%= error_tag f, :email %>
   </div>
@@ -495,6 +494,8 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
   </div>
 <% end %>
 </div>
+</div>
+
 
 <span><%= link "Back", to: user_path(@conn, :index) %></span>
 </div>
