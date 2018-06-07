@@ -1,14 +1,14 @@
 <table class="table">
   <thead>
     <tr>
-      <th> User ID </th>
-      <th> Start Date </th>
-      <th> End Date </th>
+      <th> First Name </th>
+      <th> Plan Recieved (Testing Only) </th>
+      <th> Next Plan (Testing Only) </th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td> <strong><%= @week.user_id %> </strong></td>
+      <td> <strong><%= @user.name %> </strong></td>
       <td><strong> <%= @week.start %> </strong> </td>
       <td><strong> <%= @week.end %> </strong> </td>
     </tr>
