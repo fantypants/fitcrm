@@ -203,7 +203,7 @@ function tooltip(){
 
   <div class="form-group">
     <%= label f, :"Are you vegetarian?", class: "control-label" %>
-    <%= select f, :veg, ["Select", "Yes", "No"] %>
+    <%= select f, :veg, ["Select", "true", "false"] %>
     <%= error_tag f, :veg %>
   </div>
 

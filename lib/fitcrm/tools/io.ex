@@ -143,13 +143,26 @@ defp getvalue(element, field) do
   end
 end
 
+defp convert_to_boolean(value) do
+case value do
+  "FALSE" ->
+    false
+  "TRUE" ->
+    true
+    "" ->
+      false
+end
+
+end
+
 defp getFields(row) do
 meal_ident = List.pop_at(row, 0) |> elem(0)
 name = List.pop_at(row, 1) |> elem(0)
 type = List.pop_at(row, 2) |> elem(0)
 recipe = List.pop_at(row, 3) |> elem(0)
-pcos = List.pop_at(row, 4) |> elem(0)
-veg = List.pop_at(row, 5) |> elem(0)
+IO.puts "PCOS AND VEG FIELDS"
+pcos = List.pop_at(row, 4) |> elem(0) |> convert_to_boolean
+veg = List.pop_at(row, 5) |> elem(0) |> convert_to_boolean
 foodid = getFood(meal_ident)
 stats = getfoodStats(foodid)
 

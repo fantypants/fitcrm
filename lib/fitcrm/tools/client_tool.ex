@@ -72,27 +72,28 @@ defmodule Fitcrm.Tools.ClientTool do
           case pcos do
             false ->
               #Not veg or PCOS
-              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
-              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
-              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
+              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == false end) |> Enum.map(fn(a) -> a.id end)
+              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == false end) |> Enum.map(fn(a) -> a.id end)
+              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == false end) |> Enum.map(fn(a) -> a.id end)
               true ->
                 #Not veg, is pcos
-              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
-              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
-              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
+              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == true end) |> Enum.map(fn(a) -> a.id end)
+              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == true end) |> Enum.map(fn(a) -> a.id end)
+              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == true end) |> Enum.map(fn(a) -> a.id end)
           end
         true ->
           case pcos do
-            false ->
+            "No" ->
+              IO.puts "User is Vegetarian, Not PCOS"
               #is Veg, not pcos
-              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
-              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
-              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
-              true ->
+              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == true && a.pcos == false end) |> IO.inspect |> Enum.map(fn(a) -> a.id end)
+              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == true && a.pcos == false end) |> Enum.map(fn(a) -> a.id end)
+              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == true && a.pcos == false end) |> Enum.map(fn(a) -> a.id end)
+              "Yes" ->
                 #is veg, is pcos
-              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
-              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
-              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
+              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == true && a.pcos == true end) |> Enum.map(fn(a) -> a.id end)
+              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == true && a.pcos == true end) |> Enum.map(fn(a) -> a.id end)
+              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == true && a.pcos == true end) |> Enum.map(fn(a) -> a.id end)
           end
       end
 

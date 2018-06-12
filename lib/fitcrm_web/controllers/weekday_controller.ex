@@ -214,7 +214,9 @@ defmodule FitcrmWeb.WeekdayController do
 
   def get_meallist(%Plug.Conn{assigns: %{current_user: user}} = conn) do
     user_tdee = user.tdee
-    meal_ids = Tools.ClientTool.getMealID(user_tdee)
+    user_veg = user.veg
+    user_pcos = user.pcos
+    meal_ids = Tools.ClientTool.getMealID(user_tdee, user_veg, user_pcos) |> IO.inspect
   end
 
   def createWeekMap(user_id) do
