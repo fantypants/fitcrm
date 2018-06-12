@@ -670,6 +670,7 @@ table.dataTable thead .sorting:after {
       <th data-toggle="tooltip" data-placement="left" title="Your TDEE is your bodies calories to sustain mass with activity"> TDEE </th>
       <th> PCOS </th>
       <th> Insulin Resistance </th>
+      <th> Vegetarian </th>
     </tr>
   </thead>
   <tbody>
@@ -682,6 +683,7 @@ table.dataTable thead .sorting:after {
       <td><%= @user.tdee %> </td>
       <td> <%= @user.pcos %></td>
       <td> <%= @user.ir %> </td>
+      <td> <%= @user.veg %> </td>
     </tr>
   </tbody>
 </table>

@@ -3,12 +3,16 @@
     <tr>
       <th>Name</th>
       <th> Type </th>
+      <th> PCOS? </th>
+      <th> Vegetarian? </th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td> <%= @meal.name %> </td>
-      <td> <%= @meal.type %>
+      <td> <%= @meal.type %> </td>
+      <td> <%= @meal.pcos %> </td>
+      <td> <%= @meal.veg %> </td>
     </tr>
   </tbody>
 </table>

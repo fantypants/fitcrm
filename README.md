@@ -66,3 +66,13 @@
 - Set Date on Meal of creation
 - Set Expiry for 7 days
 - Plan the 7 days
+
+## STILL LEFT TO DO BEFORE BETA
+- Correct Meals to include pcos/veg options
+  - Give Meals correct fields
+  - Ensure meal selection is for veg etc
+  - Check users can select veg
+
+- Add Member Mouse in
+- Fix CSS so it's mobile optimized
+- Enusre admins notified of new referrals

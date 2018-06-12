@@ -148,10 +148,13 @@ meal_ident = List.pop_at(row, 0) |> elem(0)
 name = List.pop_at(row, 1) |> elem(0)
 type = List.pop_at(row, 2) |> elem(0)
 recipe = List.pop_at(row, 3) |> elem(0)
+pcos = List.pop_at(row, 4) |> elem(0)
+veg = List.pop_at(row, 5) |> elem(0)
 foodid = getFood(meal_ident)
 stats = getfoodStats(foodid)
 
-original = %{name: name, type: type, recipe: recipe, foodid: foodid}
+
+original = %{name: name, type: type, recipe: recipe, foodid: foodid, pcos: pcos, veg: veg}
 Map.merge(original, stats)
 end
 
@@ -210,7 +213,7 @@ end
 
 
 def getFoodDetails(list) do
-  
+
 end
 
 

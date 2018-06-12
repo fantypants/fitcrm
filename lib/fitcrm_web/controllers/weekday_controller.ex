@@ -174,13 +174,15 @@ defmodule FitcrmWeb.WeekdayController do
 
   def create_day(id, day) do
       IO.puts "Day is: #{day}"
+      veg = Fitcrm.Repo.get!(User, id).veg
+      pcos = Fitcrm.Repo.get!(User, id).pcos
       user_tdee = Fitcrm.Repo.get!(User, id).tdee
       level = Fitcrm.Repo.get!(User, id).planlevel
       type = Fitcrm.Repo.get!(User, id).plantype
       weekday_params = %{"day" => day}
       workout_id = Tools.ClientTool.getWorkoutID(level,type)
       selected_workouts = Tools.ClientTool.selectWorkout(workout_id, day)
-      meal_ids = Tools.ClientTool.getMealID(user_tdee)
+      meal_ids = Tools.ClientTool.getMealID(user_tdee, veg, pcos)
       selected_meals = Tools.ClientTool.selectMeals(meal_ids.breakfast, meal_ids.lunch, meal_ids.dinner)
       int_params = weekday_params |> Map.merge(selected_meals)
       int_params |> Map.merge(selected_workouts)

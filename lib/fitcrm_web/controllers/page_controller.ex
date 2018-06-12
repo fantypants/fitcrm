@@ -29,7 +29,7 @@ defmodule FitcrmWeb.PageController do
     users = Fitcrm.Repo.all(from u in User, where: u.type == ^"Client") |> Enum.count
     meals = Fitcrm.Repo.all(Meal) |> Enum.count
     plans = Fitcrm.Repo.all(Week) |> Enum.count
-
+    Tools.UserTool.update_referrals() |> IO.inspect
 
 
 
@@ -51,4 +51,12 @@ defmodule FitcrmWeb.PageController do
         render conn, "settings.html", changeset: changeset, user: user
     end
   end
+
+
+
+
+
+
+
+
 end

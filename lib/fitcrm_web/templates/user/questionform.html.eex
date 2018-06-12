@@ -202,6 +202,12 @@ function tooltip(){
   </div>
 
   <div class="form-group">
+    <%= label f, :"Are you vegetarian?", class: "control-label" %>
+    <%= select f, :veg, ["Select", "Yes", "No"] %>
+    <%= error_tag f, :veg %>
+  </div>
+
+  <div class="form-group">
     <%= submit "submit", class: "btn btn-primary" %>
   </div>
 

@@ -25,7 +25,8 @@ defmodule Fitcrm.Tools.ClientTool do
       sex = params["sex"]
       cystic = params["cystic"] |> IO.inspect
       ir = params["ir"] |> IO.inspect
-      params_new = PhysicsTool.modifyQuestionResults(%{"ir" => ir, "pcos" => cystic, "plantype" => plantype, "planlevel" => planlevel, "sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
+      veg = params["veg"] |> IO.inspect
+      params_new = PhysicsTool.modifyQuestionResults(%{"ir" => ir, "veg" => veg, "pcos" => cystic, "plantype" => plantype, "planlevel" => planlevel, "sex" => sex, "height" => height, "weight" => weight, "activity" => activity, "age" => age, "cystic" => cystic}) |> IO.inspect
       bmr = PhysicsTool.calculate_tdee(params_new)
       IO.inspect params_new
       tdee_original = PhysicsTool.scaleActivity(bmr, params_new["activity"])
@@ -54,9 +55,11 @@ defmodule Fitcrm.Tools.ClientTool do
       workouts = Fitcrm.Repo.all(query) |> Enum.find(fn(a) -> a.level == level end) |> Map.fetch!(:id)
     end
 
-    def getMealID(tdee) do
+    def getMealID(tdee, veg_param, pcos_param) do
       IO.puts "Selecting appliciable meals"
       IO.puts "Variables: #{tdee}"
+      veg = veg_param
+      pcos = pcos_param
       bcals = tdee*0.25
       lcals = 0.75*0.4*tdee
       dcals = 0.75*0.6*tdee
@@ -64,11 +67,39 @@ defmodule Fitcrm.Tools.ClientTool do
       bquery = from m in Meal, where: m.calories <= ^bcals
       lquery = from m in Meal, where: m.calories <= ^lcals
       dquery = from m in Meal, where: m.calories <= ^dcals
-      breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.type == "Breakfast" end) |> Enum.map(fn(a) -> a.id end)
-      lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.type == "Lunch" end) |> Enum.map(fn(a) -> a.id end)
-      dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.type == "Dinner" end) |> Enum.map(fn(a) -> a.id end)
-      %{breakfast: breakfast, lunch: lunch, dinner: dinner}
+      case veg do
+        false ->
+          case pcos do
+            false ->
+              #Not veg or PCOS
+              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
+              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
+              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
+              true ->
+                #Not veg, is pcos
+              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
+              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
+              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == "false" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
+          end
+        true ->
+          case pcos do
+            false ->
+              #is Veg, not pcos
+              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
+              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
+              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "false" end) |> Enum.map(fn(a) -> a.id end)
+              true ->
+                #is veg, is pcos
+              breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
+              lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
+              dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == "true" && a.pcos == "true" end) |> Enum.map(fn(a) -> a.id end)
+          end
+      end
 
+      #breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.type == "Breakfast" end) |> Enum.map(fn(a) -> a.id end)
+      #lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.type == "Lunch" end) |> Enum.map(fn(a) -> a.id end)
+      #dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.type == "Dinner" end) |> Enum.map(fn(a) -> a.id end)
+      %{breakfast: breakfast, lunch: lunch, dinner: dinner}
     end
 
     def selectMeals(b_id, l_id, d_id) do

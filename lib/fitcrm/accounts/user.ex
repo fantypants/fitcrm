@@ -18,6 +18,7 @@ defmodule Fitcrm.Accounts.User do
     field :tdee, :float
     field :pcos, :string
     field :ir, :string
+    field :veg, :boolean
     field :plantype, :string
     field :planlevel, :string
     field :sessions, {:map, :integer}, default: %{}
@@ -29,15 +30,15 @@ defmodule Fitcrm.Accounts.User do
 
   def formchangeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:weight, :height, :age, :activity, :bmr, :sex, :plantype, :planlevel, :pcos, :ir])
-    |> validate_required([:weight, :height, :age, :activity, :bmr, :sex, :plantype, :planlevel, :pcos, :ir])
+    |> cast(attrs, [:weight, :height, :age, :activity, :bmr, :sex, :plantype, :planlevel, :pcos, :ir, :veg])
+    |> validate_required([:weight, :height, :age, :activity, :bmr, :sex, :plantype, :planlevel, :pcos, :ir, :veg])
   end
 
 
 
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :ref_id, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex, :password, :plantype, :planlevel, :pcos, :ir])
+    |> cast(attrs, [:email, :ref_id, :name, :type, :weight, :height, :age, :activity, :bmr, :veg, :tdee, :sex, :password, :plantype, :planlevel, :pcos, :ir])
     |> validate_required([:email])
     |> unique_email
     |> cast_assoc(:weeks)
@@ -47,7 +48,7 @@ defmodule Fitcrm.Accounts.User do
 
   def create_changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :ref_id, :password, :name, :type, :weight, :height, :age, :activity, :bmr, :tdee, :sex, :plantype, :planlevel, :pcos, :ir])
+    |> cast(attrs, [:email, :ref_id, :password, :name, :type, :weight, :height, :age, :activity, :bmr, :veg, :tdee, :sex, :plantype, :planlevel, :pcos, :ir])
     |> validate_required([:email, :password])
     |> unique_email
     |> cast_assoc(:weeks)

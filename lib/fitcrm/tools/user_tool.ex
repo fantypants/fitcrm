@@ -85,6 +85,13 @@ defmodule Fitcrm.Tools.UserTool do
   :crypto.strong_rand_bytes(length) |> Base.url_encode64 |> binary_part(0, length)
 end
 
+def update_referrals() do
+  IO.puts "Gets exisiting and new referrals"
+  query = User
+  referrer = Fitcrm.Repo.all(query) |> Enum.map(fn(a) -> %{referrer: a.ref_id, referree: a.id} end)
+  |> Enum.reject(fn(b) -> b.referrer == nil end)
+end
+
 
 
 

@@ -13,6 +13,8 @@ defmodule Fitcrm.Foods.Meal do
     field :foodid, {:array, :integer}
     field :recipe, :string
     field :type, :string
+    field :pcos, :boolean
+    field :veg, :boolean
 
     belongs_to :day, Fitcrm.Plan.Day
     timestamps()
@@ -23,8 +25,8 @@ defmodule Fitcrm.Foods.Meal do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :foodid, :calories, :fat, :carbs, :protein, :day_id, :recipe, :type])
+    |> cast(params, [:name, :foodid, :calories, :fat, :carbs, :protein, :day_id, :recipe, :type, :pcos, :veg])
     |> unique_constraint(:name)
-    |> validate_required([:name, :foodid, :calories, :fat, :carbs, :protein, :type, :recipe])
+    |> validate_required([:name, :foodid, :calories, :fat, :carbs, :protein, :type, :recipe, :pcos, :veg])
   end
 end
