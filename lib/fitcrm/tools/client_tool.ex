@@ -70,12 +70,12 @@ defmodule Fitcrm.Tools.ClientTool do
       case veg do
         false ->
           case pcos do
-            false ->
+            "No" ->
               #Not veg or PCOS
               breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == false end) |> Enum.map(fn(a) -> a.id end)
               lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == false end) |> Enum.map(fn(a) -> a.id end)
               dinner = Fitcrm.Repo.all(dquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == false end) |> Enum.map(fn(a) -> a.id end)
-              true ->
+              "Yes" ->
                 #Not veg, is pcos
               breakfast = Fitcrm.Repo.all(bquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == true end) |> Enum.map(fn(a) -> a.id end)
               lunch = Fitcrm.Repo.all(lquery) |> Enum.filter(fn(a)-> a.veg == false && a.pcos == true end) |> Enum.map(fn(a) -> a.id end)
