@@ -20,6 +20,7 @@
 
 
 
+<div class="page-container">
 
 
 <%= if @current_user do %>
@@ -120,8 +121,9 @@
            <!-- Brand and toggle get grouped for better mobile display -->
            <div class="navbar-header navbar-right">
              <a class="navbar-brand" href="">SSMPA</a>
-             <div class="nav navbar-nav navbar-right">
 
+             <div class="nav navbar-nav navbar-right">
+<button id="nav-drawer" class="pull-right" style="text-align: right;">Menu</button>
            </div>
 
            <!-- Collect the nav links, forms, and other content for toggling -->
@@ -307,6 +309,26 @@
     </div> <!-- /container -->
 
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script>
+    document.getElementById("nav-drawer").addEventListener("click", toggleDraw);
+
+    function toggleDraw(){
+      console.log("Toggling Draw");
+      var element = document.getElementById("mySidenav");
+      console.log(element.style.display);
+      switch(element.style.display){
+        case "":
+        element.style.display = "none";
+        break;
+        case "none":
+        element.style.display = "block";
+        break;
+        case "block":
+        element.style.display = "none";
+        break;
+      }
+    };
+    </script>
 
   </body>
 
@@ -314,5 +336,5 @@
 
 
 
-
+</div>
 </html>

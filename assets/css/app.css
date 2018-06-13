@@ -1748,6 +1748,9 @@ input.ct-red + span + label + span.switch-right {
     padding-top: 0px;
     background-color: rgba(0, 0, 0, 0.45); }
 
+  .sidenav {
+    display: none;
+  }
   .body-click {
     right: 230px; }
 
