@@ -29,23 +29,6 @@
     <h4 class="panel-title">
     Welcome back <%= @user.name %>
   </h4>
-  <div class="progress" id="zero">
-    <div class="progress-bar progress-bar-info" id="bar" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 1%;">
-      <span class="sr-only">0% Complete</span>
-    </div>
-  </div>
-
-  <div class="progress" id="fifty">
-    <div class="progress-bar progress-bar-info" id="bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
-      <span class="sr-only">50% Complete</span>
-    </div>
-  </div>
-
-  <div class="progress" id="onehundred">
-    <div class="progress-bar progress-bar-info" id="bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-      <span class="sr-only">100% Complete</span>
-    </div>
-  </div>
 </div>
 <div class="panel-body">
 
@@ -63,53 +46,11 @@
 
 <div id="initial">
   <h3> To get started Setting you up please complete the online questionnaire </h3>
-<%= if @user_setup == "question" do %>
-<h3><span> Step 1: <strong><%= link "Complete Questionaire", to: user_path(@conn, :newquestion, @user) %></strong></span> Status: <%= @status.question %></h3>
-<script>
-document.getElementById("zero").style.display = "none";
-document.getElementById("fifty").style.display = "block";
-document.getElementById("onehundred").style.display = "none";
-</script>
-<% else %>
-<h3><span> Step 1: <strong><%= link "Edit Questionnaire", to: user_path(@conn, :newquestion, @user) %></strong></span> Status: <%= @status.question %></h3>
-<h3><span> Step 2: <strong><%= link "Customize my meals", to: user_weekday_path(@conn, :showweek, @user, @week.id)%></strong></span> Status: <%= @status.plan %></h3>
-<script>
-document.getElementById("onehundred").style.display = "block";
-document.getElementById("zero").style.display = "none";
-document.getElementById("fifty").style.display = "none";
-</script>
-<% end %>
+<h3><span><strong><%= link "Complete Questionaire", to: user_path(@conn, :newquestion, @user) %></strong></span> Status: <%= @status.question %></h3>
 </div>
 
-
-<div id="controls">
-<button class="btn btn-success btn-round" id="back">Back</button>
-<button class="btn btn-success btn-round" id="next">Next</button>
-</div>
 </div>
 
 <h4> Please follow the links below to complete the setup, you can return anytime by selecting setup from your user dashboard </h4>
 
 </div>
-
-<script>
-document.getElementById("welcome").style.display = "block";
-document.getElementById("initial").style.display = "none";
-document.getElementById("zero").style.display = "none";
-
-document.getElementById("next").addEventListener('click', function(){
-  document.getElementById("welcome").style.display = "none";
-  document.getElementById("initial").style.display = "block";
-  document.getElementById("zero").style.display = "none";
-  document.getElementById("next").style.display = "none";
-
-});
-document.getElementById("back").addEventListener('click', function(){
-  document.getElementById("welcome").style.display = "block";
-  document.getElementById("initial").style.display = "none";
-  document.getElementById("next").style.display = "block";
-});
-
-
-
-</script>
